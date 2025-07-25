@@ -1,7 +1,3 @@
-freshfare
-3.8
-file:///C:/FreshFare/freshfare/
-file:///C:/FreshFare/freshfare/lib/
 async
 3.4
 file:///C:/Users/Dharsan/AppData/Local/Pub/Cache/hosted/pub.dev/async-2.13.0/
@@ -134,4 +130,8 @@ flutter_web_plugins
 3.7
 file:///C:/Users/Dharsan/Documents/flutter_windows_3.32.6-stable/flutter/packages/flutter_web_plugins/
 file:///C:/Users/Dharsan/Documents/flutter_windows_3.32.6-stable/flutter/packages/flutter_web_plugins/lib/
+freshfare
+3.8
+file:///C:/xampp/htdocs/FreshFareFlutter/freshfare/
+file:///C:/xampp/htdocs/FreshFareFlutter/freshfare/lib/
 2

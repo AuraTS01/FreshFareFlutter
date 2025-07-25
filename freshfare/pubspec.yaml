@@ -6,6 +6,9 @@ version: 0.1.0
 environment:
   sdk: ^3.8.1
 
+# dependencies:
+#   http: ^0.13.6  
+
 dependencies:
   carousel_slider: ^5.1.1
   flutter:

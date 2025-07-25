@@ -23,42 +23,58 @@ class _SignPageState extends State<SignPage> {
   // String? phoneError;
   // String? passwordError;
   // String? confrimError;
+  
+  // Future sign() async {
+  //   var url = "http:// 192.168.86.9/database.php";
+  //   var response = await http.post(url as Uri, body: {
+  //     "username": namecontroller.text,
+  //     "email": emailcontroller.text,
+  //     "mobile": phonecontroller.text,
+  //     "password": passwordcontroller.text,
+  //   });
+  //   var data = json.decode(response.body);
+  //   if (data == "Error") {
+  //         Fluttertoast.showToast(
+  //         msg: "User allready exit! ",
+  //         toastLength: Toast.LENGTH_SHORT,
+  //         gravity: ToastGravity.CENTER,
+  //         // webPosition: Center,
+  //         timeInSecForIosWeb: 3,
+  //         backgroundColor: Colors.red,
+  //         textColor: Colors.white,
+  //         fontSize: 16.0
+  //         );
+  //   } 
+  //   else {
+  //         Fluttertoast.showToast(
+  //         msg: "Your account is created",
+  //         toastLength: Toast.LENGTH_SHORT,
+  //         gravity: ToastGravity.CENTER,
+  //         // webPosition: Center,
+  //         timeInSecForIosWeb: 3,
+  //         backgroundColor: Colors.green,
+  //         textColor: Colors.white,
+  //         fontSize: 16.0,
+  //         );
+  //           Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage(),),);
+  //   }
+  // }
+  void sign() async {
+    var url = Uri.parse('http://192.168.86.9/database.php'); // Replace with your actual PHP URL
 
-  Future sign() async {
-    var url = "http:// 192.168.86.9/freshfare_db/login.php";
-    var response = await http.post(url as Uri, body: {
-      "username": namecontroller.text,
-      "email": emailcontroller.text,
-      "mobile": phonecontroller.text,
-      "password": passwordcontroller.text,
+    var response = await http.post(url, body: {
+      'sign': 'true', // this will trigger isset($_POST['sign'])
+      // Add more fields if needed, like 'email', 'password', etc.
     });
-    var data = json.decode(response.body);
-    if (data == "Error") {
-          Fluttertoast.showToast(
-          msg: "User allready exit! ",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          // webPosition: Center,
-          timeInSecForIosWeb: 3,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0
-          );
-    } 
-    else {
-          Fluttertoast.showToast(
-          msg: "Your account is created",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          // webPosition: Center,
-          timeInSecForIosWeb: 3,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0,
-          );
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage(),),);
+
+    if (response.statusCode == 200) {
+      print('Signup triggered successfully');
+      print('Response: ${response.body}');
+    } else {
+      print('Failed with status: ${response.statusCode}');
     }
   }
+
   
   // void sign() {
       // setState(() {
@@ -299,30 +315,14 @@ class _SignPageState extends State<SignPage> {
               ),
                SizedBox(height: 10),
               ElevatedButton(
-                 style: ElevatedButton.styleFrom(
+                style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
-               shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(0),
-               ),
-              ),
-                 onPressed:sign,
-                // (){
-                //   if(_formkey.currentState!.validate()){
-                //     _formkey.currentState!.save();
-                //      Fluttertoast.showToast(
-                //      msg: "Your account is created",
-                //      toastLength: Toast.LENGTH_SHORT,
-                //      gravity: ToastGravity.CENTER,
-                //     // webPosition: Center,
-                //      timeInSecForIosWeb: 3,
-                //      backgroundColor: Colors.green,
-                //      textColor: Colors.white,
-                //      fontSize: 16.0,
-                //      );
-                //     Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(),));
-                //   }
-                // },
-                child: Text('Sign Up',style: TextStyle(color: Colors.white),),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0),
+                  ),
+                ),
+                onPressed: sign, // This sends POST request on click
+                child: Text('Register', style: TextStyle(color: Colors.white)),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
