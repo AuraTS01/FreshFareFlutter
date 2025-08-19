@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:freshfare/freshfare/login.dart';
+import 'package:freshfare/freshfare/cartprovider.dart';
+import 'package:freshfare/freshfare/home.dart';
+// import 'package:freshfare/freshfare/login.dart';
+import 'package:provider/provider.dart';
 
 
 void main() {
@@ -9,8 +12,16 @@ void main() {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  runApp(MainApp());
+    runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => CartProvider()),
+      ],
+      child: MainApp(),
+    ),
+  );
 }
+
 
 class MainApp extends StatelessWidget {
    const MainApp({super.key});
@@ -23,7 +34,7 @@ class MainApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       title: 'Fresh Fare',
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: HomePage(),
      
     );
   }
