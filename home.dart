@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/cart.dart';
+import 'package:freshfare/freshfare/cartmodel.dart';
+import 'package:freshfare/freshfare/cartprovider.dart';
 import 'package:freshfare/freshfare/chicken.dart';
 import 'package:freshfare/freshfare/fish.dart';
 import 'package:freshfare/freshfare/login.dart';
@@ -9,8 +11,8 @@ import 'package:freshfare/freshfare/notification.dart';
 import 'package:freshfare/freshfare/prawns.dart';
 import 'package:freshfare/freshfare/profile.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 
 class HomePage extends StatefulWidget 
@@ -42,15 +44,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  bool showButton = false;
-
-  void toggleButton(){
-    setState(() {
-      showButton = !showButton;
-    });
-  }
-
-  
   String message = '';
 
   final allowedLocations = [
@@ -368,368 +361,51 @@ class _HomePageState extends State<HomePage> {
               (
                 children: 
                 [
-                  GestureDetector
-                  (
-                    onTap: toggleButton,
-                    child: Image.asset('assets/prawns.png',
-                    width: 700,
-                    height: 300,
-                    fit: BoxFit.cover,     
-                    ),
-                  ),
-                  if(showButton)
-                    Positioned
-                    (
-                      bottom: 10,
-                      left: 170,
-                      child: ElevatedButton
-                      (
-                        style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                shape: RoundedRectangleBorder
-                                (
-                                  borderRadius: BorderRadius.circular(0),
-                                ),
-                                ),
-                        onPressed: (){},
-                        child: Text("Add to Cart",style: TextStyle(color: Colors.white),),
-                        
-                      ),
-                    ),      
+                  productCard(context,"Prawns", 400.0,"assets/prawns.png"),
+                  productCard(context,"Fish", 200.0,"assets/fish.png"),
+                  productCard(context,"Chicken_Flesh",300.0,"assets/chicken_flesh.png"),
+                  productCard(context,"Chicken_WithoutSkin", 250.0,"assets/chicken_withoutSkin.png"),
+                  productCard(context,"Chicken", 300.0,"assets/chicken_2.png"),
+                  productCard(context,"Mutton", 800.0,"assets/fresh_raw_mutton_leg.png"),
+                  productCard(context,"Shrimp", 350.0,"assets/Shrimp.png"),
                 ],
-              ),
-              SizedBox(height: 20),
-              Row
-              (
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>
-                [
-                  Text("  Prawns \n ₹ 400.00",style: TextStyle(
-                    shadows: 
-                    [
-                      Shadow(
-                          color: Colors.black,
-                          offset: Offset(0, 1)
-                          )
-                    ],
-                    color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),),
-                ], 
-              ),
-              SizedBox(height: 40),
-              Stack
-              (
-                children: 
-                [
-                  GestureDetector
-                  (
-                    onTap: toggleButton,
-                    child: Image.asset('assets/fish.png',
-                    width: 700,
-                    height: 300,
-                    fit: BoxFit.cover,     
-                    ),
-                  ),
-                  if(showButton)
-                    Positioned
-                    (
-                      bottom: 10,
-                      left: 170,
-                      child: ElevatedButton
-                      (
-                        style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                shape: RoundedRectangleBorder
-                                (
-                                  borderRadius: BorderRadius.circular(0),
-                                ),
-                                ),
-                        onPressed: (){},
-                        child: Text("Add to Cart",style: TextStyle(color: Colors.white),),
-                        
-                      ),
-                    ),      
-                ],
-              ),
-              SizedBox(height: 20),
-              Row
-              (              
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>
-                [
-                  Text("    Fish  \n ₹ 200.00",style: TextStyle(
-                    shadows: 
-                    [
-                      Shadow(
-                          color: Colors.black,
-                          offset: Offset(0, 1)
-                          )
-                    ],
-                    color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),),  
-                ],
-              ),
-              SizedBox(height: 40),
-              Stack
-              (
-                children: 
-                [
-                  GestureDetector
-                  (
-                    onTap: toggleButton,
-                    child: Image.asset('assets/chicken_flesh.png',
-                    width: 700,
-                    height: 300,
-                    fit: BoxFit.cover,     
-                    ),
-                  ),
-                  if(showButton)
-                    Positioned
-                    (
-                      bottom: 10,
-                      left: 170,
-                      child: ElevatedButton
-                      (
-                        style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                shape: RoundedRectangleBorder
-                                (
-                                  borderRadius: BorderRadius.circular(0),
-                                ),
-                                ),
-                        onPressed: (){},
-                        child: Text("Add to Cart",style: TextStyle(color: Colors.white),),
-                        
-                      ),
-                    ),      
-                ],
-              ),
-              SizedBox(height: 20),
-              Row
-              (
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>
-                [
-                  Text("Chicken_Flesh \n     ₹ 220.00",style: TextStyle(
-                    shadows: 
-                    [
-                      Shadow(
-                          color: Colors.black,
-                          offset: Offset(0, 1)
-                          )
-                    ],
-                    color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),),
-                ],
-              ),
-             SizedBox(height: 40),
-             Stack
-              (
-                children: 
-                [
-                  GestureDetector
-                  (
-                    onTap: toggleButton,
-                    child: Image.asset('assets/chicken_2.png',
-                    width: 700,
-                    height: 300,
-                    fit: BoxFit.cover,     
-                    ),
-                  ),
-                  if(showButton)
-                    Positioned
-                    (
-                      bottom: 10,
-                      left: 170,
-                      child: ElevatedButton
-                      (
-                        style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                shape: RoundedRectangleBorder
-                                (
-                                  borderRadius: BorderRadius.circular(0),
-                                ),
-                                ),
-                        onPressed: (){},
-                        child: Text("Add to Cart",style: TextStyle(color: Colors.white),),
-                        
-                      ),
-                    ),      
-                ],
-              ),
-              SizedBox(height: 20),
-              Row
-              (
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>
-                [
-                  Text("  Chicken \n ₹ 260.00",style: TextStyle(
-                    shadows: 
-                    [
-                      Shadow(
-                          color: Colors.black,
-                          offset: Offset(0, 1)
-                          )
-                    ],
-                    color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),),
-                ],
-              ),
-              SizedBox(height: 40),
-              Stack
-              (
-                children: 
-                [
-                  GestureDetector
-                  (
-                    onTap: toggleButton,
-                    child: Image.asset('assets/chicken_withoutSkin.png',
-                    width: 700,
-                    height: 300,
-                    fit: BoxFit.cover,     
-                    ),
-                  ),
-                  if(showButton)
-                    Positioned
-                    (
-                      bottom: 10,
-                      left: 170,
-                      child: ElevatedButton
-                      (
-                        style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                shape: RoundedRectangleBorder
-                                (
-                                  borderRadius: BorderRadius.circular(0),
-                                ),
-                                ),
-                        onPressed: (){},
-                        child: Text("Add to Cart",style: TextStyle(color: Colors.white),),
-                        
-                      ),
-                    ),      
-                ],
-              ),
-              SizedBox(height: 20),
-              Row
-              (
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>
-                [
-                  Text("Chicken_withoutSkin \n        ₹ 300.00",style: TextStyle(
-                    shadows: 
-                    [
-                      Shadow(
-                          color: Colors.black,
-                          offset: Offset(0, 1)
-                          )
-                    ],
-                    color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),),
-                ],
-              ),
-              SizedBox(height: 40),
-              Stack
-              (
-                children: 
-                [
-                  GestureDetector
-                  (
-                    onTap: toggleButton,
-                    child: Image.asset('assets/Shrimp.png',
-                    width: 700,
-                    height: 300,
-                    fit: BoxFit.cover,     
-                    ),
-                  ),
-                  if(showButton)
-                    Positioned
-                    (
-                      bottom: 10,
-                      left: 170,
-                      child: ElevatedButton
-                      (
-                        style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                shape: RoundedRectangleBorder
-                                (
-                                  borderRadius: BorderRadius.circular(0),
-                                ),
-                                ),
-                        onPressed: (){},
-                        child: Text("Add to Cart",style: TextStyle(color: Colors.white),),
-                        
-                      ),
-                    ),      
-                ],
-              ),
-              SizedBox(height: 20),
-              Row
-              (
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>
-                [
-                  Text("Shrimp \n₹ 350.00",style: TextStyle(
-                    shadows: 
-                    [
-                      Shadow(
-                          color: Colors.black,
-                          offset: Offset(0, 1)
-                          )
-                    ],
-                    color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),),
-                ],
-              ),
-              SizedBox(height: 40),
-              Stack
-                (
-                  children: 
-                  [
-                    GestureDetector
-                    (
-                      onTap: toggleButton,
-                      child: Image.asset('assets/fresh_raw_mutton_leg.png',
-                      width: 700,
-                      height: 300,
-                      fit: BoxFit.cover,     
-                      ),
-                    ),
-                    if(showButton)
-                      Positioned
-                      (
-                        bottom: 10,
-                        left: 170,
-                        child: ElevatedButton
-                        (
-                          style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.green,
-                                  shape: RoundedRectangleBorder
-                                  (
-                                    borderRadius: BorderRadius.circular(0),
-                                  ),
-                                  ),
-                          onPressed: (){},
-                          child: Text("Add to Cart",style: TextStyle(color: Colors.white),),
-                          
-                        ),
-                      ),      
-                  ],
-                ),
-             SizedBox(height: 20),
-             Row
-             (
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>
-                [
-                  Text("Mutton_Leg \n ₹ 800.00",style: TextStyle(
-                    shadows: 
-                    [
-                      Shadow(
-                          color: Colors.black,
-                          offset: Offset(0, 1)
-                          )
-                    ],
-                    color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),),
-                ], 
-              ),
+              ),            
             ],                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
           ),
         ),
     );
+  }
+
+  Widget productCard(BuildContext context,String name,double price,String imagePath){
+    return  Card(
+       child:Column
+        (
+        children: 
+        [
+          Image.asset(imagePath,height: 150,fit: BoxFit.cover),
+          Text(name,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
+          Text("₹$price"),
+          ElevatedButton
+          (
+            onPressed: ()
+            {
+              final product = Product(name: name, price: price);
+              Provider.of<CartProvider>(context,listen:false).addProduct(product);
+              Fluttertoast.showToast(
+              msg: "$name Added to cart",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0,
+              );
+            },
+              child: Text("Add to Cart"),
+          )
+        ],
+      
+        ),
+    );
+
   }
 }

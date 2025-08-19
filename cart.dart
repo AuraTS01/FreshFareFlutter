@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:freshfare/freshfare/cartprovider.dart';
 import 'package:freshfare/freshfare/checkout.dart';
 import 'package:freshfare/freshfare/chicken.dart';
 import 'package:freshfare/freshfare/home.dart';
@@ -8,6 +9,7 @@ import 'package:freshfare/freshfare/fish.dart';
 import 'package:freshfare/freshfare/mutton.dart';
 import 'package:freshfare/freshfare/notification.dart';
 import 'package:freshfare/freshfare/prawns.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -106,6 +108,7 @@ class _CartPageState extends State<CartPage>
   @override
   Widget build(BuildContext context) 
   {
+    final cart = Provider.of<CartProvider>(context);
     return  Scaffold
     (
       appBar: AppBar
@@ -185,7 +188,7 @@ class _CartPageState extends State<CartPage>
           ],
         ),
       ),
-        body: Padding
+      body: Padding
         (
           padding: EdgeInsets.all(16.0),
           child: ListView
@@ -262,6 +265,26 @@ class _CartPageState extends State<CartPage>
                       height: 4,
                       color: Colors.green,
                     ),
+                    SizedBox(height: 30),
+                    SizedBox(
+                      height: 400,
+                      child: ListView.builder
+                      (
+                        itemCount: cart.items.length,
+                        itemBuilder: (context,index){
+                          final item =  cart.items[index];
+                          return ListTile(
+                            leading: CircleAvatar(
+                              radius: 50.0, 
+                              backgroundImage: AssetImage('assets/Shrimp.png'),
+                            ),
+                            title: Text(item.name),
+                            subtitle: Text("₹${item.price}  * ${item.quantity}"),
+                            trailing: Text("₹${item.price * item.quantity}"),
+                          );
+                        },
+                      ),
+                    )
                   ],
                 ),
                 SizedBox(height: 30),
@@ -329,8 +352,8 @@ class _CartPageState extends State<CartPage>
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: 
                   [
-                    Text('₹${totalPrice.toStringAsFixed(2)}',
-                    style: TextStyle(fontSize: 16),),
+                    // Text('₹${totalPrice.toStringAsFixed(2)}',
+                    // style: TextStyle(fontSize: 16),),
                     TextButton
                     (
                       onPressed: (){
@@ -340,28 +363,34 @@ class _CartPageState extends State<CartPage>
                     ),
                   ],
                 ),
-                Divider(height: 40),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: 
-                  [
-                    Text('Total: ₹${totalPrice.toStringAsFixed(2)}',
-                    style: TextStyle(fontSize: 18,color: Colors.red),),
-                  ],
-                  ),
+                Divider(),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.end,
+                //   children: 
+                //   [
+                //     Text('Total: ₹${totalPrice.toStringAsFixed(2)}',
+                //     style: TextStyle(fontSize: 18,color: Colors.red),),
+                //   ],
+                //   ),
                   SizedBox(height: 10),
-                  ElevatedButton
+                Padding
+                (
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text("Total: ₹${cart.totalPrice}",
+                        style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                ),
+                ElevatedButton
+                (
+                  onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => CheckoutPage(),)); 
+                  }, 
+                  style: ElevatedButton.styleFrom
                   (
-                    onPressed: (){
-                       Navigator.push(context, MaterialPageRoute(builder: (context) => CheckoutPage(),)); 
-                    }, 
-                    style: ElevatedButton.styleFrom
-                    (
-                      backgroundColor: Colors.green,
-                      padding: EdgeInsets.symmetric(horizontal: 40,vertical: 15),
-                    ),
-                    child: Text("PROCEED TO CHECKOUT",style: TextStyle(color: Colors.white)),
+                    backgroundColor: Colors.green,
+                    padding: EdgeInsets.symmetric(horizontal: 40,vertical: 15),
                   ),
+                  child: Text("PROCEED TO CHECKOUT",style: TextStyle(color: Colors.white)),
+                ),
             ],
            
           ),
