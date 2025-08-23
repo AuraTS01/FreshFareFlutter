@@ -175,6 +175,16 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  final List<Product> products = [
+                  Product(name:"Prawns", price: 400.0, image:"assets/prawns.png"),
+                  Product(name:"Fish", price: 200.0, image: "assets/fish.png"),
+                  Product(name:"Chicken_Flesh", price: 300.0, image:"assets/chicken_flesh.png"),
+                  Product(name:"Chicken_WithoutSkin", price: 250.0, image:"assets/chicken_withoutSkin.png"),
+                  Product(name:"Chicken", price: 300.0, image:"assets/chicken_2.png"),
+                  Product(name:"Mutton", price: 800.0, image:"assets/fresh_raw_mutton_leg.png"),
+                  Product(name:"Shrimp", price: 350.0, image:"assets/Shrimp.png"),
+  ];
+
 
   @override
   Widget build(BuildContext context) 
@@ -356,43 +366,45 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-              SizedBox(height: 40),
-              Stack
+              SizedBox(height: 30),
+              ListView.builder
               (
-                children: 
-                [
-                  productCard(context,"Prawns", 400.0,"assets/prawns.png"),
-                  productCard(context,"Fish", 200.0,"assets/fish.png"),
-                  productCard(context,"Chicken_Flesh",300.0,"assets/chicken_flesh.png"),
-                  productCard(context,"Chicken_WithoutSkin", 250.0,"assets/chicken_withoutSkin.png"),
-                  productCard(context,"Chicken", 300.0,"assets/chicken_2.png"),
-                  productCard(context,"Mutton", 800.0,"assets/fresh_raw_mutton_leg.png"),
-                  productCard(context,"Shrimp", 350.0,"assets/Shrimp.png"),
-                ],
-              ),            
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(), 
+                itemCount: products.length,
+                itemBuilder: (context, index) 
+                {
+                  final product = products[index];
+                  return Container(
+                    // color: Colors.white,
+                    child: productCard(context, product),
+                  );
+                },
+              ),
             ],                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
           ),
         ),
     );
   }
 
-  Widget productCard(BuildContext context,String name,double price,String imagePath){
+  Widget productCard(BuildContext context,Product product){
     return  Card(
        child:Column
         (
         children: 
         [
-          Image.asset(imagePath,height: 150,fit: BoxFit.cover),
-          Text(name,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
-          Text("₹$price"),
+          Image.asset(product.image,height: 150,fit: BoxFit.cover),
+          Text(product.name,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
+          Text("₹${product.price}"),
           ElevatedButton
           (
+             
             onPressed: ()
             {
-              final product = Product(name: name, price: price);
+              // final product = Product(name: name, price: price);
               Provider.of<CartProvider>(context,listen:false).addProduct(product);
               Fluttertoast.showToast(
-              msg: "$name Added to cart",
+              msg: "${product.name} Added to cart",
               toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.CENTER,
               backgroundColor: Colors.green,
@@ -400,10 +412,13 @@ class _HomePageState extends State<HomePage> {
               fontSize: 16.0,
               );
             },
-              child: Text("Add to Cart"),
+            style: ElevatedButton.styleFrom
+            (
+              backgroundColor: Colors.green,            
+            ),
+            child: Text("Add to Cart",style: TextStyle(color: Colors.white)),
           )
         ],
-      
         ),
     );
 

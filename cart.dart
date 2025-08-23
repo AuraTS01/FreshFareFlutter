@@ -22,12 +22,12 @@ class CartPage extends StatefulWidget
 
 class _CartPageState extends State<CartPage>
 {
-  String selectedWeight = '1 kg';
-  double pricePerKg = 190.0;
-  double quantity = 1.0;
+  // String selectedWeight = '1 kg';
+  // double pricePerKg = 190.0;
+  // double quantity = 1.0;
 
-  double get unitMultiplier => selectedWeight == '1 Kg' ? 1.0 : 0.5;
-  double get totalPrice => pricePerKg * quantity * unitMultiplier;
+  // double get unitMultiplier => selectedWeight == '1 Kg' ? 1.0 : 0.5;
+  // double get totalPrice => pricePerKg * quantity * unitMultiplier;
 
   final  searchcontroller = TextEditingController();
   void search()
@@ -274,13 +274,33 @@ class _CartPageState extends State<CartPage>
                         itemBuilder: (context,index){
                           final item =  cart.items[index];
                           return ListTile(
-                            leading: CircleAvatar(
-                              radius: 50.0, 
-                              backgroundImage: AssetImage('assets/Shrimp.png'),
-                            ),
+                            leading:Image.asset(item.image,
+                            width: 50,
+                            height : 50,
+                            fit: BoxFit.cover,
+                            ),                            
                             title: Text(item.name),
                             subtitle: Text("₹${item.price}  * ${item.quantity}"),
-                            trailing: Text("₹${item.price * item.quantity}"),
+                            trailing:Row( 
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                               
+                                // Text("₹${item.price * item.quantity}"),
+                                IconButton(icon: Icon(Icons.remove_circle,color: Colors.red),
+                                onPressed: (){
+                                  Provider.of<CartProvider>(context,listen:false).decreaseQuantity(item);
+                                }),
+                                Text(item.quantity.toString(),style: TextStyle(fontSize: 16)),
+                                IconButton(icon: Icon(Icons.add_circle,color: Colors.green),
+                                onPressed: (){
+                                  Provider.of<CartProvider>(context,listen:false).increaseQuantity(item);
+                                }),
+                                IconButton(icon: Icon(Icons.delete,color:Colors.red),                        
+                                onPressed: (){
+                                  Provider.of<CartProvider>(context,listen:false).removeProduct(item);
+                                },)
+                              ],
+                            ),
                           );
                         },
                       ),
@@ -288,91 +308,8 @@ class _CartPageState extends State<CartPage>
                   ],
                 ),
                 SizedBox(height: 30),
-                Column(
-                  children:
-                   [
-                     Row
-                     (
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children:
-                      [
-                        DropdownButton<String>
-                        (
-                          value: selectedWeight,
-                          items: ['1 kg','0.5 kg']
-                          .map((weight) => DropdownMenuItem(value:weight,
-                          child:Text(weight),
-                          ))
-                          .toList(),
-                          onChanged:(value){
-                            setState((){
-                              selectedWeight = value!;
-                            });
-                          },
-                        ),
-                        SizedBox(width: 10),
-                        Row
-                        (
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: 
-                          [
-                            IconButton
-                            (
-                              icon: Icon(Icons.remove),
-                              onPressed: ()
-                              {
-                                if(quantity > 1)
-                                {
-                                  setState(() {
-                                    quantity--;
-                                  });
-                                }
-                              },
-                            ),
-                            Text(quantity.toStringAsFixed(0)),
-                            IconButton
-                            (
-                              icon: Icon(Icons.add),
-                              onPressed: ()
-                              {
-                                setState((){
-                                  quantity++;
-                                });
-                              }, 
-                            ),
-                          ],
-                        ),
-
-                      ],
-                    ),  
-                  ],
-                ),
-                SizedBox(width: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: 
-                  [
-                    // Text('₹${totalPrice.toStringAsFixed(2)}',
-                    // style: TextStyle(fontSize: 16),),
-                    TextButton
-                    (
-                      onPressed: (){
-
-                      },
-                      child:Text('Remove',style: TextStyle(color: Colors.red))
-                    ),
-                  ],
-                ),
                 Divider(),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.end,
-                //   children: 
-                //   [
-                //     Text('Total: ₹${totalPrice.toStringAsFixed(2)}',
-                //     style: TextStyle(fontSize: 18,color: Colors.red),),
-                //   ],
-                //   ),
-                  SizedBox(height: 10),
+                SizedBox(height: 10),
                 Padding
                 (
                   padding: const EdgeInsets.all(16.0),

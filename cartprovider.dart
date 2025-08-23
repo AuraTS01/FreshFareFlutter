@@ -8,7 +8,17 @@ class CartProvider extends ChangeNotifier{
   double get totalPrice => cart.totalPrice;
 
   void addProduct(Product product){
-    cart.addProduct(product);
+    var index = items.indexWhere((item) => item.name == product.name);
+    if(index != -1){
+      items[index].quantity += 1;
+    }
+    else{
+      items.add(Product(
+        name:product.name,
+        price:product.price,
+        image:product.image,
+      ));
+    }
     notifyListeners();
   }
   void removeProduct(Product product){
@@ -16,4 +26,28 @@ class CartProvider extends ChangeNotifier{
     notifyListeners();
   }
 
+  void increaseQuantity(Product item){
+    var index = items.indexWhere((i) => i.name == item.name);
+    if(index >= 0){
+    items[index].quantity++;
+    }
+    notifyListeners();
+  }
+
+  void decreaseQuantity(Product item){
+    var index = items.indexWhere((i) => i.name == item.name);
+    if(index == -1) return;
+
+    if(items[index].quantity > 1){
+      items[index].quantity--;
+    }else{
+      items.remove(index);
+    }
+    notifyListeners();
+  }
+
+}
+
+extension on Product {
+  void operator [](int other) {}
 } 
