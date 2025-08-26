@@ -1,11 +1,27 @@
-class Product{
+
+class Product {
   final String name;
-  final double price;
+  final double baseprice;
   final String image;
   int quantity;
+  String weight;
 
-  Product({required this.name, required this.price, required this.image ,this.quantity = 1});
+  Product({
+    required this.name,
+    required this.baseprice,
+    required this.image,
+    this.quantity = 1,
+    this.weight = "1kg", 
+  });
+
+  double get price {
+    if (weight == "0.5kg") {
+      return baseprice / 2;
+    }
+    return baseprice;
+  }
 }
+
 
 class Cart{
   List<Product> items = [];

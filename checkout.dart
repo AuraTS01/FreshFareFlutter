@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/cart.dart';
@@ -9,6 +11,7 @@ import 'package:freshfare/freshfare/mutton.dart';
 import 'package:freshfare/freshfare/notification.dart';
 import 'package:freshfare/freshfare/payment.dart';
 import 'package:freshfare/freshfare/prawns.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -22,6 +25,12 @@ class CheckoutPage extends StatefulWidget
 
 class _CheckoutPageState extends State<CheckoutPage>
 {
+  final _formkey = GlobalKey<FormState>();
+  final  namecontroller = TextEditingController();
+  final  countrycontroller = TextEditingController();
+  final  addresscontroller = TextEditingController();
+  final  towncontroller = TextEditingController();
+  final  statecontroller = TextEditingController();
 
   final  searchcontroller = TextEditingController();
   void search()
@@ -97,6 +106,57 @@ class _CheckoutPageState extends State<CheckoutPage>
         );
       },
     );
+  }
+
+  final String baseUrl = "http://192.168.86.9/FreshFareFlutter/lib/freshfare_database/";
+
+  Future<void> checkout() async{
+
+    if (userEmail == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("No email found, login again")),
+      );
+      return;
+    }
+
+    var url = Uri.parse("$baseUrl/checkout.php");
+
+
+    var response = await http.post(url, body:{
+        "email":userEmail,
+        "country":countrycontroller.text,
+        "Address_1":addresscontroller.text,
+        "town":towncontroller.text,
+        "state":statecontroller.text,
+    });
+
+    var data = json.decode(response.body);
+    print("Server response: $data");
+
+   
+      if (data['status'] == "Success") {
+      Fluttertoast.showToast(
+          msg: "Checkout Successful",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        ); 
+        Navigator.push(context,MaterialPageRoute(builder: (context) => PaymentPage()),
+        );
+    }
+      else{
+        Fluttertoast.showToast(
+                    msg: "Error",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0,
+                  );
+      }
+    
   }
 
   @override
@@ -182,10 +242,7 @@ class _CheckoutPageState extends State<CheckoutPage>
         ),
       ),
       
-        body: Padding
-        (
-          padding: EdgeInsets.all(16.0),
-          child: ListView
+        body: ListView
           (  
             children: 
             [
@@ -262,30 +319,137 @@ class _CheckoutPageState extends State<CheckoutPage>
                   ],
                 ),
                 SizedBox(height: 40),
-                Column(
+                Form(
+                  key: _formkey,  
+                  child:Padding
+                (
+                  padding: EdgeInsets.all(16.0),
+                  child: Column(
+                
+                
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("Billing Detail",style: TextStyle(color:Colors.black,fontSize: 20,fontWeight: FontWeight.bold)),
-                  ],
+                  
+                SizedBox(height: 30),
+                TextFormField
+                (
+                    controller: namecontroller,                  
+                    decoration: InputDecoration(labelText: 'Full Name*',
+                    border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(0)))),
+                    validator: (value) {
+                    if(value == null || value.isEmpty)
+                    {
+                      return 'Name is required';
+                    }
+                    return null;
+                    },
                 ),
-                Divider(height: 40),
+              SizedBox(height: 20),
+              TextFormField
+                (
+                    controller: countrycontroller,
+                    decoration: InputDecoration(labelText: 'Country*',
+                    border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(0)))),
+                    validator: (value)
+                    {
+                      if(value == null || value.isEmpty)
+                      {
+                        return 'Country is required';
+                      }
+                    },
+                ),
+                SizedBox(height: 20),
+                TextFormField
+                (
+                    controller: addresscontroller,
+                    decoration: InputDecoration(labelText: 'Address*',
+                    border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(0)))),
+                    validator: (value)
+                    {
+                      if(value == null || value.isEmpty)
+                      {                    
+                        return 'Address  is required';
+                      }
+                      return null;
+                    },   
+                ),
+                SizedBox(height: 20),
+                TextFormField
+                (
+                    controller: towncontroller,
+                    decoration: InputDecoration(labelText: 'Town / City*',
+                    border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(0)))),
+                    validator: (value)
+                    {
+                      if(value == null || value.isEmpty)
+                      {                    
+                        return 'City is required';
+                      }
+                      return null;
+                    },   
+                ),
+                SizedBox(height: 20),
+                TextFormField
+                (
+                    controller: statecontroller,
+                    decoration: InputDecoration(labelText: 'State*',
+                    border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(0)))),
+                    validator: (value)
+                    {
+                      if(value == null || value.isEmpty)
+                      {                    
+                        return 'State is required';
+                      }
+                      return null;
+                    },   
+                ),
+                // Divider(height: 40),
+                SizedBox(height: 20),
+
+                Container(
+                  decoration:BoxDecoration(color: Colors.white,             
+              //     boxShadow:[
+              //     BoxShadow( color: Colors.black26,
+              //     blurRadius: 5,
+              //     spreadRadius: 4,
+              //     offset: Offset(0,5,),
+              // ),
+              // ],
+              ),
+                ),
                 ElevatedButton
                 (
                   onPressed: (){
-                     Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage(),));  
+                     if (_formkey.currentState!.validate()) {
+                          checkout();
+                     }
                   }, 
                     style: ElevatedButton.styleFrom
-                    (
-                      backgroundColor: Colors.green,
-                      padding: EdgeInsets.symmetric(horizontal: 40,vertical: 15),
-                    ),
+                        (
+                          backgroundColor: Colors.green,
+                          padding: EdgeInsets.symmetric(horizontal: 50,vertical: 15),
+                          shape: RoundedRectangleBorder
+                          (
+                            borderRadius: BorderRadius.circular(0),
+                          ),
+                        ),
                   child: Text("PROCEED TO PAYMENT",style: TextStyle(color: Colors.white),)
-                )
+                ),
+              ],
+              ),
+                ),
+           ),
                 
             ],
            
           ),
-        ),   
+           
     ); 
   }
 }

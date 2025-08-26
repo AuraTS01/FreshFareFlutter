@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/cartprovider.dart';
@@ -22,12 +23,6 @@ class CartPage extends StatefulWidget
 
 class _CartPageState extends State<CartPage>
 {
-  // String selectedWeight = '1 kg';
-  // double pricePerKg = 190.0;
-  // double quantity = 1.0;
-
-  // double get unitMultiplier => selectedWeight == '1 Kg' ? 1.0 : 0.5;
-  // double get totalPrice => pricePerKg * quantity * unitMultiplier;
 
   final  searchcontroller = TextEditingController();
   void search()
@@ -280,12 +275,23 @@ class _CartPageState extends State<CartPage>
                             fit: BoxFit.cover,
                             ),                            
                             title: Text(item.name),
-                            subtitle: Text("₹${item.price}  * ${item.quantity}"),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("₹${item.price}  * ${item.quantity}"),
+                                DropdownButton<String>(value: item.weight, items : ["0.5kg" , "1kg"].map((String value){
+                                  return DropdownMenuItem<String>(value: value, child: Text(value),);
+                                }).toList(),
+                                onChanged: (newvalue){
+                                  if(newvalue != null){
+                                    item.weight = newvalue;
+                                    cart.notifyListeners();
+                                  }
+                                },),
+                               ],),
                             trailing:Row( 
                               mainAxisSize: MainAxisSize.min,
-                              children: [
-                               
-                                // Text("₹${item.price * item.quantity}"),
+                              children: [                    
                                 IconButton(icon: Icon(Icons.remove_circle,color: Colors.red),
                                 onPressed: (){
                                   Provider.of<CartProvider>(context,listen:false).decreaseQuantity(item);
@@ -298,6 +304,14 @@ class _CartPageState extends State<CartPage>
                                 IconButton(icon: Icon(Icons.delete,color:Colors.red),                        
                                 onPressed: (){
                                   Provider.of<CartProvider>(context,listen:false).removeProduct(item);
+                                   Fluttertoast.showToast(
+                                      msg: "${item.name} Removed to cart",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0,
+                                      );
                                 },)
                               ],
                             ),

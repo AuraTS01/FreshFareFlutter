@@ -15,7 +15,7 @@ class CartProvider extends ChangeNotifier{
     else{
       items.add(Product(
         name:product.name,
-        price:product.price,
+        baseprice:product.price,
         image:product.image,
       ));
     }
@@ -47,7 +47,3 @@ class CartProvider extends ChangeNotifier{
   }
 
 }
-
-extension on Product {
-  void operator [](int other) {}
-} 

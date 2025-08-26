@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/cart.dart';
@@ -176,13 +177,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   final List<Product> products = [
-                  Product(name:"Prawns", price: 400.0, image:"assets/prawns.png"),
-                  Product(name:"Fish", price: 200.0, image: "assets/fish.png"),
-                  Product(name:"Chicken_Flesh", price: 300.0, image:"assets/chicken_flesh.png"),
-                  Product(name:"Chicken_WithoutSkin", price: 250.0, image:"assets/chicken_withoutSkin.png"),
-                  Product(name:"Chicken", price: 300.0, image:"assets/chicken_2.png"),
-                  Product(name:"Mutton", price: 800.0, image:"assets/fresh_raw_mutton_leg.png"),
-                  Product(name:"Shrimp", price: 350.0, image:"assets/Shrimp.png"),
+                  Product(name:"Prawns", baseprice: 400.0, image:"assets/prawns.png"),
+                  Product(name:"Fish", baseprice: 200.0, image: "assets/fish.png"),
+                  Product(name:"Chicken_Flesh", baseprice: 300.0, image:"assets/chicken_flesh.png"),
+                  Product(name:"Chicken_WithoutSkin", baseprice: 250.0, image:"assets/chicken_withoutSkin.png"),
+                  Product(name:"Chicken", baseprice: 300.0, image:"assets/chicken_2.png"),
+                  Product(name:"Mutton", baseprice: 800.0, image:"assets/fresh_raw_mutton_leg.png"),
+                  Product(name:"Shrimp", baseprice: 350.0, image:"assets/Shrimp.png"),
   ];
 
 
@@ -398,10 +399,8 @@ class _HomePageState extends State<HomePage> {
           Text("₹${product.price}"),
           ElevatedButton
           (
-             
             onPressed: ()
             {
-              // final product = Product(name: name, price: price);
               Provider.of<CartProvider>(context,listen:false).addProduct(product);
               Fluttertoast.showToast(
               msg: "${product.name} Added to cart",
