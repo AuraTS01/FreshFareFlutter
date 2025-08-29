@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/cart.dart';
+import 'package:freshfare/freshfare/cartmodel.dart';
+import 'package:freshfare/freshfare/cartprovider.dart';
 import 'package:freshfare/freshfare/chicken.dart';
 import 'package:freshfare/freshfare/fish.dart';
 import 'package:freshfare/freshfare/home.dart';
 import 'package:freshfare/freshfare/login.dart';
 import 'package:freshfare/freshfare/notification.dart';
 import 'package:freshfare/freshfare/prawns.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MuttonPage extends StatefulWidget {
@@ -49,13 +52,13 @@ class _MuttonPageState extends State<MuttonPage> {
     }
   }
 
-  bool showButton = false;
+  // bool showButton = false;
 
-  void toggleButton(){
-    setState(() {
-      showButton = !showButton;
-    });
-  }
+  // void toggleButton(){
+  //   setState(() {
+  //     showButton = !showButton;
+  //   });
+  // }
 
   String userName = '';
   String userEmail = '';
@@ -101,6 +104,11 @@ class _MuttonPageState extends State<MuttonPage> {
       },
     );
   }
+
+   final List<Product> products = [        
+                   Product(name:"Mutton", baseprice: 800.0, image:"assets/fresh_raw_mutton_leg.png"),
+   ];
+                
 
 
   @override
@@ -240,54 +248,66 @@ class _MuttonPageState extends State<MuttonPage> {
                     ),
                   ],
                 ),
-              SizedBox(height: 40,),
-              Stack
+                SizedBox(height: 30),
+                ListView.builder
                 (
-                  children: 
-                  [
-                    GestureDetector
-                    (
-                      onTap: toggleButton,
-                      child: Image.asset('assets/fresh_raw_mutton_leg.png',
-                      width: 700,
-                      height: 300,
-                      fit: BoxFit.cover,     
-                      ),
-                    ),
-                    if(showButton)
-                      Positioned
-                      (
-                        bottom: 10,
-                        left: 170,
-                        child: ElevatedButton
-                        (
-                          style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.green,
-                                  shape: RoundedRectangleBorder
-                                  (
-                                    borderRadius: BorderRadius.circular(0),
-                                  ),
-                                  ),
-                          onPressed: (){},
-                          child: Text("Add to Cart",style: TextStyle(color: Colors.white),),
-                          
-                        ),
-                      ),      
-                  ],
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(), 
+                  itemCount: products.length,
+                  itemBuilder: (context, index) 
+                  {
+                    final product = products[index];
+                    return Container(
+                      // color: Colors.white,
+                      child: productCard(context, product),
+                    );
+                  },
                 ),
-                SizedBox(height: 20),
-                Row
-                (
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>
-                    [
-                      Text("Mutton_Leg \n ₹ 800.00",style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),),
-                    ], 
-                  ),
             ],
           ),
         ),
         
     );
+  }
+
+  Widget productCard(BuildContext context,Product product){
+    return  Card(
+       child:Column
+        (
+        children: 
+        [
+          Image.asset(product.image,height: 150,fit: BoxFit.cover),
+          Text(product.name,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
+          Text("₹${product.price}"),
+          ElevatedButton
+          (
+            onPressed: ()
+            {
+              Provider.of<CartProvider>(context,listen:false).addProduct(product);
+              Fluttertoast.showToast(
+              msg: "${product.name} Added to cart",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0,
+              );
+               Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),)); 
+
+            },
+            style: ElevatedButton.styleFrom
+            (
+              backgroundColor: Colors.green, 
+              shape: RoundedRectangleBorder
+                      (
+                        borderRadius: BorderRadius.circular(0),
+                      ),             
+            ),
+            child: Text("Add to Cart",style: TextStyle(color: Colors.white)),
+          )
+        ],
+        ),
+    );
+
   }
 }

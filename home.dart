@@ -176,13 +176,13 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  final List<Product> products = [
+ final List<Product> products = [
                   Product(name:"Prawns", baseprice: 400.0, image:"assets/prawns.png"),
                   Product(name:"Fish", baseprice: 200.0, image: "assets/fish.png"),
                   Product(name:"Chicken_Flesh", baseprice: 300.0, image:"assets/chicken_flesh.png"),
                   Product(name:"Chicken_WithoutSkin", baseprice: 250.0, image:"assets/chicken_withoutSkin.png"),
                   Product(name:"Chicken", baseprice: 300.0, image:"assets/chicken_2.png"),
-                  Product(name:"Mutton", baseprice: 800.0, image:"assets/fresh_raw_mutton_leg.png"),
+                   Product(name:"Mutton", baseprice: 800.0, image:"assets/fresh_raw_mutton_leg.png"),
                   Product(name:"Shrimp", baseprice: 350.0, image:"assets/Shrimp.png"),
   ];
 
@@ -410,10 +410,16 @@ class _HomePageState extends State<HomePage> {
               textColor: Colors.white,
               fontSize: 16.0,
               );
+               Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),)); 
+
             },
             style: ElevatedButton.styleFrom
             (
-              backgroundColor: Colors.green,            
+              backgroundColor: Colors.green, 
+              shape: RoundedRectangleBorder
+                        (
+                          borderRadius: BorderRadius.circular(0),
+                        ),                             
             ),
             child: Text("Add to Cart",style: TextStyle(color: Colors.white)),
           )

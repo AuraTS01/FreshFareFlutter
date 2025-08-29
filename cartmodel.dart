@@ -25,6 +25,7 @@ class Product {
 
 class Cart{
   List<Product> items = [];
+  
   void addProduct(Product product){
     final index = items.indexWhere((item) => item.name == product.name);
     if(index >= 0){

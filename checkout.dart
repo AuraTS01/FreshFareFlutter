@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/cart.dart';
+import 'package:freshfare/freshfare/cartmodel.dart';
+import 'package:freshfare/freshfare/cartprovider.dart';
 import 'package:freshfare/freshfare/chicken.dart';
 import 'package:freshfare/freshfare/fish.dart';
 import 'package:freshfare/freshfare/home.dart';
@@ -12,6 +14,7 @@ import 'package:freshfare/freshfare/notification.dart';
 import 'package:freshfare/freshfare/payment.dart';
 import 'package:freshfare/freshfare/prawns.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -162,6 +165,7 @@ class _CheckoutPageState extends State<CheckoutPage>
   @override
   Widget build(BuildContext context) 
   {
+    final cart = Provider.of<CartProvider>(context);
     return  Scaffold
     (
       appBar: AppBar
@@ -408,48 +412,68 @@ class _CheckoutPageState extends State<CheckoutPage>
                       }
                       return null;
                     },   
+                ),             
+                SizedBox(height: 30),
+                Text("Your Order",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                SizedBox(height: 10),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: cart.items.length,               
+                  itemBuilder: (context,index){
+                    final product = cart.items[index];
+                    return ListTile(
+                    title: Text(product.name),
+                    subtitle: Text("Qty: ${product.quantity}"),
+                    trailing: Text("₹${product.baseprice * product.quantity}"),
+                    );                
+                }
                 ),
-                // Divider(height: 40),
-                SizedBox(height: 20),
-
-                Container(
-                  decoration:BoxDecoration(color: Colors.white,             
-              //     boxShadow:[
-              //     BoxShadow( color: Colors.black26,
-              //     blurRadius: 5,
-              //     spreadRadius: 4,
-              //     offset: Offset(0,5,),
-              // ),
-              // ],
-              ),
+                Divider(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Subtotal",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
+                    Text("₹${cart.totalPrice}",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))
+                ],
                 ),
-                ElevatedButton
+                Divider(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Total",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
+                    Text("₹${cart.totalPrice}",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))
+                ],
+                ),
+                Divider(height: 30),
+                SizedBox
                 (
-                  onPressed: (){
-                     if (_formkey.currentState!.validate()) {
-                          checkout();
-                     }
-                  }, 
-                    style: ElevatedButton.styleFrom
-                        (
-                          backgroundColor: Colors.green,
-                          padding: EdgeInsets.symmetric(horizontal: 50,vertical: 15),
-                          shape: RoundedRectangleBorder
-                          (
-                            borderRadius: BorderRadius.circular(0),
-                          ),
-                        ),
-                  child: Text("PROCEED TO PAYMENT",style: TextStyle(color: Colors.white),)
+                  width: double.infinity,
+                  child: ElevatedButton                                             
+                    (
+                      onPressed: (){
+                        if (_formkey.currentState!.validate()) {
+                              checkout();
+                        }
+                      }, 
+                        style: ElevatedButton.styleFrom
+                            (
+                              backgroundColor: Colors.green,
+                              padding: EdgeInsets.symmetric(horizontal: 50,vertical: 15),
+                              shape: RoundedRectangleBorder
+                              (
+                                borderRadius: BorderRadius.circular(0),
+                              ),
+                            ),
+                      child: Text("PROCEED TO PAYMENT",style: TextStyle(color: Colors.white),)
+                    ),
                 ),
               ],
               ),
-                ),
+            ),
            ),
-                
             ],
-           
           ),
-           
     ); 
   }
 }

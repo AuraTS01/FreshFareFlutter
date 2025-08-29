@@ -322,6 +322,25 @@ class _CartPageState extends State<CartPage>
                   ],
                 ),
                 SizedBox(height: 30),
+                Align(
+                alignment: Alignment.centerLeft,
+                child:ElevatedButton
+                (
+                  onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),)); 
+                  }, 
+                  style: ElevatedButton.styleFrom
+                  (
+                    backgroundColor: Colors.green,
+                    padding: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+                    shape: RoundedRectangleBorder
+                        (
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                  ),
+                  child: Text("CONTINUE SHOPPING",style: TextStyle(color: Colors.white)),
+                ),  
+                ),            
                 Divider(),
                 SizedBox(height: 10),
                 Padding

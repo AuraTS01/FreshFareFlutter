@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/cart.dart';
+import 'package:freshfare/freshfare/cartmodel.dart';
+import 'package:freshfare/freshfare/cartprovider.dart';
 import 'package:freshfare/freshfare/chicken.dart';
 import 'package:freshfare/freshfare/home.dart';
 import 'package:freshfare/freshfare/login.dart';
 import 'package:freshfare/freshfare/mutton.dart';
 import 'package:freshfare/freshfare/notification.dart';
 import 'package:freshfare/freshfare/prawns.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FishPage extends StatefulWidget {
@@ -49,13 +52,13 @@ class _FishPageState extends State<FishPage> {
     }
   }
 
-  bool showButton = false;
+  // bool showButton = false;
 
-  void toggleButton(){
-    setState(() {
-      showButton = !showButton;
-    });
-  }
+  // void toggleButton(){
+  //   setState(() {
+  //     showButton = !showButton;
+  //   });
+  // }
 
   String userName = '';
   String userEmail = '';
@@ -101,6 +104,10 @@ class _FishPageState extends State<FishPage> {
       },
     );
   }
+
+   final List<Product> products = [               
+                  Product(name:"Fish", baseprice: 200.0, image: "assets/fish.png"),              
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -237,54 +244,66 @@ class _FishPageState extends State<FishPage> {
                     ),
                   ],
                 ),
-              SizedBox(height: 40,),
-              Stack
-              (
-                children: 
-                [
-                  GestureDetector
-                  (
-                    onTap: toggleButton,
-                    child: Image.asset('assets/fish.png',
-                    width: 700,
-                    height: 300,
-                    fit: BoxFit.cover,     
-                    ),
-                  ),
-                  if(showButton)
-                    Positioned
-                    (
-                      bottom: 10,
-                      left: 170,
-                      child: ElevatedButton
-                      (
-                        style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                shape: RoundedRectangleBorder
-                                (
-                                  borderRadius: BorderRadius.circular(0),
-                                ),
-                                ),
-                        onPressed: (){},
-                        child: Text("Add to Cart",style: TextStyle(color: Colors.white),),
-                        
-                      ),
-                    ),      
-                ],
-              ),
-              SizedBox(height: 20),
-              Row
-              (              
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>
-                [
-                  Text("    Fish  \n ₹ 200.00",style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),),  
-                ],
-              ),
+                SizedBox(height: 30),
+                ListView.builder
+                (
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(), 
+                  itemCount: products.length,
+                  itemBuilder: (context, index) 
+                  {
+                    final product = products[index];
+                    return Container(
+                      // color: Colors.white,
+                      child: productCard(context, product),
+                    );
+                  },
+                ),
             ],
           ),
         ),
         
     );
+  }
+
+  Widget productCard(BuildContext context,Product product){
+    return  Card(
+       child:Column
+        (
+        children: 
+        [
+          Image.asset(product.image,height: 150,fit: BoxFit.cover),
+          Text(product.name,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
+          Text("₹${product.price}"),
+          ElevatedButton
+          (
+            onPressed: ()
+            {
+              Provider.of<CartProvider>(context,listen:false).addProduct(product);
+              Fluttertoast.showToast(
+              msg: "${product.name} Added to cart",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0,
+              );
+               Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),)); 
+
+            },
+            style: ElevatedButton.styleFrom
+            (
+              backgroundColor: Colors.green,     
+              shape: RoundedRectangleBorder
+                      (
+                        borderRadius: BorderRadius.circular(0),
+                      ),         
+            ),
+            child: Text("Add to Cart",style: TextStyle(color: Colors.white)),
+          )
+        ],
+        ),
+    );
+
   }
 }

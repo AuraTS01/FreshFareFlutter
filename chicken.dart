@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/cart.dart';
+import 'package:freshfare/freshfare/cartmodel.dart';
+import 'package:freshfare/freshfare/cartprovider.dart';
 import 'package:freshfare/freshfare/fish.dart';
 import 'package:freshfare/freshfare/home.dart';
 import 'package:freshfare/freshfare/login.dart';
 import 'package:freshfare/freshfare/mutton.dart';
 import 'package:freshfare/freshfare/notification.dart';
 import 'package:freshfare/freshfare/prawns.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ChickenPage extends StatefulWidget {
@@ -49,17 +52,17 @@ class _ChickenPageState extends State<ChickenPage> {
     }
   }
 
-  bool showButton = false;
-  bool showButton_1 = false;
-  bool showButton_2 = false;
+  // bool showButton = false;
+  // bool showButton_1 = false;
+  // bool showButton_2 = false;
 
-  void toggleButton(){
-    setState(() {
-      showButton = !showButton;
-      showButton_1 = !showButton_1;
-      showButton_2 = !showButton_2;
-    });
-  }
+  // void toggleButton(){
+  //   setState(() {
+  //     showButton = !showButton;
+  //     showButton_1 = !showButton_1;
+  //     showButton_2 = !showButton_2;
+  //   });
+  // }
 
   String userName = '';
   String userEmail = '';
@@ -105,6 +108,13 @@ class _ChickenPageState extends State<ChickenPage> {
       },
     );
   }
+
+   final List<Product> products = [          
+                  Product(name:"Chicken_Flesh", baseprice: 300.0, image:"assets/chicken_flesh.png"),
+                  Product(name:"Chicken_WithoutSkin", baseprice: 250.0, image:"assets/chicken_withoutSkin.png"),
+                  Product(name:"Chicken", baseprice: 300.0, image:"assets/chicken_2.png"),             
+  ];
+  
 
   @override
   Widget build(BuildContext context) {
@@ -250,141 +260,65 @@ class _ChickenPageState extends State<ChickenPage> {
                       ),
                     ],
                 ),
-              SizedBox(height: 40),
-              Stack
-              (
-                children: 
-                [
-                  GestureDetector
-                  (
-                    onTap: toggleButton,
-                    child: Image.asset('assets/chicken_flesh.png',
-                    width: 700,
-                    height: 300,
-                    fit: BoxFit.cover,     
-                    ),
-                  ),
-                  if(showButton)
-                    Positioned
-                    (
-                      bottom: 10,
-                      left: 170,
-                      child: ElevatedButton
-                      (
-                        style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                shape: RoundedRectangleBorder
-                                (
-                                  borderRadius: BorderRadius.circular(0),
-                                ),
-                                ),
-                        onPressed: (){},
-                        child: Text("Add to Cart",style: TextStyle(color: Colors.white),),
-                        
-                      ),
-                    ),      
-                ],
-              ),
-              SizedBox(height: 20),
-              Row
-              (
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>
-                [
-                  Text("Chicken_Flesh \n     ₹ 220.00",style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),), 
-                ],
-              ),
-             SizedBox(height: 40),
-             Stack
-              (
-                children: 
-                [
-                  GestureDetector
-                  (
-                    onTap: toggleButton,
-                    child: Image.asset('assets/chicken_2.png',
-                    width: 700,
-                    height: 300,
-                    fit: BoxFit.cover,     
-                    ),
-                  ),
-                  if(showButton_1)
-                    Positioned
-                    (
-                      bottom: 10,
-                      left: 170,
-                      child: ElevatedButton
-                      (
-                        style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                shape: RoundedRectangleBorder
-                                (
-                                  borderRadius: BorderRadius.circular(0),
-                                ),
-                                ),
-                        onPressed: (){},
-                        child: Text("Add to Cart",style: TextStyle(color: Colors.white),),
-                        
-                      ),
-                    ),      
-                ],
-              ),
-              SizedBox(height: 20),
-              Row
-              (
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>
-                [
-                  Text("  Chicken \n ₹ 260.00",style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),), 
-                ],
-              ),
-              SizedBox(height: 40),
-              Stack
-              (
-                children: 
-                [
-                  GestureDetector
-                  (
-                    onTap: toggleButton,
-                    child: Image.asset('assets/chicken_withoutSkin.png',
-                    width: 700,
-                    height: 300,
-                    fit: BoxFit.cover,     
-                    ),
-                  ),
-                  if(showButton_2)
-                    Positioned
-                    (
-                      bottom: 10,
-                      left: 170,
-                      child: ElevatedButton
-                      (
-                        style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                shape: RoundedRectangleBorder
-                                (
-                                  borderRadius: BorderRadius.circular(0),
-                                ),
-                                ),
-                        onPressed: (){},
-                        child: Text("Add to Cart",style: TextStyle(color: Colors.white),),
-                        
-                      ),
-                    ),      
-                ],
-              ),
-              SizedBox(height: 20),
-              Row
-              (
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>
-                [
-                  Text("Chicken_withoutSkin \n        ₹ 300.00",style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),),
-                ],
-              ),
+                SizedBox(height: 30),
+                ListView.builder
+                (
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(), 
+                  itemCount: products.length,
+                  itemBuilder: (context, index) 
+                  {
+                    final product = products[index];
+                    return Container(
+                      // color: Colors.white,
+                      child: productCard(context, product),
+                    );
+                  },
+                ),
             ],
           ),
         ),  
     );
+  }
+
+  Widget productCard(BuildContext context,Product product){
+    return  Card(
+       child:Column
+        (
+        children: 
+        [
+          Image.asset(product.image,height: 150,fit: BoxFit.cover),
+          Text(product.name,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
+          Text("₹${product.price}"),
+          ElevatedButton
+          (
+            onPressed: ()
+            {
+              Provider.of<CartProvider>(context,listen:false).addProduct(product);
+              Fluttertoast.showToast(
+              msg: "${product.name} Added to cart",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0,
+              );
+               Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),)); 
+
+            },
+            style: ElevatedButton.styleFrom
+            (
+              backgroundColor: Colors.green,  
+              shape: RoundedRectangleBorder
+                      (
+                        borderRadius: BorderRadius.circular(0),
+                      ),            
+            ),
+            child: Text("Add to Cart",style: TextStyle(color: Colors.white)),
+          )
+        ],
+        ),
+    );
+
   }
 }
