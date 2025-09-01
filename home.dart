@@ -186,6 +186,8 @@ class _HomePageState extends State<HomePage> {
                   Product(name:"Shrimp", baseprice: 350.0, image:"assets/Shrimp.png"),
   ];
 
+  
+
 
   @override
   Widget build(BuildContext context) 
@@ -356,7 +358,7 @@ class _HomePageState extends State<HomePage> {
               (
                 children: 
                 [
-                  Text("Order  Products",style: TextStyle(
+                  Text("Choose Your Butcher Shops",style: TextStyle(
                   color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold, ),),
                   SizedBox(height: 5),
                   Container
@@ -397,22 +399,8 @@ class _HomePageState extends State<HomePage> {
           Image.asset(product.image,height: 150,fit: BoxFit.cover),
           Text(product.name,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
           Text("₹${product.price}"),
-          ElevatedButton
+          ElevatedButton.icon
           (
-            onPressed: ()
-            {
-              Provider.of<CartProvider>(context,listen:false).addProduct(product);
-              Fluttertoast.showToast(
-              msg: "${product.name} Added to cart",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              backgroundColor: Colors.green,
-              textColor: Colors.white,
-              fontSize: 16.0,
-              );
-               Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),)); 
-
-            },
             style: ElevatedButton.styleFrom
             (
               backgroundColor: Colors.green, 
@@ -421,7 +409,29 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.circular(0),
                         ),                             
             ),
-            child: Text("Add to Cart",style: TextStyle(color: Colors.white)),
+            onPressed: ()
+            {
+              if(product.isAdded){             
+                 Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),)); 
+              }
+              else{
+                Provider.of<CartProvider>(context,listen:false).addProduct(product);
+                setState((){
+                  product.isAdded = true;
+                });
+              }
+              Fluttertoast.showToast(
+              msg: "${product.name} Added to cart",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0,
+              );           
+
+            },
+            icon:Icon(product.isAdded ?  Icons.shopping_cart : Icons.add_shopping_cart,color: Colors.white),
+            label: Text(product.isAdded ? "View Cart" : "Add to Cart",style: TextStyle(color: Colors.white)),
           )
         ],
         ),

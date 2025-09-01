@@ -14,6 +14,7 @@ import 'package:freshfare/freshfare/notification.dart';
 import 'package:freshfare/freshfare/payment.dart';
 import 'package:freshfare/freshfare/prawns.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as https;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -34,6 +35,9 @@ class _CheckoutPageState extends State<CheckoutPage>
   final  addresscontroller = TextEditingController();
   final  towncontroller = TextEditingController();
   final  statecontroller = TextEditingController();
+  final zipcontroller = TextEditingController();
+  final emailcontroller = TextEditingController();
+  final phonecontroller = TextEditingController();
 
   final  searchcontroller = TextEditingController();
   void search()
@@ -160,6 +164,20 @@ class _CheckoutPageState extends State<CheckoutPage>
                   );
       }
     
+  }
+
+
+  Future<void> fetchData() async{
+    final response =  await https.post(
+      Uri.parse("$baseUrl/checkout.php"),
+      body: {"email": loggedInEmail},
+    );
+    var data = jsonDecode(response.body);
+    setState((){
+        namecontroller.text = data['name'];
+        emailcontroller.text = data['email'];
+        phonecontroller.text =  data['number'];
+    });
   }
 
   @override
@@ -322,7 +340,8 @@ class _CheckoutPageState extends State<CheckoutPage>
                     ),
                   ],
                 ),
-                SizedBox(height: 40),
+                SizedBox(height: 30),
+                
                 Form(
                   key: _formkey,  
                   child:Padding
@@ -332,7 +351,11 @@ class _CheckoutPageState extends State<CheckoutPage>
                 
                 
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: 
+                  [
+                    Text("Note : If you have already saved your billing Address and its not visisble, Kindly logout and Login back,You will be provided with the Address that are saved.",
+                          style: TextStyle(fontSize: 12)),
+                    SizedBox(height: 30),
                     Text("Billing Detail",style: TextStyle(color:Colors.black,fontSize: 20,fontWeight: FontWeight.bold)),
                   
                 SizedBox(height: 30),
@@ -412,22 +435,96 @@ class _CheckoutPageState extends State<CheckoutPage>
                       }
                       return null;
                     },   
-                ),             
+                ),  
+                SizedBox(height: 20),    
+                TextFormField
+                (
+                    controller: zipcontroller,
+                    decoration: InputDecoration(labelText: 'Postcode / ZIP*',
+                    border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(0)))),
+                    validator: (value)
+                    {
+                      if(value == null || value.isEmpty)
+                      {                    
+                        return 'Code is required';
+                      }
+                      return null;
+                    },   
+                ),      
+                SizedBox(height: 20),
+                TextFormField
+                (
+                    controller: emailcontroller,
+                    decoration: InputDecoration(labelText: 'Email*',
+                    border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(0)))),
+                    validator: (value)
+                    {
+                      if(value == null || value.isEmpty)
+                      {
+                        return 'Email is required';
+                      }
+                      else if(!value.contains('@'))
+                      {
+                        return 'Enter valid email';
+                      }
+                      return null;
+                    },
+                ),
+                SizedBox(height: 20),    
+                TextFormField
+                (
+                    controller: phonecontroller,
+                    decoration: InputDecoration(labelText: 'Mobile*',
+                    border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(0)))),
+                    validator: (value)
+                    {
+                      if(value == null || value.isEmpty)
+                      {                    
+                        return 'Mobile number is required';
+                      }
+                      return null;
+                    },   
+                ),       
+                SizedBox(height: 20),
+                SizedBox
+                (
+                  width: double.infinity,
+                  child: ElevatedButton                                             
+                    (
+                      onPressed: (){}, 
+                      style: ElevatedButton.styleFrom
+                          (
+                            backgroundColor: Colors.green,
+                            padding: EdgeInsets.symmetric(horizontal: 50,vertical: 15),
+                            shape: RoundedRectangleBorder
+                            (
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                          ),
+                      child: Text("SAVE BILLING DETAILS",style: TextStyle(color: Colors.white),)
+                    ),
+                ),
                 SizedBox(height: 30),
                 Text("Your Order",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
                 SizedBox(height: 10),
-                ListView.builder(
+                ListView.builder
+                (
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: cart.items.length,               
-                  itemBuilder: (context,index){
+                  itemBuilder: (context,index)
+                  {
                     final product = cart.items[index];
-                    return ListTile(
-                    title: Text(product.name),
-                    subtitle: Text("Qty: ${product.quantity}"),
-                    trailing: Text("₹${product.baseprice * product.quantity}"),
+                    return ListTile
+                    (
+                      title: Text(product.name),
+                      subtitle: Text("Qty: ${product.quantity}"),
+                      trailing: Text("₹${product.baseprice * product.quantity}"),
                     );                
-                }
+                  }
                 ),
                 Divider(height: 20),
                 Row(

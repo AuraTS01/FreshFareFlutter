@@ -5,6 +5,7 @@ class Product {
   final String image;
   int quantity;
   String weight;
+  bool isAdded;
 
   Product({
     required this.name,
@@ -12,6 +13,7 @@ class Product {
     required this.image,
     this.quantity = 1,
     this.weight = "1kg", 
+    this.isAdded = false,
   });
 
   double get price {

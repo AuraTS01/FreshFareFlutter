@@ -51,16 +51,6 @@ class _PrawnsPageState extends State<PrawnsPage> {
     }
   }
 
-  // bool showButton = false;
-  // bool showButton_1 = false;
-
-  // void toggleButton(){
-  //   setState(() {
-  //     showButton = !showButton;
-  //     showButton_1 = !showButton_1;
-  //   });
-  // }
-
   String userName = '';
   String userEmail = '';
 
@@ -271,7 +261,8 @@ class _PrawnsPageState extends State<PrawnsPage> {
     );
   }
 
-  Widget productCard(BuildContext context,Product product){
+  Widget productCard(BuildContext context,Product product)
+  {
     return  Card(
        child:Column
         (
@@ -280,11 +271,27 @@ class _PrawnsPageState extends State<PrawnsPage> {
           Image.asset(product.image,height: 150,fit: BoxFit.cover),
           Text(product.name,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
           Text("₹${product.price}"),
-          ElevatedButton
+          ElevatedButton.icon
           (
+            style: ElevatedButton.styleFrom
+            (
+              backgroundColor: Colors.green, 
+              shape: RoundedRectangleBorder
+                        (
+                          borderRadius: BorderRadius.circular(0),
+                        ),                             
+            ),
             onPressed: ()
             {
-              Provider.of<CartProvider>(context,listen:false).addProduct(product);
+             if(product.isAdded){             
+                 Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),)); 
+              }
+              else{
+                Provider.of<CartProvider>(context,listen:false).addProduct(product);
+                setState((){
+                  product.isAdded = true;
+                });
+              }
               Fluttertoast.showToast(
               msg: "${product.name} Added to cart",
               toastLength: Toast.LENGTH_SHORT,
@@ -292,19 +299,10 @@ class _PrawnsPageState extends State<PrawnsPage> {
               backgroundColor: Colors.green,
               textColor: Colors.white,
               fontSize: 16.0,
-              );
-               Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),)); 
-
+              );           
             },
-            style: ElevatedButton.styleFrom
-            (
-              backgroundColor: Colors.green,  
-              shape: RoundedRectangleBorder
-                      (
-                        borderRadius: BorderRadius.circular(0),
-                      ),            
-            ),
-            child: Text("Add to Cart",style: TextStyle(color: Colors.white)),
+            icon:Icon(product.isAdded ?  Icons.shopping_cart : Icons.add_shopping_cart,color: Colors.white),
+            label: Text(product.isAdded ? "View Cart" : "Add to Cart",style: TextStyle(color: Colors.white)),
           )
         ],
         ),
