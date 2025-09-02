@@ -14,7 +14,6 @@ import 'package:freshfare/freshfare/notification.dart';
 import 'package:freshfare/freshfare/payment.dart';
 import 'package:freshfare/freshfare/prawns.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart' as https;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,6 +37,7 @@ class _CheckoutPageState extends State<CheckoutPage>
   final zipcontroller = TextEditingController();
   final emailcontroller = TextEditingController();
   final phonecontroller = TextEditingController();
+  final loginemailcontroller = TextEditingController();
 
   final  searchcontroller = TextEditingController();
   void search()
@@ -85,6 +85,7 @@ class _CheckoutPageState extends State<CheckoutPage>
   void initState() {
     super.initState();
     _loadUserData();
+    
   }
 
   void _showLogoutDialog(BuildContext context)
@@ -168,10 +169,11 @@ class _CheckoutPageState extends State<CheckoutPage>
 
 
   Future<void> fetchData() async{
-    final response =  await https.post(
-      Uri.parse("$baseUrl/checkout.php"),
-      body: {"email": loggedInEmail},
-    );
+   String loginEmail = loginemailcontroller.text.trim();
+    final response =  await http.post(
+      Uri.parse("$baseUrl/getuser.php"),
+        body: {"email": loginEmail},
+        );
     var data = jsonDecode(response.body);
     setState((){
         namecontroller.text = data['name'];
@@ -179,6 +181,8 @@ class _CheckoutPageState extends State<CheckoutPage>
         phonecontroller.text =  data['number'];
     });
   }
+
+  
 
   @override
   Widget build(BuildContext context) 
@@ -522,7 +526,7 @@ class _CheckoutPageState extends State<CheckoutPage>
                     (
                       title: Text(product.name),
                       subtitle: Text("Qty: ${product.quantity}"),
-                      trailing: Text("₹${product.baseprice * product.quantity}"),
+                      trailing: Text("₹${product.baseprice}"),  
                     );                
                   }
                 ),

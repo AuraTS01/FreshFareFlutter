@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/cart.dart';
@@ -12,6 +14,7 @@ import 'package:freshfare/freshfare/notification.dart';
 import 'package:freshfare/freshfare/prawns.dart';
 import 'package:freshfare/freshfare/profile.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,6 +28,8 @@ class HomePage extends StatefulWidget
 }
 
 class _HomePageState extends State<HomePage> {
+
+  final  pincodecontroller = TextEditingController();
 
   String ? selecteditem;
   final items =['Chicken','Mutton','Fish','Prawns'];
@@ -45,99 +50,14 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  String message = '';
-
-  final allowedLocations = [
-    {'lat': 11.289087, 'lng': 76.940971}, // Location 1 Mettupalayam
-    {'lat': 11.238106, 'lng': 76.961426}, // Location 2 Karamadai
-  ];
-
-  double allowedRadius = 5.0; // in km
 
   @override
   void initState() {
     super.initState();
-    checkUserLocation();
     _loadUserData();
   }
 
-  Future<void> checkUserLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // Check if location services are enabled
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      setState(() {
-        message = "Location services are disabled.";
-      });
-      return;
-    }
-
-    // Check location permission
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        setState(() {
-          message = "Location permissions are denied.";
-        });
-        return;
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      setState(() {
-        message = "Location permissions are permanently denied.";
-      });
-      return;
-    }
-
-    // Get current position
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
-
-    bool isInAllowedArea = false;
-
-    for (var loc in allowedLocations) {
-      double distanceInMeters = Geolocator.distanceBetween(
-        position.latitude,
-        position.longitude,
-        loc['lat']!,
-        loc['lng']!,
-      );
-      double distanceInKm = distanceInMeters / 1000;
-
-      if (distanceInKm <= allowedRadius) {
-        isInAllowedArea = true;
-        break;
-      }
-    }
-
-    setState(() {
-      if (isInAllowedArea) {
-        Fluttertoast.showToast(
-                msg: "✅ You can place an order.",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                backgroundColor: Colors.green,
-                textColor: Colors.white,
-                fontSize: 16.0,
-              );
-        
-      } else {
-        Fluttertoast.showToast(
-                msg: "🚫 Sorry, orders are not available in your location.",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                backgroundColor: Colors.red,
-                textColor: Colors.white,
-                fontSize: 16.0,
-              );
-      }
-    });
-  }
+ 
   void _showLogoutDialog(BuildContext context)
   {
     showDialog(
@@ -159,6 +79,149 @@ class _HomePageState extends State<HomePage> {
               },
               child: const Text("No"),
             ),            
+          ],
+        );
+      },
+    );
+  }
+  Future<void> checkPincode() async {
+    String pincode = pincodecontroller.text.trim();
+
+    if (pincode.isEmpty) {
+      Fluttertoast.showToast(
+              msg: "Please enter your pincode",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0,
+              );           
+      return;
+    }
+
+    try {
+      var response = await http.post(
+        Uri.parse("http://192.168.86.9/FreshFareFlutter/lib/freshfare_database/pincode.php"),
+        body: {"pincode": pincode},
+      );
+
+      var data = json.decode(response.body);
+      if (data["status"] == "success") {
+              Fluttertoast.showToast(
+              msg: data["message"],
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0,
+              ); 
+              Navigator.pop(context); 
+      } else {
+         Fluttertoast.showToast(
+              msg: data["message"],
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0,
+              ); 
+              Navigator.pop(context); 
+      }
+     
+    } catch (e) {
+      Fluttertoast.showToast(
+              msg: "Something went wrong. Try again later.",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0,
+              );
+    }
+  }
+
+  void _showLocationDialog(BuildContext context)
+  {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Enter Your Pincode"),
+          content: 
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Location access was denied. Please enter your area pincode to check delivery availability.",
+                style: TextStyle(fontSize: 12),
+              ),
+              SizedBox(height: 15),
+              TextField(
+                controller: pincodecontroller,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintText: "e.g., 641301",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); 
+              },
+              child: Text("Cancel"),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              // onPressed: () {
+              //   String pincode = pincodecontroller.text.trim();
+              //    if(pincode == "641301" || pincode == "641305"){    //Mettupalayam
+              //         Fluttertoast.showToast
+              //         (
+              //           msg: "Delivery available in your area ($pincode)",
+              //           toastLength: Toast.LENGTH_SHORT,
+              //           gravity: ToastGravity.CENTER,
+              //           backgroundColor: Colors.green,
+              //           textColor: Colors.white,
+              //           fontSize: 16.0,
+              //         );   
+              //   }
+              //   else if(pincode == "641104"){    //Karamadai
+              //     Fluttertoast.showToast
+              //         (
+              //           msg: "Delivery available in your area ($pincode)",
+              //           toastLength: Toast.LENGTH_SHORT,
+              //           gravity: ToastGravity.CENTER,
+              //           backgroundColor: Colors.green,
+              //           textColor: Colors.white,
+              //           fontSize: 16.0,
+              //         );   
+              //   }
+              //   else{
+              //      Fluttertoast.showToast
+              //         (
+              //           msg: "not ($pincode)",
+              //           toastLength: Toast.LENGTH_SHORT,
+              //           gravity: ToastGravity.CENTER,
+              //           backgroundColor: Colors.red,
+              //           textColor: Colors.white,
+              //           fontSize: 16.0,
+              //         );   
+              //   }
+              // },
+              onPressed: checkPincode,
+              child: Text("Check",style: TextStyle(color: Colors.white),),
+            ),
           ],
         );
       },
@@ -280,25 +343,27 @@ class _HomePageState extends State<HomePage> {
           (
             children: 
             [
-              Text("Please allow location access to check delivery availabity in your area"),
-              SizedBox
+              Text("Please allow location access to check delivery availabity in your area.",style: TextStyle(fontSize: 15),),
+              SizedBox(height: 10),             
+              Align
               (
-                width: 0.0,
-                height: 30.0,
+                alignment: Alignment.center,              
                 child:ElevatedButton
                   (
                     style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blue,
                               shape: RoundedRectangleBorder
                               (
-                                borderRadius: BorderRadius.circular(0),
+                                borderRadius: BorderRadius.circular(7.0),
                               ),
                               ),
-                    onPressed: checkUserLocation,                    
-                    child:Text("change location", style: TextStyle(color: Colors.white),)
+                    onPressed:  () async{   
+                      _showLocationDialog(context);                  
+                        },                    
+                    child:Text("Change Location", style: TextStyle(color: Colors.white,fontWeight:FontWeight.bold))
                   ),
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 40),
               Container
               (
                 padding: EdgeInsets.symmetric(horizontal: 12),
@@ -312,7 +377,7 @@ class _HomePageState extends State<HomePage> {
                   child: DropdownButton
                   (
                     value:selecteditem,
-                    hint: Text("All Items"),
+                    hint: Text("All Items",style: TextStyle(color: Colors.white,fontWeight:FontWeight.bold),),
                     items: items.map((String value)
                     {
                       return DropdownMenuItem<String>

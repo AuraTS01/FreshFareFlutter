@@ -331,7 +331,7 @@ class _CartPageState extends State<CartPage>
                   }, 
                   style: ElevatedButton.styleFrom
                   (
-                    backgroundColor: Colors.green,
+                    backgroundColor: Colors.blue,
                     padding: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
                     shape: RoundedRectangleBorder
                         (
@@ -358,6 +358,10 @@ class _CartPageState extends State<CartPage>
                   (
                     backgroundColor: Colors.green,
                     padding: EdgeInsets.symmetric(horizontal: 40,vertical: 15),
+                    shape: RoundedRectangleBorder
+                            (
+                              borderRadius: BorderRadius.circular(0),
+                            ),
                   ),
                   child: Text("PROCEED TO CHECKOUT",style: TextStyle(color: Colors.white)),
                 ),
