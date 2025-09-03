@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:freshfare/freshfare/cartprovider.dart';
 import 'package:freshfare/freshfare/home.dart';
+// import 'package:google_fonts/google_fonts.dart';
 // import 'package:freshfare/freshfare/login.dart';
 import 'package:provider/provider.dart';
 
@@ -29,8 +30,8 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  MaterialApp(
-      theme: ThemeData(brightness: Brightness.light),
-      darkTheme: ThemeData(brightness: Brightness.light),
+      theme: ThemeData(
+        fontFamily: "Poppins"),
       themeMode: ThemeMode.system,
       title: 'Fresh Fare',
       debugShowCheckedModeBanner: false,

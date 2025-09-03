@@ -142,12 +142,14 @@ class _SignPageState extends State<SignPage>
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>
                     [
-                      Text("Sign Up",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 40)),
-                      Text("Create an account"),
+                      Text("Create  Account",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30)),     
+                      SizedBox(height: 20),                
                       TextFormField
                       (
                                 controller: namecontroller,
-                                decoration: InputDecoration(labelText: 'username'),
+                                decoration: InputDecoration(labelText: 'username',
+                                border: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(0)))),
                                 validator: (value) {
                                 if(value == null || value.isEmpty)
                                 {
@@ -156,11 +158,13 @@ class _SignPageState extends State<SignPage>
                                 return null;
                                 },
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 20),
                       TextFormField
                       (
                                 controller: emailcontroller,
-                                decoration: InputDecoration(labelText: 'email'),
+                                decoration: InputDecoration(labelText: 'email',
+                                border: const OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(0)))),
                                 validator: (value)
                                 {
                                   if(value == null || value.isEmpty)
@@ -174,11 +178,13 @@ class _SignPageState extends State<SignPage>
                                   return null;
                                 },
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 20),
                       TextFormField
                       (
                                 controller: phonecontroller,
-                                decoration: InputDecoration(labelText: 'mobile',),
+                                decoration: InputDecoration(labelText: 'mobile',
+                                border: const OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(0)))),
                                 validator: (value)
                                 {
                                   if(value == null || value.isEmpty)
@@ -188,7 +194,7 @@ class _SignPageState extends State<SignPage>
                                   return null;
                                 },   
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 20),
                       TextFormField
                       (
                                 obscureText: passwordVisible,
@@ -207,7 +213,10 @@ class _SignPageState extends State<SignPage>
                                       },
                                     ),
                                 alignLabelWithHint: false,
-                                filled: true,),
+                                filled: true,
+                                border: const OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(0)))
+                               ),
                                 validator : (value)
                                 {
                                     if(value == null || value.isEmpty)
@@ -224,7 +233,7 @@ class _SignPageState extends State<SignPage>
                                 },
                           
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 20),
                       TextFormField
                       (
                                 obscureText: passwordVis,
@@ -244,7 +253,10 @@ class _SignPageState extends State<SignPage>
                                       },
                                     ),
                                 alignLabelWithHint: false,
-                                filled: true,),
+                                filled: true,
+                                border: const OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(0)))
+                                ),
                                 validator : (value)
                                 {
                                       if(value == null || value.isEmpty)
@@ -259,7 +271,7 @@ class _SignPageState extends State<SignPage>
                                 },
                     
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 20),
                       ElevatedButton
                       (
                           style: ElevatedButton.styleFrom
@@ -275,7 +287,7 @@ class _SignPageState extends State<SignPage>
                               signup();
                             }
                           },                          
-                          child: Text('Register', style: TextStyle(color: Colors.white)),
+                          child: Text('Register', style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)),
                       ),
                       Row
                       (
@@ -289,7 +301,7 @@ class _SignPageState extends State<SignPage>
                             {
                               Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(),));
                             },
-                            child:Text("Login", style: TextStyle(color: Colors.blue),)
+                            child:Text("Login here", style: TextStyle(color: Colors.blue),)
                             ),
                         ],
                       ),

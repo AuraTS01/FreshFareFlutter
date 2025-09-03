@@ -526,7 +526,7 @@ class _CheckoutPageState extends State<CheckoutPage>
                     (
                       title: Text(product.name),
                       subtitle: Text("Qty: ${product.quantity}"),
-                      trailing: Text("₹${product.baseprice}"),  
+                      trailing: Text("₹${product.price}"),  
                     );                
                   }
                 ),

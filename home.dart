@@ -183,42 +183,6 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              // onPressed: () {
-              //   String pincode = pincodecontroller.text.trim();
-              //    if(pincode == "641301" || pincode == "641305"){    //Mettupalayam
-              //         Fluttertoast.showToast
-              //         (
-              //           msg: "Delivery available in your area ($pincode)",
-              //           toastLength: Toast.LENGTH_SHORT,
-              //           gravity: ToastGravity.CENTER,
-              //           backgroundColor: Colors.green,
-              //           textColor: Colors.white,
-              //           fontSize: 16.0,
-              //         );   
-              //   }
-              //   else if(pincode == "641104"){    //Karamadai
-              //     Fluttertoast.showToast
-              //         (
-              //           msg: "Delivery available in your area ($pincode)",
-              //           toastLength: Toast.LENGTH_SHORT,
-              //           gravity: ToastGravity.CENTER,
-              //           backgroundColor: Colors.green,
-              //           textColor: Colors.white,
-              //           fontSize: 16.0,
-              //         );   
-              //   }
-              //   else{
-              //      Fluttertoast.showToast
-              //         (
-              //           msg: "not ($pincode)",
-              //           toastLength: Toast.LENGTH_SHORT,
-              //           gravity: ToastGravity.CENTER,
-              //           backgroundColor: Colors.red,
-              //           textColor: Colors.white,
-              //           fontSize: 16.0,
-              //         );   
-              //   }
-              // },
               onPressed: checkPincode,
               child: Text("Check",style: TextStyle(color: Colors.white),),
             ),
@@ -243,7 +207,7 @@ class _HomePageState extends State<HomePage> {
                   Product(name:"Prawns", baseprice: 400.0, image:"assets/prawns.png"),
                   Product(name:"Fish", baseprice: 200.0, image: "assets/fish.png"),
                   Product(name:"Chicken_Flesh", baseprice: 300.0, image:"assets/chicken_flesh.png"),
-                  Product(name:"Chicken_WithoutSkin", baseprice: 250.0, image:"assets/chicken_withoutSkin.png"),
+                  Product(name:"Chicken_Without_Skin", baseprice: 250.0, image:"assets/chicken_withoutSkin.png"),
                   Product(name:"Chicken", baseprice: 300.0, image:"assets/chicken_2.png"),
                    Product(name:"Mutton", baseprice: 800.0, image:"assets/fresh_raw_mutton_leg.png"),
                   Product(name:"Shrimp", baseprice: 350.0, image:"assets/Shrimp.png"),
@@ -343,7 +307,7 @@ class _HomePageState extends State<HomePage> {
           (
             children: 
             [
-              Text("Please allow location access to check delivery availabity in your area.",style: TextStyle(fontSize: 15),),
+              Text("Please allow location access to check delivery availabity in your area.",style: TextStyle(fontSize: 14),),
               SizedBox(height: 10),             
               Align
               (

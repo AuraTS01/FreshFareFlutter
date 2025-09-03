@@ -7,7 +7,7 @@ $password = isset($_POST['password']) ? $_POST['password'] : '';
 
 
 // Check if user exists
-$sql = "SELECT * FROM fresh_fare_signup WHERE email = '$email'";
+$sql = "SELECT * FROM fresh_fare_signup WHERE email = '$email' AND password = '$password'";
 $result = mysqli_query($conn, $sql);
 $count = mysqli_num_rows($result);
 

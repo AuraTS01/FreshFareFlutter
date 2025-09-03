@@ -122,12 +122,14 @@ class _LoginPageState extends State<LoginPage>
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>
                           [
-                            Text("Login",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 40)),
-                            Text("Enter your username & password to login"),
+                            Text("Login",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30)),  
+                            SizedBox(height: 20),                          
                             TextFormField
                             (
                               controller: emailcontroller,
-                              decoration: InputDecoration(labelText: 'Email',),                   
+                              decoration: InputDecoration(labelText: 'Email',
+                              border: const OutlineInputBorder(
+                                 borderRadius: BorderRadius.all(Radius.circular(0)))),                   
                               validator: (value) 
                               {
                                 if(value == null || value.isEmpty)
@@ -140,7 +142,7 @@ class _LoginPageState extends State<LoginPage>
                                 return null;
                               },
                             ),
-                            SizedBox(height: 10),
+                            SizedBox(height: 20),
                             TextFormField
                             (
                               obscureText: passwordVisible,
@@ -161,6 +163,8 @@ class _LoginPageState extends State<LoginPage>
                                   ),
                                   alignLabelWithHint: false,
                                   filled: true,
+                                  border: const OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(0)))
                                 ),
                                 validator : (value)
                                 {
@@ -200,22 +204,23 @@ class _LoginPageState extends State<LoginPage>
                                       login();
                                     }
                                   },                            
-                                  child: Text('Login',style: TextStyle(color: Colors.white),),
+                                  child: Text('Login',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
                               ),
                             ),
-                            Row
+                            SizedBox(height: 20),
+                            Wrap
                             (
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              alignment: WrapAlignment.center,
                               children: 
                               [
-                                Text("Don't have an account? "),
+                                Text("Don't have an account?",),                              
                                 TextButton
                                 (
                                   onPressed: () 
                                   {
                                     Navigator.push(context, MaterialPageRoute(builder: (context) => SignPage(),));
                                   },
-                                  child:Text(" Create an account", style: TextStyle(color: Colors.blue),)
+                                  child:Text("Create an account", style: TextStyle(color: Colors.blue),)
                                 ),
                               ],
                             ),
