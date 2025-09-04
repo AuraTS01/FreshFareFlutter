@@ -32,7 +32,12 @@ if ($count >= 1) {
     $insert = "INSERT INTO fresh_fare_signup (username, email, mob_num, password, category, access, role, country, Address_1, Address_2, town, state)
      VALUES ('$name', '$email', '$number', '$password', '$category', '$access', '$role', '$country', '$Address_1', '$Address_2', '$town', '$state')";
     if (mysqli_query($conn, $insert)) {
-        echo json_encode(["status" => "Success"]);
+
+        echo json_encode(array(
+            "status" => "Success",
+            "userName" => $row['$name'],
+            "userEmail" => $row['$email'],
+            "phoneNumber" => $row['$number']));
     } else {
         echo json_encode("Database error: " . mysqli_error($conn));
     }

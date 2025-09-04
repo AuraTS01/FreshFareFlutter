@@ -1,3 +1,4 @@
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:freshfare/freshfare/home.dart';
@@ -75,25 +76,26 @@ class _LoginPageState extends State<LoginPage>
         automaticallyImplyLeading: false,
         title:Row
         (
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.end,
-           children: 
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: 
             [
               Image.asset('assets/logo.png',
-              height:70,),
+              height:50),
+              SizedBox(width: 8),
               RichText(text: TextSpan
               (
                 children: 
                 [
-                  TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 60,fontWeight: FontWeight.bold),),
-                  TextSpan(text: 'resh',style:TextStyle(color:Colors.black,fontSize: 60,fontWeight: FontWeight.bold),),
-                  TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 60,fontWeight: FontWeight.bold),),
-                  TextSpan(text: 'are',style: TextStyle(color:Colors.black,fontSize: 60,fontWeight: FontWeight.bold),),
+                  TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 40,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                  TextSpan(text: 'resh',style:TextStyle(color:Colors.black,fontSize: 40,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                  TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 40,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                  TextSpan(text: 'are',style: TextStyle(color:Colors.black,fontSize: 40,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
                 ],
               ),
               ),
             ],
-        ),
+          ),
       ),
       body:SingleChildScrollView
       (

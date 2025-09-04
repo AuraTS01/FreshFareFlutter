@@ -1,57 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/cart.dart';
-import 'package:freshfare/freshfare/chicken.dart';
-import 'package:freshfare/freshfare/fish.dart';
 import 'package:freshfare/freshfare/home.dart';
 import 'package:freshfare/freshfare/login.dart';
-import 'package:freshfare/freshfare/mutton.dart';
 import 'package:freshfare/freshfare/notification.dart';
-import 'package:freshfare/freshfare/prawns.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
 
 class SummaryPage extends StatefulWidget 
 {
+  
   const SummaryPage({super.key});
+  
   @override
   State<SummaryPage> createState() => _SummaryPageState();
 }
 
 class _SummaryPageState extends State<SummaryPage>
 {
-
-  final  searchcontroller = TextEditingController();
-  void search()
-  {
-    String input = searchcontroller.text;
-    if(input=="chicken"){
-       Navigator.push(context, MaterialPageRoute(builder: (context) => ChickenPage(selecteditem: '',),));
-    }
-    else if(input=="fish"){
-       Navigator.push(context, MaterialPageRoute(builder: (context) => FishPage(selecteditem: '',),),);
-    }
-    else if(input=="prawns"){
-       Navigator.push(context, MaterialPageRoute(builder: (context) => PrawnsPage(selecteditem: '',),),);
-    }
-    else if(input=="mutton"){
-       Navigator.push(context, MaterialPageRoute(builder: (context) => MuttonPage(selecteditem: '',),),);
-    }
-    else if(input.isEmpty)
-    {
-      Fluttertoast.showToast
-                      (
-                        msg: "Please enter something to search",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 3,
-                        backgroundColor: Colors.green,
-                        textColor: Colors.white,
-                        fontSize: 16.0,
-                      );
-    }
-  }
 
   String userName = '';
   String userEmail = '';
@@ -82,7 +48,7 @@ class _SummaryPageState extends State<SummaryPage>
             TextButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(),));
-                // Navigator.pushReplacementNamed(context, '/login');
+                
               },
               child: const Text("Yes"),
             ),
@@ -98,6 +64,8 @@ class _SummaryPageState extends State<SummaryPage>
     );
   }
 
+
+
   @override
   Widget build(BuildContext context) 
   {
@@ -106,26 +74,26 @@ class _SummaryPageState extends State<SummaryPage>
       appBar: AppBar
       (
         title:Row
-        (
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: 
+       (
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: 
             [
               Image.asset('assets/logo.png',
-             height:53),
+              height:45),
+              SizedBox(width: 8),
               RichText(text: TextSpan
               (
                 children: 
                 [
-                  TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 50,fontWeight: FontWeight.bold),),
-                  TextSpan(text: 'resh',style:TextStyle(color:Colors.black,fontSize: 50,fontWeight: FontWeight.bold),),
-                  TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 50,fontWeight: FontWeight.bold),),
-                  TextSpan(text: 'are',style: TextStyle(color:Colors.black,fontSize: 50,fontWeight: FontWeight.bold),),
+                  TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                  TextSpan(text: 'resh',style:TextStyle(color:Colors.black,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                  TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                  TextSpan(text: 'are',style: TextStyle(color:Colors.black,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
                 ],
               ),
               ),
             ],
-        ),           
+          ),       
       ),
       drawer:Drawer
       ( 

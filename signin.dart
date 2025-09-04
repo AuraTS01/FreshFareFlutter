@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-// import 'package:freshfare/authmanagement/authmanage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/login.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class SignPage extends StatefulWidget 
@@ -47,6 +47,11 @@ class _SignPageState extends State<SignPage>
                   );
       }
     else if(data['status'] == "Success"){
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('userName', data["username"]);
+        await prefs.setString('userEmail', data["email"]);
+        await prefs.setString('phoneNumber', data["mob_num"]);
+        
       Fluttertoast.showToast(
           msg: "Registration Successful",
           toastLength: Toast.LENGTH_SHORT,
@@ -94,26 +99,27 @@ class _SignPageState extends State<SignPage>
       (
         automaticallyImplyLeading: false,
         title:Row
-        (
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: 
-          [
-            Image.asset('assets/logo.png',
-            height:70,),
-            RichText(text:TextSpan
-            (
-              children: 
-              [
-                TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 60,fontWeight: FontWeight.bold),),
-                TextSpan(text: 'resh',style:TextStyle(color:Colors.black,fontSize: 60,fontWeight: FontWeight.bold),),
-                TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 60,fontWeight: FontWeight.bold),),
-                TextSpan(text: 'are',style: TextStyle(color:Colors.black,fontSize: 60,fontWeight: FontWeight.bold),),
-              ],
-            ),
-            ),
-          ],
-        ),
+         (
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: 
+            [
+              Image.asset('assets/logo.png',
+              height:50),
+              SizedBox(width: 8),
+              RichText(text: TextSpan
+              (
+                children: 
+                [
+                  TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 40,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                  TextSpan(text: 'resh',style:TextStyle(color:Colors.black,fontSize: 40,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                  TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 40,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                  TextSpan(text: 'are',style: TextStyle(color:Colors.black,fontSize: 40,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                ],
+              ),
+              ),
+            ],
+          ),
       ),
       body:SingleChildScrollView
       (
@@ -142,7 +148,7 @@ class _SignPageState extends State<SignPage>
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>
                     [
-                      Text("Create  Account",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30)),     
+                      Text("Create  Account",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20)),     
                       SizedBox(height: 20),                
                       TextFormField
                       (

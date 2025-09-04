@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/cart.dart';
-import 'package:freshfare/freshfare/cartmodel.dart';
+// import 'package:freshfare/freshfare/cartmodel.dart';
 import 'package:freshfare/freshfare/cartprovider.dart';
 import 'package:freshfare/freshfare/chicken.dart';
 import 'package:freshfare/freshfare/fish.dart';
@@ -171,7 +171,7 @@ class _CheckoutPageState extends State<CheckoutPage>
   Future<void> fetchData() async{
    String loginEmail = loginemailcontroller.text.trim();
     final response =  await http.post(
-      Uri.parse("$baseUrl/getuser.php"),
+      Uri.parse("$baseUrl/signup.php"),
         body: {"email": loginEmail},
         );
     var data = jsonDecode(response.body);
@@ -194,25 +194,25 @@ class _CheckoutPageState extends State<CheckoutPage>
       (
         title:Row
         (
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: 
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: 
             [
               Image.asset('assets/logo.png',
-              height:53),
+              height:45),
+              SizedBox(width: 8),
               RichText(text: TextSpan
               (
                 children: 
                 [
-                  TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 50,fontWeight: FontWeight.bold),),
-                  TextSpan(text: 'resh',style:TextStyle(color:Colors.black,fontSize: 50,fontWeight: FontWeight.bold),),
-                  TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 50,fontWeight: FontWeight.bold),),
-                  TextSpan(text: 'are',style: TextStyle(color:Colors.black,fontSize: 50,fontWeight: FontWeight.bold),),
+                  TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                  TextSpan(text: 'resh',style:TextStyle(color:Colors.black,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                  TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                  TextSpan(text: 'are',style: TextStyle(color:Colors.black,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
                 ],
               ),
               ),
             ],
-        ),           
+          ),
       ),
       drawer:Drawer
       ( 

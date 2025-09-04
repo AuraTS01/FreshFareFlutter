@@ -18,19 +18,21 @@ class _ProfilePageState extends State<ProfilePage>
 
   String userName = '';
   String userEmail = '';
+  String phoneNumber= '';
 
-  Future<void> _loadUserData() async {
+  Future<void> loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       userName = prefs.getString('userName') ?? '';
       userEmail = prefs.getString('userEmail') ?? '';
+      phoneNumber = prefs.getString('phoneNumber') ?? '';
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _loadUserData();
+    loadUserData();
   }
 
   void _showLogoutDialog(BuildContext context)
@@ -44,8 +46,7 @@ class _ProfilePageState extends State<ProfilePage>
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(),));
-                // Navigator.pushReplacementNamed(context, '/login');
+                Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(),));              
               },
               child: const Text("Yes"),
             ),
@@ -61,7 +62,6 @@ class _ProfilePageState extends State<ProfilePage>
     );
   }
 
- 
   @override
   Widget build(BuildContext context) {
     return  Scaffold
@@ -70,25 +70,25 @@ class _ProfilePageState extends State<ProfilePage>
       (
         title:Row
         (
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: 
+            crossAxisAlignment: CrossAxisAlignment.center,      
+            children: 
             [
               Image.asset('assets/logo.png',
-              height:53),
+              height:45),
+              SizedBox(width: 8),
               RichText(text: TextSpan
               (
                 children: 
                 [
-                  TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 50,fontWeight: FontWeight.bold),),
-                  TextSpan(text: 'resh',style:TextStyle(color:Colors.black,fontSize: 50,fontWeight: FontWeight.bold),),
-                  TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 50,fontWeight: FontWeight.bold),),
-                  TextSpan(text: 'are',style: TextStyle(color:Colors.black,fontSize: 50,fontWeight: FontWeight.bold),),
+                  TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                  TextSpan(text: 'resh',style:TextStyle(color:Colors.black,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                  TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                  TextSpan(text: 'are',style: TextStyle(color:Colors.black,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
                 ],
               ),
               ),
             ],
-        ),
+          ),
       ),
       drawer:Drawer
       ( 
@@ -143,28 +143,107 @@ class _ProfilePageState extends State<ProfilePage>
           ],
         ),
       ),
-      body:Center
-      (
-       child: Container
-       (
-          decoration:BoxDecoration
-          (
-            color: Colors.white,             
-            boxShadow:
-            [
-              BoxShadow
-              ( 
-                color: Colors.black26,
-                blurRadius: 5,
-                spreadRadius: 4,
-                offset: Offset(0,5,),
+      body: Column(
+        children: [
+          Stack(
+            children: [
+              ClipPath(
+                clipper: CurvedHeaderClipper(),
+                child: Container(
+                  height: 200,
+                  color: Colors.green,
+                ),
+              ),
+              Positioned(
+                top: 40,
+                left: 20,
+                child: Text(
+                  "Profile",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 100),
+                  child: CircleAvatar(
+                     radius: 40,
+                    backgroundColor: Colors.white,
+                   child: Text(userName.isNotEmpty ? userName[0] : '?',
+                   style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 30,fontFamily: "Poppins"),),
+                  ),
+                ),
               ),
             ],
           ),
-          margin:EdgeInsets.all(20.0),    
-        ),
-      ),  
-    ); 
+          SizedBox(height: 20),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  profileItem(Icons.person, "Name", userName),
+                  SizedBox(height: 20),         
+                  profileItem(Icons.phone, "Phone", phoneNumber),
+                  SizedBox(height: 20),
+                  profileItem(Icons.email, "Email", userEmail),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
+  Widget profileItem(IconData icon, String title, String value) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, size: 28, color: Colors.green),
+        SizedBox(width: 15),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                )),
+            SizedBox(height: 3),
+            Text(value,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black87,
+                )),
+          ],
+        ),
+      ],
+    );
+  }
+}
+class CurvedHeaderClipper extends CustomClipper<Path> 
+{
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+    path.lineTo(0, size.height - 60);
+    var controlPoint = Offset(size.width / 2, size.height);
+    var endPoint = Offset(size.width, size.height - 60);
+    path.quadraticBezierTo(
+        controlPoint.dx, controlPoint.dy, endPoint.dx, endPoint.dy);
+    path.lineTo(size.width, 0);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
+
 }
 
