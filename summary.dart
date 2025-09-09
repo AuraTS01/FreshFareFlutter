@@ -4,7 +4,7 @@ import 'package:freshfare/freshfare/home.dart';
 import 'package:freshfare/freshfare/login.dart';
 import 'package:freshfare/freshfare/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:freshfare/freshfare/cartprovider.dart';
 
 
 class SummaryPage extends StatefulWidget 
@@ -148,8 +148,7 @@ class _SummaryPageState extends State<SummaryPage>
           ],
         ),
       ),
-      body:SingleChildScrollView(
-        child:Padding
+      body:Padding
         (
           padding: EdgeInsets.all(16.0),
           child:Column(
@@ -161,17 +160,94 @@ class _SummaryPageState extends State<SummaryPage>
                 padding: EdgeInsets.all(12),
                 child: Text("Order Summary",style: TextStyle(color: Colors.white,fontSize: 18),),
               ),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey.shade300),
+              SizedBox(height: 20), 
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Customer Info",style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            )),
+                      SizedBox(height: 30),
+                      Text("Name : $userName",style: TextStyle(
+                            fontSize: 14,
+                            
+                            )),
+                      SizedBox(height: 20), 
+                      Text("Email : $userEmail",style: TextStyle(
+                              fontSize: 14,
+                              
+                              )),
+                      SizedBox(height: 20),        
+                      Text("Phone :", style: TextStyle(
+                              fontSize: 14,
+                             
+                              )),
+                      SizedBox(height: 20),
+                      Text("Address :", style: TextStyle(
+                              fontSize: 14,
+                              
+                              )),
+                      SizedBox(height: 30),
+                      Text("Order Details :", style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              )),
+                      SizedBox(height: 20),
+                      Text("Order ID:", style: TextStyle(
+                              fontSize: 14,
+                              
+                              )),
+                      SizedBox(height: 20),
+                      Text("Date :", style: TextStyle(
+                              fontSize: 14,
+                              
+                              )),
+                      SizedBox(height: 20),
+                      Text("Payment :", style: TextStyle(
+                              fontSize: 14,
+                             
+                              )),
+                      SizedBox(height: 20),
+                      Text("Items", style: TextStyle(
+                              fontSize: 14,                             
+                              )),
+                      Divider(height: 30),
+                      // ListView.builder
+                      // (
+                      //   shrinkWrap: true,
+                      //   physics: NeverScrollableScrollPhysics(),
+                      //   itemCount: cart.items.length,               
+                      //   itemBuilder: (context,index)
+                      //   {
+                      //     final product = cart.items[index];
+                      //     return ListTile
+                      //     (
+                      //       title: Text(product.name),
+                      //       subtitle: Text("Qty: ${product.quantity}"),
+                      //       trailing: Text("₹${product.price}"),  
+                      //     );                
+                      //   }
+                      // ),
+                      // Divider(height: 30),
+                      // Row
+                      // (
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     Text("Total",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
+                      //     Text("₹${cart.totalPrice}",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))
+                      //   ],
+                      // ),
+                    ],
+                  ),
                 ),
-               
-              )
+              ),
             ],
           )
         )
-      )
     ); 
   }
 }

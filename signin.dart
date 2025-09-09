@@ -47,10 +47,6 @@ class _SignPageState extends State<SignPage>
                   );
       }
     else if(data['status'] == "Success"){
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('userName', data["username"]);
-        await prefs.setString('userEmail', data["email"]);
-        await prefs.setString('phoneNumber', data["mob_num"]);
         
       Fluttertoast.showToast(
           msg: "Registration Successful",

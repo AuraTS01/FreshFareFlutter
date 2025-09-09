@@ -33,7 +33,10 @@ class _LoginPageState extends State<LoginPage>
       if(data['status'] == "Success"){
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('userName', data["username"]);
+        await prefs.setString('userPhone', data['number']);
         await prefs.setString('userEmail', data["email"]);
+       
+
 
         Fluttertoast.showToast(
               msg: "Login Successfully!",

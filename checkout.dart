@@ -1,9 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/cart.dart';
-// import 'package:freshfare/freshfare/cartmodel.dart';
 import 'package:freshfare/freshfare/cartprovider.dart';
 import 'package:freshfare/freshfare/chicken.dart';
 import 'package:freshfare/freshfare/fish.dart';
@@ -85,7 +83,9 @@ class _CheckoutPageState extends State<CheckoutPage>
   void initState() {
     super.initState();
     _loadUserData();
-    
+     Future.delayed(Duration(milliseconds: 100), () {
+    fetchUserData(); 
+     });
   }
 
   void _showLogoutDialog(BuildContext context)
@@ -99,8 +99,7 @@ class _CheckoutPageState extends State<CheckoutPage>
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(),));
-                // Navigator.pushReplacementNamed(context, '/login');
+                Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(),));             
               },
               child: const Text("Yes"),
             ),
@@ -139,7 +138,6 @@ class _CheckoutPageState extends State<CheckoutPage>
     });
 
     var data = json.decode(response.body);
-    print("Server response: $data");
 
    
       if (data['status'] == "Success") {
@@ -167,20 +165,30 @@ class _CheckoutPageState extends State<CheckoutPage>
     
   }
 
+  Future<void> fetchUserData() async {
+  if (userEmail.isEmpty) return;
 
-  Future<void> fetchData() async{
-   String loginEmail = loginemailcontroller.text.trim();
-    final response =  await http.post(
-      Uri.parse("$baseUrl/signup.php"),
-        body: {"email": loginEmail},
-        );
-    var data = jsonDecode(response.body);
-    setState((){
-        namecontroller.text = data['name'];
-        emailcontroller.text = data['email'];
-        phonecontroller.text =  data['number'];
+  final response = await http.post(
+    Uri.parse("$baseUrl/getuser.php"),
+    body: {"email": userEmail},
+  );
+
+  var data = jsonDecode(response.body);
+
+  if (data['status'] == "Success") {
+    setState(() {
+      namecontroller.text = data['name'] ?? '';
+      emailcontroller.text = data['email'] ?? '';
+      phonecontroller.text = data['number'] ?? '';
     });
+  } else {
+    Fluttertoast.showToast(
+      msg: "Failed to fetch user data",
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+    );
   }
+}
 
   
 

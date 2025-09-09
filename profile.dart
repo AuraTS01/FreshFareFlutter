@@ -18,14 +18,16 @@ class _ProfilePageState extends State<ProfilePage>
 
   String userName = '';
   String userEmail = '';
-  String phoneNumber= '';
+  String userPhone = '';
+
 
   Future<void> loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       userName = prefs.getString('userName') ?? '';
+      userPhone = prefs.getString('userPhone') ?? '';
       userEmail = prefs.getString('userEmail') ?? '';
-      phoneNumber = prefs.getString('phoneNumber') ?? '';
+    
     });
   }
 
@@ -188,9 +190,9 @@ class _ProfilePageState extends State<ProfilePage>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   profileItem(Icons.person, "Name", userName),
-                  SizedBox(height: 20),         
-                  profileItem(Icons.phone, "Phone", phoneNumber),
-                  SizedBox(height: 20),
+                  SizedBox(height: 20), 
+                  profileItem(Icons.phone, "Phone", userPhone),
+                  SizedBox(height: 20),        
                   profileItem(Icons.email, "Email", userEmail),
                 ],
               ),
