@@ -16,7 +16,8 @@ if ($count >= 1) {
     echo json_encode([
         "status" => "Success",
         "username" => $row['username'],
-        "email" => $row['email']]);
+        "email" => $row['email'],
+        "number" => $row['mob_num']]);
 } else {
      echo json_encode(["status" => "Error"]);
     

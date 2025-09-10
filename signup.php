@@ -33,11 +33,9 @@ if ($count >= 1) {
      VALUES ('$name', '$email', '$number', '$password', '$category', '$access', '$role', '$country', '$Address_1', '$Address_2', '$town', '$state')";
     if (mysqli_query($conn, $insert)) {
 
-        echo json_encode(array(
+        echo json_encode([
             "status" => "Success",
-            "userName" => $row['$name'],
-            "userEmail" => $row['$email'],
-            "phoneNumber" => $row['$number']));
+        ]);
     } else {
         echo json_encode("Database error: " . mysqli_error($conn));
     }
