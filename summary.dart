@@ -3,6 +3,7 @@ import 'package:freshfare/freshfare/cart.dart';
 import 'package:freshfare/freshfare/home.dart';
 import 'package:freshfare/freshfare/login.dart';
 import 'package:freshfare/freshfare/notification.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:freshfare/freshfare/cartprovider.dart';
 
@@ -69,6 +70,7 @@ class _SummaryPageState extends State<SummaryPage>
   @override
   Widget build(BuildContext context) 
   {
+     final cart = Provider.of<CartProvider>(context); 
     return  Scaffold
     (
       appBar: AppBar
@@ -148,7 +150,8 @@ class _SummaryPageState extends State<SummaryPage>
           ],
         ),
       ),
-      body:Padding
+      body:SingleChildScrollView(
+        child: Padding
         (
           padding: EdgeInsets.all(16.0),
           child:Column(
@@ -163,7 +166,7 @@ class _SummaryPageState extends State<SummaryPage>
               SizedBox(height: 20), 
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(18.0),
+                  padding: const EdgeInsets.all(20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -192,7 +195,7 @@ class _SummaryPageState extends State<SummaryPage>
                               
                               )),
                       SizedBox(height: 30),
-                      Text("Order Details :", style: TextStyle(
+                      Text("Order Details", style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                               )),
@@ -207,7 +210,7 @@ class _SummaryPageState extends State<SummaryPage>
                               
                               )),
                       SizedBox(height: 20),
-                      Text("Payment :", style: TextStyle(
+                      Text("Payment Mode: Cash On Delivery", style: TextStyle(
                               fontSize: 14,
                              
                               )),
@@ -215,39 +218,40 @@ class _SummaryPageState extends State<SummaryPage>
                       Text("Items", style: TextStyle(
                               fontSize: 14,                             
                               )),
-                      Divider(height: 30),
-                      // ListView.builder
-                      // (
-                      //   shrinkWrap: true,
-                      //   physics: NeverScrollableScrollPhysics(),
-                      //   itemCount: cart.items.length,               
-                      //   itemBuilder: (context,index)
-                      //   {
-                      //     final product = cart.items[index];
-                      //     return ListTile
-                      //     (
-                      //       title: Text(product.name),
-                      //       subtitle: Text("Qty: ${product.quantity}"),
-                      //       trailing: Text("₹${product.price}"),  
-                      //     );                
-                      //   }
-                      // ),
-                      // Divider(height: 30),
-                      // Row
-                      // (
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   children: [
-                      //     Text("Total",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
-                      //     Text("₹${cart.totalPrice}",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))
-                      //   ],
-                      // ),
+                      Divider(height: 20),
+                      ListView.builder
+                      (
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: cart.items.length,               
+                        itemBuilder: (context,index)
+                        {
+                          final product = cart.items[index];
+                          return ListTile
+                          (
+                            title: Text(product.name),
+                            subtitle: Text("Qty: ${product.quantity}"),
+                            trailing: Text("₹${product.price}"),  
+                          );                
+                        }
+                      ),
+                      Divider(height: 20),
+                      Row
+                      (
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Total",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
+                          Text("₹${cart.totalPrice}",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))
+                        ],
+                      ),
                     ],
                   ),
                 ),
               ),
             ],
           )
-        )
+        ),
+      ),
     ); 
   }
 }

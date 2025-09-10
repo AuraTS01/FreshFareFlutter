@@ -83,8 +83,9 @@ class _CheckoutPageState extends State<CheckoutPage>
   void initState() {
     super.initState();
     _loadUserData();
-     Future.delayed(Duration(milliseconds: 100), () {
+     Future.delayed(Duration(milliseconds: 0), () {
     fetchUserData(); 
+    loadBillingDetails();
      });
   }
 
@@ -119,12 +120,13 @@ class _CheckoutPageState extends State<CheckoutPage>
 
   Future<void> checkout() async{
 
-    if (userEmail == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("No email found, login again")),
-      );
-      return;
-    }
+   if (userEmail.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("No email found, login again")),
+    );
+    return;
+  }
+
 
     var url = Uri.parse("$baseUrl/checkout.php");
 
@@ -182,15 +184,51 @@ class _CheckoutPageState extends State<CheckoutPage>
       phonecontroller.text = data['number'] ?? '';
     });
   } else {
+      Fluttertoast.showToast(
+        msg: "Failed to fetch user data",
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+    }
+  }
+
+  Future<void> saveBillingDetails() async 
+  {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString('billingName', namecontroller.text);
+    await prefs.setString('billingCountry', countrycontroller.text);
+    await prefs.setString('billingAddress', addresscontroller.text);
+    await prefs.setString('billingTown', towncontroller.text);
+    await prefs.setString('billingState', statecontroller.text);
+    await prefs.setString('billingZip', zipcontroller.text);
+    await prefs.setString('billingEmail', emailcontroller.text);
+    await prefs.setString('billingPhone', phonecontroller.text);
+
     Fluttertoast.showToast(
-      msg: "Failed to fetch user data",
-      backgroundColor: Colors.red,
+      msg: "Billing details saved!",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      backgroundColor: Colors.green,
       textColor: Colors.white,
     );
   }
-}
 
-  
+  Future<void> loadBillingDetails() async
+  {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      namecontroller.text = prefs.getString('billingName') ?? '';
+      countrycontroller.text = prefs.getString('billingCountry') ?? '';
+      addresscontroller.text = prefs.getString('billingAddress') ?? '';
+      towncontroller.text = prefs.getString('billingTown') ?? '';
+      statecontroller.text = prefs.getString('billingState') ?? '';
+      zipcontroller.text = prefs.getString('billingZip') ?? '';
+      emailcontroller.text = prefs.getString('billingEmail') ?? '';
+      phonecontroller.text = prefs.getString('billingPhone') ?? '';
+    });
+  }
 
   @override
   Widget build(BuildContext context) 
@@ -506,7 +544,11 @@ class _CheckoutPageState extends State<CheckoutPage>
                   width: double.infinity,
                   child: ElevatedButton                                             
                     (
-                      onPressed: (){}, 
+                      onPressed: (){
+                        if (_formkey.currentState!.validate()) {
+                          saveBillingDetails();  
+                        }
+                      }, 
                       style: ElevatedButton.styleFrom
                           (
                             backgroundColor: Colors.green,
