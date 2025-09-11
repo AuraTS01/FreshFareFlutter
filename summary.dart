@@ -6,6 +6,7 @@ import 'package:freshfare/freshfare/notification.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:freshfare/freshfare/cartprovider.dart';
+import 'package:intl/intl.dart';
 
 
 class SummaryPage extends StatefulWidget 
@@ -22,12 +23,22 @@ class _SummaryPageState extends State<SummaryPage>
 
   String userName = '';
   String userEmail = '';
+  String userPhone = '';
+  String billingAddress = '';
+  String billingTown = '';
+  String billingState = '';
+
 
   Future<void> _loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       userName = prefs.getString('userName') ?? '';
       userEmail = prefs.getString('userEmail') ?? '';
+      userPhone = prefs.getString('userPhone') ?? '';
+
+      billingAddress = prefs.getString('billingAddress') ?? '';
+      billingTown = prefs.getString('billingTown') ?? '';
+      billingState = prefs.getString('billingState') ?? '';
     });
   }
 
@@ -64,13 +75,18 @@ class _SummaryPageState extends State<SummaryPage>
       },
     );
   }
-
-
-
+  
   @override
   Widget build(BuildContext context) 
   {
-     final cart = Provider.of<CartProvider>(context); 
+
+    final cart = Provider.of<CartProvider>(context); 
+
+    DateTime now = DateTime.now();  
+
+    String formattedDate = DateFormat('dd-MM-yyyy').format(now);
+    String formattedTime = DateFormat('hh:mm a').format(now);
+
     return  Scaffold
     (
       appBar: AppBar
@@ -150,8 +166,7 @@ class _SummaryPageState extends State<SummaryPage>
           ],
         ),
       ),
-      body:SingleChildScrollView(
-        child: Padding
+      body:Padding
         (
           padding: EdgeInsets.all(16.0),
           child:Column(
@@ -185,27 +200,21 @@ class _SummaryPageState extends State<SummaryPage>
                               
                               )),
                       SizedBox(height: 20),        
-                      Text("Phone :", style: TextStyle(
+                      Text("Phone : $userPhone", style: TextStyle(
                               fontSize: 14,
                              
                               )),
                       SizedBox(height: 20),
-                      Text("Address :", style: TextStyle(
-                              fontSize: 14,
-                              
-                              )),
+                      Text("Address : $billingAddress, $billingTown, $billingState.",style: TextStyle(fontSize: 14)),
                       SizedBox(height: 30),
-                      Text("Order Details", style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              )),
+                      Text("Order Details", style: TextStyle( fontSize: 16, fontWeight: FontWeight.bold,)),
                       SizedBox(height: 20),
                       Text("Order ID:", style: TextStyle(
                               fontSize: 14,
                               
                               )),
                       SizedBox(height: 20),
-                      Text("Date :", style: TextStyle(
+                      Text("Date : $formattedDate $formattedTime", style: TextStyle(
                               fontSize: 14,
                               
                               )),
@@ -251,7 +260,7 @@ class _SummaryPageState extends State<SummaryPage>
             ],
           )
         ),
-      ),
+      
     ); 
   }
 }

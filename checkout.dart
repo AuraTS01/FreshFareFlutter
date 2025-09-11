@@ -118,55 +118,6 @@ class _CheckoutPageState extends State<CheckoutPage>
 
   final String baseUrl = "http://192.168.86.9/FreshFareFlutter/lib/freshfare_database/";
 
-  Future<void> checkout() async{
-
-   if (userEmail.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("No email found, login again")),
-    );
-    return;
-  }
-
-
-    var url = Uri.parse("$baseUrl/checkout.php");
-
-
-    var response = await http.post(url, body:{
-        "email":userEmail,
-        "country":countrycontroller.text,
-        "Address_1":addresscontroller.text,
-        "town":towncontroller.text,
-        "state":statecontroller.text,
-    });
-
-    var data = json.decode(response.body);
-
-   
-      if (data['status'] == "Success") {
-      Fluttertoast.showToast(
-          msg: "Checkout Successful",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        ); 
-        Navigator.push(context,MaterialPageRoute(builder: (context) => PaymentPage()),
-        );
-    }
-      else{
-        Fluttertoast.showToast(
-                    msg: "Error",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                    backgroundColor: Colors.red,
-                    textColor: Colors.white,
-                    fontSize: 16.0,
-                  );
-      }
-    
-  }
-
   Future<void> fetchUserData() async {
   if (userEmail.isEmpty) return;
 
@@ -212,6 +163,28 @@ class _CheckoutPageState extends State<CheckoutPage>
       backgroundColor: Colors.green,
       textColor: Colors.white,
     );
+
+    var url = Uri.parse("$baseUrl/checkout.php");
+
+    var response = await http.post(url, body:{
+        "email":userEmail,
+        "country":countrycontroller.text,
+        "Address_1":addresscontroller.text,
+        "town":towncontroller.text,
+        "state":statecontroller.text,
+    });
+
+    var data = json.decode(response.body);
+
+    if (data['status'] == "Success") 
+    {
+       SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('billingAddress', addresscontroller.text);
+        await prefs.setString('billingTown', towncontroller.text);
+        await prefs.setString('billingState', statecontroller.text) ;
+
+       
+    }
   }
 
   Future<void> loadBillingDetails() async
@@ -603,9 +576,11 @@ class _CheckoutPageState extends State<CheckoutPage>
                   child: ElevatedButton                                             
                     (
                       onPressed: (){
-                        if (_formkey.currentState!.validate()) {
-                              checkout();
-                        }
+                        // if (_formkey.currentState!.validate()) {
+                        //       checkout();
+                        // }
+                         Navigator.push(context,MaterialPageRoute(builder: (context) => PaymentPage())); 
+                         
                       }, 
                         style: ElevatedButton.styleFrom
                             (

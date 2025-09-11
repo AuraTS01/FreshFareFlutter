@@ -22,20 +22,27 @@ class _PaymentPageState extends State<PaymentPage>
   
   String selectedPayment = 'Pay on Delivery';
 
-  void placeorder()
-  {
-    Fluttertoast.showToast
-        (
-          msg: "Order Placed",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 3,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
-     Navigator.push(context, MaterialPageRoute(builder: (context) => SummaryPage(),));  
-  }
+  // void placeorder() 
+  // {
+  //   Fluttertoast.showToast(
+  //     msg: "Order Placed",
+  //     toastLength: Toast.LENGTH_SHORT,
+  //     gravity: ToastGravity.CENTER,
+  //     timeInSecForIosWeb: 3,
+  //     backgroundColor: Colors.green,
+  //     textColor: Colors.white,
+  //     fontSize: 16.0,
+  //   );
+
+  //   try {
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => const SummaryPage()),
+  //     );
+  //   } catch (e) {
+  //     print("Navigation error: $e");
+  //   }
+  // }
 
   String userName = '';
   String userEmail = '';
@@ -66,7 +73,6 @@ class _PaymentPageState extends State<PaymentPage>
             TextButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(),));
-                // Navigator.pushReplacementNamed(context, '/login');
               },
               child: const Text("Yes"),
             ),
@@ -245,7 +251,18 @@ class _PaymentPageState extends State<PaymentPage>
                       SizedBox(height: 30),
                       ElevatedButton
                       (
-                        onPressed: placeorder,
+                        onPressed:(){
+                                Navigator.push( context,MaterialPageRoute(builder: (context) => const SummaryPage()));
+                                Fluttertoast.showToast(
+                                      msg: "Order is Placed",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      timeInSecForIosWeb: 3,
+                                      backgroundColor: Colors.green,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0,
+                                    );
+                        },
                         style: ElevatedButton.styleFrom
                         (
                           backgroundColor: Colors.green,
