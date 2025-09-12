@@ -175,6 +175,7 @@ class _HomePageState extends State<HomePage> {
           actions: [
             TextButton(
               onPressed: () {
+                pincodecontroller.clear(); 
                 Navigator.pop(context); 
               },
               child: Text("Cancel"),
@@ -186,7 +187,11 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: checkPincode,
+              onPressed: ()
+              {
+                checkPincode();
+                pincodecontroller.clear(); 
+              },
               child: Text("Check",style: TextStyle(color: Colors.white),),
             ),
           ],
