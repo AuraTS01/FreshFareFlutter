@@ -68,14 +68,34 @@ class _HomePageState extends State<HomePage> {
           content: const Text("Are you sure you want to logout?"),
           actions: [
             TextButton(
-              onPressed: ()async {
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.clear(); 
-                Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => LoginPage()),
-                );
-              },
-              child: const Text("Yes"),
-            ),
+               onPressed: () async {
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.remove('isLoggedIn'); // ✅ only clear login status
+              await prefs.remove('userId');     // optional if you stored userId
+
+              // Close dialog
+              Navigator.of(context).pop();
+              // Close drawer
+              Navigator.of(context).pop();
+
+              // Stay on HomePage
+              setState(() {
+                userName = '';
+                userEmail = '';
+              });
+              
+              Fluttertoast.showToast(
+              msg: "Logout Successfully",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0,
+              );  
+             
+            },
+            child: const Text("Yes"),
+          ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); 
@@ -221,8 +241,6 @@ class _HomePageState extends State<HomePage> {
                   Product(name:"Shrimp", baseprice: 350.0, image:"assets/Shrimp.png"),
   ];
 
-  
-
 
   @override
   Widget build(BuildContext context) 
@@ -260,16 +278,16 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.zero,
             children: 
             [ 
-              UserAccountsDrawerHeader
+               UserAccountsDrawerHeader
               (
                 decoration: BoxDecoration(color: Colors.green),
                 accountName: Text("Hello $userName"),
                 accountEmail: Text(userEmail),
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Colors.white,
-                child: Text(userName.isNotEmpty ? userName[0] : '?',
-                style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20,fontFamily: "Poppins"),),
-                ),
+                  child: Text(userName.isNotEmpty ? userName[0] : '?',
+                  style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20,fontFamily: "Poppins"),),
+                  ),
               ),
               ListTile
               (      
@@ -295,7 +313,14 @@ class _HomePageState extends State<HomePage> {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationPage(),));  
                   },
               ),
-              
+              ListTile
+              (
+                  leading: Icon(Icons.login_outlined),
+                  title: Text('Login'),
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(),));  
+                  },
+              ),
               ListTile
               (
                 leading: const Icon(Icons.logout),
@@ -437,7 +462,7 @@ class _HomePageState extends State<HomePage> {
         [
           Image.asset(product.image,height: 150,fit: BoxFit.cover),
           Text(product.name,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
-          Text("₹${product.price}"),
+          Text("₹${product.price} / KG"),
           ElevatedButton.icon
           (
             style: ElevatedButton.styleFrom

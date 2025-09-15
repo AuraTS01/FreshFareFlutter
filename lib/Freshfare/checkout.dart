@@ -71,6 +71,12 @@ class _CheckoutPageState extends State<CheckoutPage>
   String userName = '';
   String userEmail = '';
 
+  Future<bool> isLoggedIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('userEmail') != null &&
+           prefs.getString('userEmail')!.isNotEmpty;
+  }
+
   Future<void> _loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -540,12 +546,21 @@ class _CheckoutPageState extends State<CheckoutPage>
                   width: double.infinity,
                   child: ElevatedButton                                             
                     (
-                      onPressed: (){
+                      onPressed: () async {
                         if (_formkey.currentState!.validate()) 
-                        {
-                         Navigator.push(context,MaterialPageRoute(builder: (context) => PaymentPage())); 
-                        }
-                      }, 
+                       {
+                            bool loggedIn = await isLoggedIn();
+                            if (loggedIn) {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage()));
+                            } else {                            
+                              Fluttertoast.showToast(
+                                msg: "Please login first to proceed",
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                              );
+                            }
+                          }
+                        },                     
                         style: ElevatedButton.styleFrom
                             (
                               backgroundColor: Colors.green,

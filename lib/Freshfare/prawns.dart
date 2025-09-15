@@ -217,7 +217,6 @@ class _PrawnsPageState extends State<PrawnsPage> {
                   {
                     final product = products[index];
                     return Container(
-                      // color: Colors.white,
                       child: productCard(context, product),
                     );
                   },
@@ -238,7 +237,7 @@ class _PrawnsPageState extends State<PrawnsPage> {
         [
           Image.asset(product.image,height: 150,fit: BoxFit.cover),
           Text(product.name,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
-          Text("₹${product.price}"),
+          Text("₹${product.price} / KG"),
           ElevatedButton.icon
           (
             style: ElevatedButton.styleFrom

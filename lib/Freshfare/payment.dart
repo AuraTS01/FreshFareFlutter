@@ -130,7 +130,7 @@ class _PaymentPageState extends State<PaymentPage>
                         [ 
                           RadioListTile
                           (
-                            title: Text('Credit/Debit Card'),
+                            title: Text('Pay Online (UPI / Card / Netbanking / Wallet)'),
                             value: 'Card', 
                             groupValue: selectedPayment, 
                             onChanged: (value)
@@ -140,18 +140,7 @@ class _PaymentPageState extends State<PaymentPage>
                               });
                             },
                           ),
-                          RadioListTile
-                          (
-                            title: Text('UPI'),
-                            value: 'UPI', 
-                            groupValue: selectedPayment, 
-                            onChanged: (value)
-                            {
-                              setState(() {
-                                selectedPayment =  value.toString();
-                              });
-                            },
-                          ),
+                          SizedBox(height: 20),
                           RadioListTile
                           (
                             title: Text('Pay on Delivery'),
@@ -172,24 +161,16 @@ class _PaymentPageState extends State<PaymentPage>
                         (
                           padding: EdgeInsets.all(10),
                           color: Colors.green.shade50,
-                          child: Text('You\'ve selected Pay on Delivery. Please Keep the amount ready when your order arrives.',
+                          child: Text('You’ve selected Pay on Delivery. Please keep the amount ready when your order arrives.',
                           style: TextStyle(color:Colors.green.shade900),),
                         ),
                       if(selectedPayment == 'Card')
                         Container
                         (
                           padding: EdgeInsets.all(10),
-                          color: Colors.yellow.shade50,
-                          child: Text('This payment method is under development. Please choose a Pay on Delivery',
-                          style: TextStyle(color:Colors.black),),
-                        ),  
-                      if(selectedPayment == 'UPI')
-                        Container
-                        (
-                          padding: EdgeInsets.all(10),
-                          color: Colors.yellow.shade50,
-                          child: Text('This payment method is under development. Please choose a Pay on Delivery',
-                          style: TextStyle(color:Colors.black),),
+                          color: Colors.green.shade50,
+                          child: Text('You’ve selected Online Payment. Complete the payment securely with Razorpay.',
+                          style: TextStyle(color:Colors.green.shade900),),
                         ),  
                       SizedBox(height: 30),
                       ElevatedButton

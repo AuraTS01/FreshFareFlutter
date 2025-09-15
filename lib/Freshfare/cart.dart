@@ -227,7 +227,18 @@ class _CartPageState extends State<CartPage>
                     SizedBox(height: 30),
                     SizedBox(
                       height: 400,
-                      child: ListView.builder
+                      child: cart.items.isEmpty
+                      ? const Center(
+                          child: Text(
+                            "🛒 Your cart is empty",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                        )
+                      : ListView.builder
                       (
                         itemCount: cart.items.length,
                         itemBuilder: (context,index){
@@ -316,20 +327,7 @@ class _CartPageState extends State<CartPage>
                 ElevatedButton
                 (
                   onPressed: (){
-                      if (cart.items.isEmpty)
-                      {
-                        Fluttertoast.showToast(
-                          msg: "Your cart is empty, Please Add a Product",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          fontSize: 16.0,
-                        );
-                      } 
-                      else{
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => CheckoutPage(),)); 
-                      }
+                     Navigator.push(context, MaterialPageRoute(builder: (context) => CheckoutPage(),)); 
                   }, 
                   style: ElevatedButton.styleFrom
                   (

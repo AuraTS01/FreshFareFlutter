@@ -241,7 +241,7 @@ class _ChickenPageState extends State<ChickenPage> {
         [
           Image.asset(product.image,height: 150,fit: BoxFit.cover),
           Text(product.name,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
-          Text("₹${product.price}"),
+          Text("₹${product.price} / KG"),
           ElevatedButton.icon
           (
             style: ElevatedButton.styleFrom
