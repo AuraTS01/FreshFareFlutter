@@ -37,22 +37,8 @@ class MainApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       title: 'FreshFare',
       debugShowCheckedModeBanner: false,
-      home: FutureBuilder<bool>(
-        future: _checkLoginStatus(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            );
-          } else {
-            if (snapshot.data == true) {
-              return HomePage(); // Already logged in
-            } else {
-              return LoginPage(); // Not logged in
-            }
-          }
-        },
-      ),
+      home:HomePage(),
+       
     );
   }
 }
