@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:freshfare/freshfare/home.dart';
+import 'package:freshfare/freshfare/delivery.dart';
 import 'package:freshfare/freshfare/signin.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -20,6 +21,16 @@ class _LoginPageState extends State<LoginPage>
   final  emailcontroller = TextEditingController();
   final  passwordcontroller =  TextEditingController();
 
+  String category = '';
+
+  Future<void> loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      category = prefs.getString('category') ?? '';
+    });
+  }
+
+
   final String baseUrl = "http://192.168.86.9/FreshFareFlutter/lib/freshfare_database/";
 
   Future<void> login() async{
@@ -30,29 +41,48 @@ class _LoginPageState extends State<LoginPage>
         
     });
     var data = json.decode(response.body);
-      if(data['status'] == "Success"){
+      if(data['status'] == "Success")
+      {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setBool('isLoggedIn', true);
         await prefs.setString('userName', data["username"]);
         await prefs.setString('userPhone', data['number']);
         await prefs.setString('userEmail', data["email"]);
+        await prefs.setString('category', data['category']);
        
 
+       if (data['category'] == "customer") {
+          Fluttertoast.showToast(
+            msg: "Login Successfully!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()),
+          );
+        } else if (data['category'] == "Delivery agent") {
+          Fluttertoast.showToast(
+            msg: "Login Successfully!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => DeliveryPage()),
+          );
+        }
 
+      } 
+      else 
+      {
         Fluttertoast.showToast(
-              msg: "Login Successfully!",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              backgroundColor: Colors.green,
-              timeInSecForIosWeb: 3,
-              textColor: Colors.white,
-              fontSize: 16.0,
-            );
-             Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => HomePage()),
-  );
-      }
-    else if(data['status'] == "Error"){
-      Fluttertoast.showToast(
             msg: "Invalid email or password",
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.CENTER,
@@ -60,8 +90,31 @@ class _LoginPageState extends State<LoginPage>
             textColor: Colors.white,
             fontSize: 16.0,
             );
-    }
+      }
   }
+  //       Fluttertoast.showToast(
+  //             msg: "Login Successfully!",
+  //             toastLength: Toast.LENGTH_SHORT,
+  //             gravity: ToastGravity.CENTER,
+  //             backgroundColor: Colors.green,
+  //             timeInSecForIosWeb: 3,
+  //             textColor: Colors.white,
+  //             fontSize: 16.0,
+  //           );
+  //            Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => HomePage()),
+  // );
+      
+    // else if(data['status'] == "Error"){
+    //   Fluttertoast.showToast(
+    //         msg: "Invalid email or password",
+    //         toastLength: Toast.LENGTH_SHORT,
+    //         gravity: ToastGravity.CENTER,
+    //         backgroundColor: Colors.red,
+    //         textColor: Colors.white,
+    //         fontSize: 16.0,
+    //         );
+    // }
+  
 
 
   bool passwordVisible=false;

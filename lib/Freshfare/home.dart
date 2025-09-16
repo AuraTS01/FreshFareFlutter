@@ -1,6 +1,4 @@
-
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/cart.dart';
@@ -13,7 +11,6 @@ import 'package:freshfare/freshfare/mutton.dart';
 import 'package:freshfare/freshfare/notification.dart';
 import 'package:freshfare/freshfare/prawns.dart';
 import 'package:freshfare/freshfare/profile.dart';
-// import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,7 +30,6 @@ class _HomePageState extends State<HomePage> {
 
   String ? selecteditem;
   final items =['Chicken','Mutton','Fish','Prawns'];
-
   void navigate(String value)
   {
     if(value == 'Chicken'){
@@ -68,17 +64,16 @@ class _HomePageState extends State<HomePage> {
           content: const Text("Are you sure you want to logout?"),
           actions: [
             TextButton(
-               onPressed: () async {
+              onPressed: () async {
               final prefs = await SharedPreferences.getInstance();
-              await prefs.remove('isLoggedIn'); // ✅ only clear login status
-              await prefs.remove('userId');     // optional if you stored userId
-
-              // Close dialog
+              await prefs.remove('isLoggedIn'); 
+              await prefs.remove('userId');     
+           
               Navigator.of(context).pop();
-              // Close drawer
+              
               Navigator.of(context).pop();
 
-              // Stay on HomePage
+              
               setState(() {
                 userName = '';
                 userEmail = '';
@@ -237,7 +232,7 @@ class _HomePageState extends State<HomePage> {
                   Product(name:"Chicken_Flesh", baseprice: 300.0, image:"assets/chicken_flesh.png"),
                   Product(name:"Chicken_Without_Skin", baseprice: 250.0, image:"assets/chicken_withoutSkin.png"),
                   Product(name:"Chicken", baseprice: 300.0, image:"assets/chicken_2.png"),
-                   Product(name:"Mutton", baseprice: 800.0, image:"assets/fresh_raw_mutton_leg.png"),
+                  Product(name:"Mutton", baseprice: 800.0, image:"assets/fresh_raw_mutton_leg.png"),
                   Product(name:"Shrimp", baseprice: 350.0, image:"assets/Shrimp.png"),
   ];
 
