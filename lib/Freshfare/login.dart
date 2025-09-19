@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:freshfare/freshfare/home.dart';
 import 'package:freshfare/freshfare/delivery.dart';
+import 'package:freshfare/freshfare/company.dart';
 import 'package:freshfare/freshfare/signin.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -78,6 +79,20 @@ class _LoginPageState extends State<LoginPage>
             MaterialPageRoute(builder: (context) => DeliveryPage()),
           );
         }
+         else if (data['category'] == "Company") {
+          Fluttertoast.showToast(
+            msg: "Login Successfully!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => CompanyPage()),
+          );
+        }
 
       } 
       else 
@@ -92,31 +107,6 @@ class _LoginPageState extends State<LoginPage>
             );
       }
   }
-  //       Fluttertoast.showToast(
-  //             msg: "Login Successfully!",
-  //             toastLength: Toast.LENGTH_SHORT,
-  //             gravity: ToastGravity.CENTER,
-  //             backgroundColor: Colors.green,
-  //             timeInSecForIosWeb: 3,
-  //             textColor: Colors.white,
-  //             fontSize: 16.0,
-  //           );
-  //            Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => HomePage()),
-  // );
-      
-    // else if(data['status'] == "Error"){
-    //   Fluttertoast.showToast(
-    //         msg: "Invalid email or password",
-    //         toastLength: Toast.LENGTH_SHORT,
-    //         gravity: ToastGravity.CENTER,
-    //         backgroundColor: Colors.red,
-    //         textColor: Colors.white,
-    //         fontSize: 16.0,
-    //         );
-    // }
-  
-
-
   bool passwordVisible=false;
   @override
   void initState()
