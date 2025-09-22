@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/company.dart';
+import 'package:freshfare/freshfare/dispatched.dart';
+import 'package:freshfare/freshfare/price.dart';
+import 'package:freshfare/freshfare/orderlist.dart';
 
 class OrderlistPage extends StatefulWidget 
 {
@@ -126,22 +129,38 @@ class _OrderlistPageState extends State<OrderlistPage>
                   style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20,fontFamily: "Poppins"),),
                   ),
               ),
-              ListTile
+             ListTile
               (
                 leading: Icon(Icons.home_outlined),
-                title: const Text('Home'),
+                title: const Text('Dashboard'),
                 onTap: () {          
                     Navigator.push(context, MaterialPageRoute(builder: (context) => CompanyPage(),));               
                 },
               ),
               ListTile
-              (      
-                leading: const Icon(Icons.delivery_dining),              
-                title: const Text('View Orders List'),
-                onTap: () {          
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => OrderlistPage(),));               
+              (
+                leading: Icon(Icons.auto_stories_outlined),
+                title: Text('View Orders List'),
+                onTap: (){
+                     Navigator.push(context, MaterialPageRoute(builder: (context) => OrderlistPage(),));
                 },
-              ),
+             ),
+             ListTile
+              (
+                leading: Icon(Icons.auto_stories_outlined),
+                title: Text('View Dispatched Order List'),
+                onTap: (){
+                     Navigator.push(context, MaterialPageRoute(builder: (context) => DispatchedPage(),));
+                },
+             ),
+             ListTile
+              (
+                leading: Icon(Icons.price_change_outlined),
+                title: Text(' Fix Price for Products'),
+                onTap: (){
+                     Navigator.push(context, MaterialPageRoute(builder: (context) => PricePage(),));
+                },
+             ),
           ],
         ),
       ),
@@ -158,8 +177,6 @@ class _OrderlistPageState extends State<OrderlistPage>
               mainAxisAlignment: MainAxisAlignment.center,
               children: 
               [
-                // Icon(Icons.shopping_bag, color: Colors.green, size: 28),
-                // SizedBox(width: 8),
                 Text("🛒 Live Orders",style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold,fontFamily: "Poppins",),),
               ],
             ),
@@ -193,74 +210,74 @@ class _OrderlistPageState extends State<OrderlistPage>
                       Padding(padding: EdgeInsets.all(8), child: Text("Status", style: TextStyle(fontWeight: FontWeight.bold))),
                     ],
                   ),
-                  TableRow
-                  (
-                    decoration: BoxDecoration(color: Colors.white),
-                    children: 
-                    [
-                      Padding(padding: EdgeInsets.all(10), child: Text("#ORD967329")),
-                      Padding(padding: EdgeInsets.all(10),child: Text("John Frank\n8967452310\nCOD")),
-                      Padding
-                      (
-                        padding: EdgeInsets.all(10),
-                        child: Column
-                        (
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text("Chicken With Skin (1 Kg) – ₹170.00"),
-                            Text("Chicken Without Skin (1 Kg) – ₹180.00"),
-                          ],
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.all(10), child: Text("₹350")),
-                      Padding(padding: EdgeInsets.all(10), child: Text("2025-09-15 11:44:59")),
-                      Padding(
-                        padding: EdgeInsets.all(10),
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            foregroundColor: Colors.white,
-                          ),
-                          child: Text("Acknowledge"),
-                        ),
-                      ),
-                    ],
-                  ),
-                  TableRow
-                  (
-                    decoration: BoxDecoration(color: Colors.white),
-                    children: 
-                    [
-                      Padding(padding: EdgeInsets.all(10), child: Text("#ORD967329")),
-                      Padding(padding: EdgeInsets.all(10),child: Text("John Frank\n8967452310\nCOD")),
-                      Padding
-                      (
-                        padding: EdgeInsets.all(10),
-                        child: Column
-                        (
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text("Chicken With Skin (1 Kg) – ₹170.00"),
-                            Text("Chicken Without Skin (1 Kg) – ₹180.00"),
-                          ],
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.all(10), child: Text("₹350")),
-                      Padding(padding: EdgeInsets.all(10), child: Text("2025-09-15 11:44:59")),
-                      Padding(
-                        padding: EdgeInsets.all(10),
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            foregroundColor: Colors.white,
-                          ),
-                          child: Text("Acknowledge"),
-                        ),
-                      ),
-                    ],
-                  ),
+                  // TableRow
+                  // (
+                  //   decoration: BoxDecoration(color: Colors.white),
+                  //   children: 
+                  //   [
+                      // Padding(padding: EdgeInsets.all(10), child: Text("#ORD967329")),
+                      // Padding(padding: EdgeInsets.all(10),child: Text("John Frank\n8967452310\nCOD")),
+                      // Padding
+                      // (
+                      //   padding: EdgeInsets.all(10),
+                      //   child: Column
+                      //   (
+                      //     crossAxisAlignment: CrossAxisAlignment.start,
+                      //     children: const [
+                      //       Text("Chicken With Skin (1 Kg) – ₹170.00"),
+                      //       Text("Chicken Without Skin (1 Kg) – ₹180.00"),
+                      //     ],
+                      //   ),
+                      // ),
+                      // Padding(padding: EdgeInsets.all(10), child: Text("₹350")),
+                      // Padding(padding: EdgeInsets.all(10), child: Text("2025-09-15 11:44:59")),
+                  //     Padding(
+                  //       padding: EdgeInsets.all(10),
+                  //       child: ElevatedButton(
+                  //         onPressed: () {},
+                  //         style: ElevatedButton.styleFrom(
+                  //           backgroundColor: Colors.blue,
+                  //           foregroundColor: Colors.white,
+                  //         ),
+                  //         child: Text("Acknowledge"),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  // TableRow
+                  // (
+                  //   decoration: BoxDecoration(color: Colors.white),
+                  //   children: 
+                  //   [
+                  //     Padding(padding: EdgeInsets.all(10), child: Text("#ORD967329")),
+                  //     Padding(padding: EdgeInsets.all(10),child: Text("John Frank\n8967452310\nCOD")),
+                  //     Padding
+                  //     (
+                  //       padding: EdgeInsets.all(10),
+                  //       child: Column
+                  //       (
+                  //         crossAxisAlignment: CrossAxisAlignment.start,
+                  //         children: const [
+                  //           Text("Chicken With Skin (1 Kg) – ₹170.00"),
+                  //           Text("Chicken Without Skin (1 Kg) – ₹180.00"),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //     Padding(padding: EdgeInsets.all(10), child: Text("₹350")),
+                  //     Padding(padding: EdgeInsets.all(10), child: Text("2025-09-15 11:44:59")),
+                  //     Padding(
+                  //       padding: EdgeInsets.all(10),
+                  //       child: ElevatedButton(
+                  //         onPressed: () {},
+                  //         style: ElevatedButton.styleFrom(
+                  //           backgroundColor: Colors.blue,
+                  //           foregroundColor: Colors.white,
+                  //         ),
+                  //         child: Text("Acknowledge"),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
             ),

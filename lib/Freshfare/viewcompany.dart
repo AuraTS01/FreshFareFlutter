@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:freshfare/freshfare/adminorder.dart';
+import 'package:freshfare/freshfare/viewcompany.dart';
+import 'package:freshfare/freshfare/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:freshfare/freshfare/delivery.dart';
+import 'package:freshfare/freshfare/enroll.dart';
+import 'package:freshfare/freshfare/admin.dart';
 
-class ViewdeliveryPage extends StatefulWidget 
+class ViewcompanyPage extends StatefulWidget 
 {
-  const ViewdeliveryPage({super.key});
+  const ViewcompanyPage({super.key});
   @override
-  State<ViewdeliveryPage> createState() => _ViewdeliveryPageState();
+  State<ViewcompanyPage> createState() => _ViewcompanyPageState();
 }
 
-class _ViewdeliveryPageState extends State<ViewdeliveryPage>
+class _ViewcompanyPageState extends State<ViewcompanyPage>
 {
 
   String userName = '';
@@ -128,24 +132,36 @@ class _ViewdeliveryPageState extends State<ViewdeliveryPage>
               ),
               ListTile
               (
-                leading: Icon(Icons.home_outlined),
-                title: const Text('Home'),
+                title: const Text('Dashboard'),
                 onTap: () {          
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => DeliveryPage(),));               
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AdminPage(),));               
                 },
               ),
               ListTile
-              (      
-                leading: const Icon(Icons.delivery_dining),              
-                title: const Text('View Undelivered /Delivered Orders'),
-                onTap: () {          
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ViewdeliveryPage(),));               
+              (
+                title: Text('View Registered Companies'),
+                onTap: (){
+                     Navigator.push(context, MaterialPageRoute(builder: (context) => ViewcompanyPage(),));
                 },
-              ),
+             ),
+              ListTile
+              (
+                title: Text('Enroll New Company'),
+                onTap: (){
+                     Navigator.push(context, MaterialPageRoute(builder: (context) => EnrollPage(),));
+                },
+             ),
+             ListTile
+              (
+                title: Text('View Orders List'),
+                onTap: (){
+                     Navigator.push(context, MaterialPageRoute(builder: (context) => AdminOrderPage(),));
+                },
+             ),
           ],
         ),
       ),
-      body:SingleChildScrollView
+    body: SingleChildScrollView
       (
         padding: EdgeInsets.all(16),
         child: Column
@@ -158,17 +174,7 @@ class _ViewdeliveryPageState extends State<ViewdeliveryPage>
               mainAxisAlignment: MainAxisAlignment.center,
               children: 
               [
-                Icon(Icons.delivery_dining, size: 30.0, color: Colors.blue),
-                  SizedBox(width: 10),
-                  RichText(
-                    text: TextSpan
-                    (
-                      children: 
-                      [
-                        TextSpan(text: "Undelivered Orders",style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold,fontFamily: "Poppins",),),
-                      ],
-                    ),
-                  ),
+                Text("Registered Users",style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold,fontFamily: "Poppins",),),
               ],
             ),
             SizedBox(height:40),
@@ -179,13 +185,12 @@ class _ViewdeliveryPageState extends State<ViewdeliveryPage>
               (
                 border: TableBorder.all(color: Colors.grey.shade400,width: 1,),
                 columnWidths: const {
-                  0: FixedColumnWidth(120), 
+                  0: FixedColumnWidth(50), 
                   1: FixedColumnWidth(150), 
                   2: FixedColumnWidth(220), 
-                  3: FixedColumnWidth(100),  
-                  4: FixedColumnWidth(160),
-                  5: FixedColumnWidth(160), 
-                  6: FixedColumnWidth(170), 
+                  3: FixedColumnWidth(80),  
+                  4: FixedColumnWidth(160), 
+                  5: FixedColumnWidth(170),
                 },
                 defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                 children: 
@@ -194,23 +199,21 @@ class _ViewdeliveryPageState extends State<ViewdeliveryPage>
                   (
                     decoration: BoxDecoration(color: Colors.green.shade100),
                     children: const [
-                      Padding(padding: EdgeInsets.all(8), child: Text("Order ID", style: TextStyle(fontWeight: FontWeight.bold))),
-                      Padding(padding: EdgeInsets.all(8), child: Text("Customer", style: TextStyle(fontWeight: FontWeight.bold))),
-                      Padding(padding: EdgeInsets.all(8), child: Text("Companies & Items", style: TextStyle(fontWeight: FontWeight.bold))),
-                      Padding(padding: EdgeInsets.all(8), child: Text("Progress", style: TextStyle(fontWeight: FontWeight.bold))),
-                      Padding(padding: EdgeInsets.all(8), child: Text("Total", style: TextStyle(fontWeight: FontWeight.bold))),
-                      Padding(padding: EdgeInsets.all(8), child: Text("Date", style: TextStyle(fontWeight: FontWeight.bold))),
+                      Padding(padding: EdgeInsets.all(8), child: Text(" # ", style: TextStyle(fontWeight: FontWeight.bold))),
+                      Padding(padding: EdgeInsets.all(8), child: Text("Name", style: TextStyle(fontWeight: FontWeight.bold))),
+                      Padding(padding: EdgeInsets.all(8), child: Text("Email", style: TextStyle(fontWeight: FontWeight.bold))),
+                      Padding(padding: EdgeInsets.all(8), child: Text("Phone", style: TextStyle(fontWeight: FontWeight.bold))),
+                      Padding(padding: EdgeInsets.all(8), child: Text("Category", style: TextStyle(fontWeight: FontWeight.bold))),
                       Padding(padding: EdgeInsets.all(8), child: Text("Action", style: TextStyle(fontWeight: FontWeight.bold))),
                     ],
                   ),
-               
                 ],
               ),
             ),
           ],
         ),
       ),
-    ); 
+    );
   }
 }
 

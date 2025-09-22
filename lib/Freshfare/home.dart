@@ -66,18 +66,20 @@ class _HomePageState extends State<HomePage> {
             TextButton(
               onPressed: () async {
               final prefs = await SharedPreferences.getInstance();
-              await prefs.remove('isLoggedIn'); 
-              await prefs.remove('userId');     
+              // await prefs.remove('isLoggedIn'); 
+              // await prefs.remove('userId');     
            
-              Navigator.of(context).pop();
+              // Navigator.of(context).pop();
               
-              Navigator.of(context).pop();
+              // Navigator.of(context).pop();
 
               
-              setState(() {
-                userName = '';
-                userEmail = '';
-              });
+              // setState(() {
+              //   userName = '';
+              //   userEmail = '';
+              // });
+              await prefs.remove('userEmail'); // clear login
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const LoginPage()),);
               
               Fluttertoast.showToast(
               msg: "Logout Successfully",

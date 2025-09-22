@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:freshfare/freshfare/cart.dart';
-import 'package:freshfare/freshfare/home.dart';
-import 'package:freshfare/freshfare/orderlist.dart';
-import 'package:freshfare/freshfare/dispatched.dart';
+import 'package:freshfare/freshfare/adminorder.dart';
+import 'package:freshfare/freshfare/viewcompany.dart';
 import 'package:freshfare/freshfare/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:freshfare/freshfare/profile.dart';
-import 'package:freshfare/freshfare/price.dart';
+import 'package:freshfare/freshfare/enroll.dart';
 
-class CompanyPage extends StatefulWidget 
+class AdminPage extends StatefulWidget 
 {
-  const CompanyPage({super.key});
+  const AdminPage({super.key});
   @override
-  State<CompanyPage> createState() => _CompanyPageState();
+  State<AdminPage> createState() => _AdminPageState();
 }
 
-class _CompanyPageState extends State<CompanyPage>
+class _AdminPageState extends State<AdminPage>
 {
 
   String userName = '';
@@ -136,34 +133,30 @@ class _CompanyPageState extends State<CompanyPage>
               ),
               ListTile
               (
-                leading: Icon(Icons.home_outlined),
                 title: const Text('Dashboard'),
                 onTap: () {          
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => CompanyPage(),));               
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AdminPage(),));               
                 },
               ),
               ListTile
               (
-                leading: Icon(Icons.auto_stories_outlined),
+                title: Text('View Registered Companies'),
+                onTap: (){
+                     Navigator.push(context, MaterialPageRoute(builder: (context) => ViewcompanyPage(),));
+                },
+             ),
+             ListTile
+              (
+                title: Text('Enroll New Company'),
+                onTap: (){
+                     Navigator.push(context, MaterialPageRoute(builder: (context) => EnrollPage(),));
+                },
+             ),
+             ListTile
+              (
                 title: Text('View Orders List'),
                 onTap: (){
-                     Navigator.push(context, MaterialPageRoute(builder: (context) => OrderlistPage(),));
-                },
-             ),
-             ListTile
-              (
-                leading: Icon(Icons.auto_stories_outlined),
-                title: Text('View Dispatched Order List'),
-                onTap: (){
-                     Navigator.push(context, MaterialPageRoute(builder: (context) => DispatchedPage(),));
-                },
-             ),
-             ListTile
-              (
-                leading: Icon(Icons.price_change_outlined),
-                title: Text(' Fix Price for Products'),
-                onTap: (){
-                     Navigator.push(context, MaterialPageRoute(builder: (context) => PricePage(),));
+                     Navigator.push(context, MaterialPageRoute(builder: (context) => AdminOrderPage(),));
                 },
              ),
              ListTile
@@ -192,7 +185,6 @@ class _CompanyPageState extends State<CompanyPage>
         padding: EdgeInsets.all(20.0),
         child: SingleChildScrollView
         (
-          // scrollDirection: Axis.horizontal,
           child: Column
           (
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -210,31 +202,13 @@ class _CompanyPageState extends State<CompanyPage>
                     (
                       children: 
                       [
-                        TextSpan(text:"Dharsan Company Orders Dashboard",style: TextStyle(color: Colors.black,fontSize: 15,fontWeight: FontWeight.bold,fontFamily: "Poppins",),),
+                        TextSpan(text:"Company Dashboard",style: TextStyle(color: Colors.black,fontSize: 15,fontWeight: FontWeight.bold,fontFamily: "Poppins",),),
                       ],
                     ),
                   ),
                 ],
               ),
               SizedBox(height: 40),
-              Container
-              (
-                width: double.infinity,
-                padding: EdgeInsets.all(40),
-                margin: EdgeInsets.symmetric(vertical: 10),
-                decoration: BoxDecoration(color: Colors.orange,borderRadius: BorderRadius.circular(12),),
-                child: Column
-                (
-                  children: 
-                  [
-                    Text("0",style: TextStyle(color: Colors.white,fontSize: 30,fontWeight: FontWeight.bold)),
-                    SizedBox(height: 10),
-                    Text("Pending Orders Received",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.center,),
-                  ],
-                ),
-              ),
-              SizedBox(height: 30),
               Container
               (
                 width: double.infinity,
@@ -247,7 +221,79 @@ class _CompanyPageState extends State<CompanyPage>
                   [
                     Text("0",style: TextStyle(color: Colors.white,fontSize: 30,fontWeight: FontWeight.bold)),
                     SizedBox(height: 10),
-                    Text("Orders Packed and Out for Delivery",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),
+                    Text("Total Companies",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.center,),
+                  ],
+                ),
+              ),
+              SizedBox(height: 30),
+              Container
+              (
+                width: double.infinity,
+                padding: EdgeInsets.all(40),
+                margin: EdgeInsets.symmetric(vertical: 10),
+                decoration: BoxDecoration(color: Colors.red,borderRadius: BorderRadius.circular(12),),
+                child: Column
+                (
+                  children: 
+                  [
+                    Text("0",style: TextStyle(color: Colors.white,fontSize: 30,fontWeight: FontWeight.bold)),
+                    SizedBox(height: 10),
+                    Text("Total Income",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.center,),
+                  ],
+                ),
+              ),
+              SizedBox(height: 30),
+               Container
+              (
+                width: double.infinity,
+                padding: EdgeInsets.all(40),
+                margin: EdgeInsets.symmetric(vertical: 10),
+                decoration: BoxDecoration(color: Colors.green,borderRadius: BorderRadius.circular(12),),
+                child: Column
+                (
+                  children: 
+                  [
+                    Text("0",style: TextStyle(color: Colors.white,fontSize: 30,fontWeight: FontWeight.bold)),
+                    SizedBox(height: 10),
+                    Text("Delivered Orders",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.center,),
+                  ],
+                ),
+              ),
+              SizedBox(height: 30),
+               Container
+              (
+                width: double.infinity,
+                padding: EdgeInsets.all(40),
+                margin: EdgeInsets.symmetric(vertical: 10),
+                decoration: BoxDecoration(color: Colors.orange,borderRadius: BorderRadius.circular(12),),
+                child: Column
+                (
+                  children: 
+                  [
+                    Text("0",style: TextStyle(color: Colors.white,fontSize: 30,fontWeight: FontWeight.bold)),
+                    SizedBox(height: 10),
+                    Text("Pending Orders",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.center,),
+                  ],
+                ),
+              ),
+              SizedBox(height: 30),
+               Container
+              (
+                width: double.infinity,
+                padding: EdgeInsets.all(40),
+                margin: EdgeInsets.symmetric(vertical: 10),
+                decoration: BoxDecoration(color: Colors.pink,borderRadius: BorderRadius.circular(12),),
+                child: Column
+                (
+                  children: 
+                  [
+                    Text("0",style: TextStyle(color: Colors.white,fontSize: 30,fontWeight: FontWeight.bold)),
+                    SizedBox(height: 10),
+                    Text("Picked Up Orders",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),
                     textAlign: TextAlign.center,),
                   ],
                 ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:freshfare/freshfare/home.dart';
 import 'package:freshfare/freshfare/delivery.dart';
 import 'package:freshfare/freshfare/company.dart';
+import 'package:freshfare/freshfare/admin.dart';
 import 'package:freshfare/freshfare/signin.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -91,6 +92,20 @@ class _LoginPageState extends State<LoginPage>
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => CompanyPage()),
+          );
+        }
+        else if (data['category'] == "admin") {
+          Fluttertoast.showToast(
+            msg: "Login Successfully!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => AdminPage()),
           );
         }
 

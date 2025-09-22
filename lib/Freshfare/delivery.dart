@@ -47,19 +47,21 @@ class _DeliveryPageState extends State<DeliveryPage>
             TextButton(
                onPressed: () async {
               final prefs = await SharedPreferences.getInstance();
-              await prefs.remove('isLoggedIn'); 
-              await prefs.remove('userId');     
+              // await prefs.remove('isLoggedIn'); 
+              // await prefs.remove('userId');     
 
             
-              Navigator.of(context).pop();
+              // Navigator.of(context).pop();
               
-              Navigator.of(context).pop();
+              // Navigator.of(context).pop();
 
               
-              setState(() {
-                userName = '';
-                userEmail = '';
-              });
+              // setState(() {
+              //   userName = '';
+              //   userEmail = '';
+              // });
+              await prefs.remove('userEmail'); // clear login
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const LoginPage()),);
               
               Fluttertoast.showToast(
               msg: "Logout Successfully",
@@ -207,7 +209,7 @@ class _DeliveryPageState extends State<DeliveryPage>
                 (
                   children: 
                   [
-                    Text("1",style: TextStyle(color: Colors.white,fontSize: 30,fontWeight: FontWeight.bold)),
+                    Text("0",style: TextStyle(color: Colors.white,fontSize: 30,fontWeight: FontWeight.bold)),
                     SizedBox(height: 10),
                     Text("Delivered Orders",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),
                     textAlign: TextAlign.center,),
@@ -225,7 +227,7 @@ class _DeliveryPageState extends State<DeliveryPage>
                 (
                   children: 
                   [
-                    Text("3",style: TextStyle(color: Colors.white,fontSize: 30,fontWeight: FontWeight.bold)),
+                    Text("0",style: TextStyle(color: Colors.white,fontSize: 30,fontWeight: FontWeight.bold)),
                     SizedBox(height: 10),
                     Text("Pending Orders",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),
                     textAlign: TextAlign.center,),

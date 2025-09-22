@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/company.dart';
+import 'package:freshfare/freshfare/dispatched.dart';
+import 'package:freshfare/freshfare/price.dart';
 import 'package:freshfare/freshfare/orderlist.dart';
-
 class DispatchedPage extends StatefulWidget 
 {
   const DispatchedPage({super.key});
@@ -127,22 +128,38 @@ class _DispatchedPageState extends State<DispatchedPage>
                   style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20,fontFamily: "Poppins"),),
                   ),
               ),
-              ListTile
+             ListTile
               (
                 leading: Icon(Icons.home_outlined),
-                title: const Text('Home'),
+                title: const Text('Dashboard'),
                 onTap: () {          
                     Navigator.push(context, MaterialPageRoute(builder: (context) => CompanyPage(),));               
                 },
               ),
               ListTile
-              (      
-                leading: const Icon(Icons.delivery_dining),              
-                title: const Text('View Orders List'),
-                onTap: () {          
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => OrderlistPage(),));               
+              (
+                leading: Icon(Icons.auto_stories_outlined),
+                title: Text('View Orders List'),
+                onTap: (){
+                     Navigator.push(context, MaterialPageRoute(builder: (context) => OrderlistPage(),));
                 },
-              ),
+             ),
+             ListTile
+              (
+                leading: Icon(Icons.auto_stories_outlined),
+                title: Text('View Dispatched Order List'),
+                onTap: (){
+                     Navigator.push(context, MaterialPageRoute(builder: (context) => DispatchedPage(),));
+                },
+             ),
+             ListTile
+              (
+                leading: Icon(Icons.price_change_outlined),
+                title: Text(' Fix Price for Products'),
+                onTap: (){
+                     Navigator.push(context, MaterialPageRoute(builder: (context) => PricePage(),));
+                },
+             ),
           ],
         ),
       ),
@@ -175,7 +192,7 @@ class _DispatchedPageState extends State<DispatchedPage>
                   0: FixedColumnWidth(120), // Order #
                   1: FixedColumnWidth(150), // Customer
                   2: FixedColumnWidth(220), // Items
-                  3: FixedColumnWidth(80),  // Total
+                  3: FixedColumnWidth(100),  // Total
                   4: FixedColumnWidth(160), // Date
                   5: FixedColumnWidth(170), // Status
                 },
@@ -186,82 +203,82 @@ class _DispatchedPageState extends State<DispatchedPage>
                   (
                     decoration: BoxDecoration(color: Colors.green.shade100),
                     children: const [
-                      Padding(padding: EdgeInsets.all(8), child: Text("Order #", style: TextStyle(fontWeight: FontWeight.bold))),
+                      Padding(padding: EdgeInsets.all(8), child: Text("Order Code", style: TextStyle(fontWeight: FontWeight.bold))),
                       Padding(padding: EdgeInsets.all(8), child: Text("Customer", style: TextStyle(fontWeight: FontWeight.bold))),
                       Padding(padding: EdgeInsets.all(8), child: Text("Items", style: TextStyle(fontWeight: FontWeight.bold))),
-                      Padding(padding: EdgeInsets.all(8), child: Text("Total", style: TextStyle(fontWeight: FontWeight.bold))),
-                      Padding(padding: EdgeInsets.all(8), child: Text("Date", style: TextStyle(fontWeight: FontWeight.bold))),
+                      Padding(padding: EdgeInsets.all(8), child: Text("Total Price", style: TextStyle(fontWeight: FontWeight.bold))),
+                      Padding(padding: EdgeInsets.all(8), child: Text("Order Date", style: TextStyle(fontWeight: FontWeight.bold))),
                       Padding(padding: EdgeInsets.all(8), child: Text("Status", style: TextStyle(fontWeight: FontWeight.bold))),
                     ],
                   ),
-                  TableRow
-                  (
-                    decoration: BoxDecoration(color: Colors.white),
-                    children: 
-                    [
-                      Padding(padding: EdgeInsets.all(10), child: Text("#ORD967329")),
-                      Padding(padding: EdgeInsets.all(10),child: Text("John Frank\n8967452310\nCOD")),
-                      Padding
-                      (
-                        padding: EdgeInsets.all(10),
-                        child: Column
-                        (
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text("Chicken With Skin (1 Kg) – ₹170.00"),
-                            Text("Chicken Without Skin (1 Kg) – ₹180.00"),
-                          ],
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.all(10), child: Text("₹350")),
-                      Padding(padding: EdgeInsets.all(10), child: Text("2025-09-15 11:44:59")),
-                      Padding(
-                        padding: EdgeInsets.all(10),
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            foregroundColor: Colors.white,
-                          ),
-                          child: Text("Acknowledge"),
-                        ),
-                      ),
-                    ],
-                  ),
-                  TableRow
-                  (
-                    decoration: BoxDecoration(color: Colors.white),
-                    children: 
-                    [
-                      Padding(padding: EdgeInsets.all(10), child: Text("#ORD967329")),
-                      Padding(padding: EdgeInsets.all(10),child: Text("John Frank\n8967452310\nCOD")),
-                      Padding
-                      (
-                        padding: EdgeInsets.all(10),
-                        child: Column
-                        (
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text("Chicken With Skin (1 Kg) – ₹170.00"),
-                            Text("Chicken Without Skin (1 Kg) – ₹180.00"),
-                          ],
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.all(10), child: Text("₹350")),
-                      Padding(padding: EdgeInsets.all(10), child: Text("2025-09-15 11:44:59")),
-                      Padding(
-                        padding: EdgeInsets.all(10),
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            foregroundColor: Colors.white,
-                          ),
-                          child: Text("Acknowledge"),
-                        ),
-                      ),
-                    ],
-                  ),
+                  // TableRow
+                  // (
+                  //   decoration: BoxDecoration(color: Colors.white),
+                  //   children: 
+                  //   [
+                  //     Padding(padding: EdgeInsets.all(10), child: Text("#ORD967329")),
+                  //     Padding(padding: EdgeInsets.all(10),child: Text("John Frank\n8967452310\nCOD")),
+                  //     Padding
+                  //     (
+                  //       padding: EdgeInsets.all(10),
+                  //       child: Column
+                  //       (
+                  //         crossAxisAlignment: CrossAxisAlignment.start,
+                  //         children: const [
+                  //           Text("Chicken With Skin (1 Kg) – ₹170.00"),
+                  //           Text("Chicken Without Skin (1 Kg) – ₹180.00"),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //     Padding(padding: EdgeInsets.all(10), child: Text("₹350")),
+                  //     Padding(padding: EdgeInsets.all(10), child: Text("2025-09-15 11:44:59")),
+                  //     Padding(
+                  //       padding: EdgeInsets.all(10),
+                  //       child: ElevatedButton(
+                  //         onPressed: () {},
+                  //         style: ElevatedButton.styleFrom(
+                  //           backgroundColor: Colors.blue,
+                  //           foregroundColor: Colors.white,
+                  //         ),
+                  //         child: Text("Acknowledge"),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  // TableRow
+                  // (
+                  //   decoration: BoxDecoration(color: Colors.white),
+                  //   children: 
+                  //   [
+                  //     Padding(padding: EdgeInsets.all(10), child: Text("#ORD967329")),
+                  //     Padding(padding: EdgeInsets.all(10),child: Text("John Frank\n8967452310\nCOD")),
+                  //     Padding
+                  //     (
+                  //       padding: EdgeInsets.all(10),
+                  //       child: Column
+                  //       (
+                  //         crossAxisAlignment: CrossAxisAlignment.start,
+                  //         children: const [
+                  //           Text("Chicken With Skin (1 Kg) – ₹170.00"),
+                  //           Text("Chicken Without Skin (1 Kg) – ₹180.00"),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //     Padding(padding: EdgeInsets.all(10), child: Text("₹350")),
+                  //     Padding(padding: EdgeInsets.all(10), child: Text("2025-09-15 11:44:59")),
+                  //     Padding(
+                  //       padding: EdgeInsets.all(10),
+                  //       child: ElevatedButton(
+                  //         onPressed: () {},
+                  //         style: ElevatedButton.styleFrom(
+                  //           backgroundColor: Colors.blue,
+                  //           foregroundColor: Colors.white,
+                  //         ),
+                  //         child: Text("Acknowledge"),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
             ),
