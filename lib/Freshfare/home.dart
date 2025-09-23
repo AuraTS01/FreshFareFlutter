@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:freshfare/freshfare/login.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/cart.dart';
 import 'package:freshfare/freshfare/cartmodel.dart';
 import 'package:freshfare/freshfare/cartprovider.dart';
 import 'package:freshfare/freshfare/chicken.dart';
 import 'package:freshfare/freshfare/fish.dart';
-import 'package:freshfare/freshfare/login.dart';
 import 'package:freshfare/freshfare/mutton.dart';
 import 'package:freshfare/freshfare/notification.dart';
 import 'package:freshfare/freshfare/prawns.dart';
@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   final  pincodecontroller = TextEditingController();
 
   String ? selecteditem;
-  final items =['Chicken','Mutton','Fish','Prawns'];
+  final items =['Chicken','Mutton','Fish','Prawns','Mutton - Boti','Mutton - Liver','Beef','Beef - Liver','Beef - Boti','Quail','Duck'];
   void navigate(String value)
   {
     if(value == 'Chicken'){
@@ -66,20 +66,20 @@ class _HomePageState extends State<HomePage> {
             TextButton(
               onPressed: () async {
               final prefs = await SharedPreferences.getInstance();
-              // await prefs.remove('isLoggedIn'); 
-              // await prefs.remove('userId');     
-           
-              // Navigator.of(context).pop();
+              await prefs.remove('isLoggedIn'); 
+              await prefs.remove('userName');     
+
+            
+              Navigator.of(context).pop();
               
               // Navigator.of(context).pop();
 
               
-              // setState(() {
-              //   userName = '';
-              //   userEmail = '';
-              // });
+              setState(() {
+                userName = '';
+                userEmail = '';
+              });
               await prefs.remove('userEmail'); // clear login
-              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const LoginPage()),);
               
               Fluttertoast.showToast(
               msg: "Logout Successfully",
@@ -278,7 +278,7 @@ class _HomePageState extends State<HomePage> {
                UserAccountsDrawerHeader
               (
                 decoration: BoxDecoration(color: Colors.green),
-                accountName: Text("Hello $userName"),
+                accountName: Text(userName.isNotEmpty ? "Hello $userName" : "Hello Guest"),
                 accountEmail: Text(userEmail),
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Colors.white,
@@ -310,25 +310,31 @@ class _HomePageState extends State<HomePage> {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationPage(),));  
                   },
               ),
-              ListTile
-              (
+              if (userEmail.isEmpty) 
+              ...[
+                ListTile
+                (
                   leading: Icon(Icons.login_outlined),
                   title: Text('Login'),
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(),));  
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    ).then((_) => _loadUserData()); 
                   },
-              ),
-              ListTile
-              (
-                leading: const Icon(Icons.logout),
-                title: const Text('Logout'),
-                onTap: () async{   
-                  _showLogoutDialog(context); 
-                  final prefs = await SharedPreferences.getInstance();
-                  await prefs.clear();
-                },
-              ),
-              
+                ),
+              ]
+              else 
+              ...[
+                ListTile
+                (
+                  leading: const Icon(Icons.logout),
+                  title: const Text('Logout'),
+                  onTap: () async {
+                    _showLogoutDialog(context);
+                  },
+                ),
+              ]
             ],
           ),
         ),

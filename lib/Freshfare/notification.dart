@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:freshfare/freshfare/cart.dart';
 import 'package:freshfare/freshfare/home.dart';
 import 'package:freshfare/freshfare/login.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -30,6 +31,57 @@ class _NotificationPageState extends State<NotificationPage>
   void initState() {
     super.initState();
     _loadUserData();
+  }
+
+  void _showLogoutDialog(BuildContext context)
+  {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Logout"),
+          content: const Text("Are you sure you want to logout?"),
+          actions: [
+            TextButton(
+              onPressed: () async {
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.remove('isLoggedIn'); 
+              await prefs.remove('userId');     
+
+            
+              Navigator.of(context).pop();
+              
+              Navigator.of(context).pop();
+
+              
+              setState(() {
+                userName = '';
+                userEmail = '';
+              });
+              await prefs.remove('userEmail'); // clear login
+              
+              Fluttertoast.showToast(
+              msg: "Logout Successfully",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0,
+              );  
+             
+            },
+            child: const Text("Yes"),
+          ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); 
+              },
+              child: const Text("No"),
+            ),            
+          ],
+        );
+      },
+    );
   }
  
   @override
@@ -102,6 +154,31 @@ class _NotificationPageState extends State<NotificationPage>
                     Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationPage(),));
                   },
             ),
+            if (userEmail.isEmpty) 
+              ...[
+                ListTile
+                (
+                  leading: Icon(Icons.login_outlined),
+                  title: Text('Login'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    ).then((_) => _loadUserData()); 
+                  },
+                ),
+              ]
+              else 
+              ...[
+                ListTile
+                (
+                  leading: const Icon(Icons.logout),
+                  title: const Text('Logout'),
+                  onTap: () async {
+                    _showLogoutDialog(context);
+                  },
+                ),
+              ]
           ],
         ),
       ),

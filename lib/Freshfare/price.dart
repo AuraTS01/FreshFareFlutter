@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:freshfare/freshfare/login.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/company.dart';
 import 'dart:convert';
@@ -46,7 +47,7 @@ class _PricePageState extends State<PricePage>
     _loadUserData();
   }
 
-   void _showLogoutDialog(BuildContext context)
+  void _showLogoutDialog(BuildContext context)
   {
     showDialog(
       context: context,
@@ -56,21 +57,19 @@ class _PricePageState extends State<PricePage>
           content: const Text("Are you sure you want to logout?"),
           actions: [
             TextButton(
-               onPressed: () async {
+              onPressed: () async {
               final prefs = await SharedPreferences.getInstance();
               await prefs.remove('isLoggedIn'); 
               await prefs.remove('userId');     
 
-            
               Navigator.of(context).pop();
               
-              Navigator.of(context).pop();
-
-              
+              Navigator.of(context).pop();   
               setState(() {
                 userName = '';
                 userEmail = '';
               });
+              await prefs.remove('userEmail'); // clear login
               
               Fluttertoast.showToast(
               msg: "Logout Successfully",
@@ -175,6 +174,31 @@ class _PricePageState extends State<PricePage>
                      Navigator.push(context, MaterialPageRoute(builder: (context) => PricePage(),));
                 },
              ),
+             if (userEmail.isEmpty) 
+              ...[
+                ListTile
+                (
+                  leading: Icon(Icons.login_outlined),
+                  title: Text('Login'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    ).then((_) => _loadUserData()); 
+                  },
+                ),
+              ]
+              else 
+              ...[
+                ListTile
+                (
+                  leading: const Icon(Icons.logout),
+                  title: const Text('Logout'),
+                  onTap: () async {
+                    _showLogoutDialog(context);
+                  },
+                ),
+              ]
           ],
         ),
       ),

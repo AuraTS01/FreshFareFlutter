@@ -46,23 +46,22 @@ class _CompanyPageState extends State<CompanyPage>
           content: const Text("Are you sure you want to logout?"),
           actions: [
             TextButton(
-               onPressed: () async {
+              onPressed: () async {
               final prefs = await SharedPreferences.getInstance();
-              // await prefs.remove('isLoggedIn'); 
-              // await prefs.remove('userId');     
+              await prefs.remove('isLoggedIn'); 
+              await prefs.remove('userId');     
 
             
-              // Navigator.of(context).pop();
+              Navigator.of(context).pop();
               
-              // Navigator.of(context).pop();
+              Navigator.of(context).pop();
 
               
-              // setState(() {
-              //   userName = '';
-              //   userEmail = '';
-              // });
+              setState(() {
+                userName = '';
+                userEmail = '';
+              });
               await prefs.remove('userEmail'); // clear login
-              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const LoginPage()),);
               
               Fluttertoast.showToast(
               msg: "Logout Successfully",
@@ -166,24 +165,31 @@ class _CompanyPageState extends State<CompanyPage>
                      Navigator.push(context, MaterialPageRoute(builder: (context) => PricePage(),));
                 },
              ),
-             ListTile
-              (
+            if (userEmail.isEmpty) 
+              ...[
+                ListTile
+                (
                   leading: Icon(Icons.login_outlined),
                   title: Text('Login'),
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(),));  
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    ).then((_) => _loadUserData()); 
                   },
-              ),
-              ListTile
-              (
-                leading: const Icon(Icons.logout),
-                title: const Text('Logout'),
-                onTap: () async{   
-                  _showLogoutDialog(context); 
-                  final prefs = await SharedPreferences.getInstance();
-                  await prefs.clear();
-                },
-              ),       
+                ),
+              ]
+              else 
+              ...[
+                ListTile
+                (
+                  leading: const Icon(Icons.logout),
+                  title: const Text('Logout'),
+                  onTap: () async {
+                    _showLogoutDialog(context);
+                  },
+                ),
+              ] 
           ],
         ),
       ),

@@ -74,6 +74,57 @@ class _ChickenPageState extends State<ChickenPage> {
                   Product(name:"Chicken_Without_Skin", baseprice: 250.0, image:"assets/chicken_withoutSkin.png"),
                   Product(name:"Chicken", baseprice: 300.0, image:"assets/chicken_2.png"),             
   ];
+
+  void _showLogoutDialog(BuildContext context)
+  {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Logout"),
+          content: const Text("Are you sure you want to logout?"),
+          actions: [
+            TextButton(
+              onPressed: () async {
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.remove('isLoggedIn'); 
+              await prefs.remove('userId');     
+
+            
+              Navigator.of(context).pop();
+              
+              Navigator.of(context).pop();
+
+              
+              setState(() {
+                userName = '';
+                userEmail = '';
+              });
+              await prefs.remove('userEmail'); // clear login
+              
+              Fluttertoast.showToast(
+              msg: "Logout Successfully",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0,
+              );  
+             
+            },
+            child: const Text("Yes"),
+          ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); 
+              },
+              child: const Text("No"),
+            ),            
+          ],
+        );
+      },
+    );
+  }
   
 
   @override
@@ -146,6 +197,31 @@ class _ChickenPageState extends State<ChickenPage> {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationPage(),));
                   },
             ),
+            if (userEmail.isEmpty) 
+              ...[
+                ListTile
+                (
+                  leading: Icon(Icons.login_outlined),
+                  title: Text('Login'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    ).then((_) => _loadUserData()); 
+                  },
+                ),
+              ]
+              else 
+              ...[
+                ListTile
+                (
+                  leading: const Icon(Icons.logout),
+                  title: const Text('Logout'),
+                  onTap: () async {
+                    _showLogoutDialog(context);
+                  },
+                ),
+              ]
           ],
         ),
       ),

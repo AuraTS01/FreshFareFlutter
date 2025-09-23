@@ -51,6 +51,7 @@ class _LoginPageState extends State<LoginPage>
         await prefs.setString('userPhone', data['number']);
         await prefs.setString('userEmail', data["email"]);
         await prefs.setString('category', data['category']);
+        await prefs.setString('userId', data["signup_id"].toString());
        
 
        if (data['category'] == "customer") {

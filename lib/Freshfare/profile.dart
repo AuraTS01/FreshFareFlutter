@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:freshfare/freshfare/cart.dart';
 import 'package:freshfare/freshfare/home.dart';
 import 'package:freshfare/freshfare/login.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,6 +21,14 @@ class _ProfilePageState extends State<ProfilePage>
   String userEmail = '';
   String userPhone = '';
 
+   Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userName = prefs.getString('userName') ?? '';
+      userEmail = prefs.getString('userEmail') ?? '';
+    });
+  }
+
 
   Future<void> loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
@@ -37,7 +46,7 @@ class _ProfilePageState extends State<ProfilePage>
     loadUserData();
   }
 
-  void _showLogoutDialog(BuildContext context)
+ void _showLogoutDialog(BuildContext context)
   {
     showDialog(
       context: context,
@@ -47,11 +56,30 @@ class _ProfilePageState extends State<ProfilePage>
           content: const Text("Are you sure you want to logout?"),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(),));              
-              },
-              child: const Text("Yes"),
-            ),
+              onPressed: () async {
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.remove('isLoggedIn'); 
+              await prefs.remove('userId');     
+              
+              Navigator.of(context).pop();
+              setState(() {
+                userName = '';
+                userEmail = '';
+              });
+              await prefs.remove('userEmail'); // clear login
+              
+              Fluttertoast.showToast(
+              msg: "Logout Successfully",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0,
+              );  
+             
+            },
+            child: const Text("Yes"),
+          ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); 
@@ -63,7 +91,6 @@ class _ProfilePageState extends State<ProfilePage>
       },
     );
   }
-
   @override
   Widget build(BuildContext context) {
     return  Scaffold
@@ -134,16 +161,31 @@ class _ProfilePageState extends State<ProfilePage>
                     Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationPage(),));
                   },
             ),
-           ListTile
-              (
-                leading: const Icon(Icons.logout),
-                title: const Text('Logout'),
-                onTap: () async{   
-                  _showLogoutDialog(context); 
-                  final prefs = await SharedPreferences.getInstance();
-                  await prefs.clear();
-                },
-              ),
+           if (userEmail.isEmpty) 
+              ...[
+                ListTile
+                (
+                  leading: Icon(Icons.login_outlined),
+                  title: Text('Login'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    ).then((_) => _loadUserData()); 
+                  },
+                ),
+              ]
+              else 
+              ...[
+                ListTile
+                (
+                  leading: const Icon(Icons.logout),
+                  title: const Text('Logout'),
+                  onTap: () async {
+                    _showLogoutDialog(context);
+                  },
+                ),
+              ]
           ],
         ),
       ),

@@ -1,10 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/login.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignPage extends StatefulWidget 
 {
@@ -46,7 +45,8 @@ class _SignPageState extends State<SignPage>
                   );
       }
     else if(data['status'] == "Success"){
-        
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('userId', data["signup_id"].toString()); 
       Fluttertoast.showToast(
           msg: "Registration Successful",
           toastLength: Toast.LENGTH_SHORT,

@@ -40,25 +40,17 @@ class _FishPageState extends State<FishPage> {
     else if(input.isEmpty)
     {
       Fluttertoast.showToast
-                      (
-                        msg: "Please enter something to search",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 3,
-                        backgroundColor: Colors.green,
-                        textColor: Colors.white,
-                        fontSize: 16.0,
-                      );
+        (
+          msg: "Please enter something to search",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
     }
   }
-
-  // bool showButton = false;
-
-  // void toggleButton(){
-  //   setState(() {
-  //     showButton = !showButton;
-  //   });
-  // }
 
   String userName = '';
   String userEmail = '';
@@ -80,6 +72,57 @@ class _FishPageState extends State<FishPage> {
    final List<Product> products = [               
                   Product(name:"Fish", baseprice: 200.0, image: "assets/fish.png"),              
   ];
+
+  void _showLogoutDialog(BuildContext context)
+  {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Logout"),
+          content: const Text("Are you sure you want to logout?"),
+          actions: [
+            TextButton(
+              onPressed: () async {
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.remove('isLoggedIn'); 
+              await prefs.remove('userId');     
+
+            
+              Navigator.of(context).pop();
+              
+              Navigator.of(context).pop();
+
+              
+              setState(() {
+                userName = '';
+                userEmail = '';
+              });
+              await prefs.remove('userEmail'); // clear login
+              
+              Fluttertoast.showToast(
+              msg: "Logout Successfully",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0,
+              );  
+             
+            },
+            child: const Text("Yes"),
+          ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); 
+              },
+              child: const Text("No"),
+            ),            
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -142,13 +185,39 @@ class _FishPageState extends State<FishPage> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),));                    
                 },
             ),
-            ListTile(
+            ListTile
+            (
                   leading: Icon(Icons.notifications_outlined),
                   title: Text('Notifications'),
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationPage(),));
                   },
-                ),
+            ),
+            if (userEmail.isEmpty) 
+          ...[
+            ListTile
+            (
+              leading: Icon(Icons.login_outlined),
+              title: Text('Login'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                ).then((_) => _loadUserData()); 
+              },
+            ),
+          ]
+          else 
+          ...[
+            ListTile
+            (
+              leading: const Icon(Icons.logout),
+              title: const Text('Logout'),
+              onTap: () async {
+                _showLogoutDialog(context);
+              },
+            ),
+          ]
           ],
         ),
       ),
