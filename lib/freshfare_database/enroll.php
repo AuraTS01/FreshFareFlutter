@@ -20,15 +20,20 @@ if (empty($company_name) || empty($signup_id)) {
     exit;
 }
 
+// ✅ Make sure signup_id is an integer
+$signup_id = (int)$signup_id;  
+
 // ✅ Check if signup_id exists
 $checkSignup = $conn->prepare("SELECT id FROM fresh_fare_signup WHERE id = ?");
 $checkSignup->bind_param("i", $signup_id);
 $checkSignup->execute();
 $result = $checkSignup->get_result();
+
 if ($result->num_rows == 0) {
     echo json_encode(["status" => "Error", "message" => "Invalid signup_id"]);
     exit;
 }
+
 
 // ✅ Check if company already exists
 $checkCompany = $conn->prepare("SELECT id FROM company_registration WHERE email = ? OR mobile = ?");
