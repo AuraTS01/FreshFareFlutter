@@ -5,15 +5,16 @@ import 'package:freshfare/freshfare/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/enroll.dart';
+import 'package:freshfare/freshfare/admin.dart';
 
-class AdminPage extends StatefulWidget 
+class RegisterPage extends StatefulWidget 
 {
-  const AdminPage({super.key});
+  const RegisterPage({super.key});
   @override
-  State<AdminPage> createState() => _AdminPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _AdminPageState extends State<AdminPage>
+class _RegisterPageState extends State<RegisterPage>
 {
 
   String userName = '';
@@ -33,7 +34,7 @@ class _AdminPageState extends State<AdminPage>
     _loadUserData();
   }
 
-   void _showLogoutDialog(BuildContext context)
+  void _showLogoutDialog(BuildContext context)
   {
     showDialog(
       context: context,
@@ -136,7 +137,7 @@ class _AdminPageState extends State<AdminPage>
                      Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage(),));
                 },
              ),
-             ListTile
+              ListTile
               (
                 title: Text('Enroll New Company'),
                 onTap: (){
@@ -178,126 +179,56 @@ class _AdminPageState extends State<AdminPage>
           ],
         ),
       ),
-     body: Padding
-     (
-        padding: EdgeInsets.all(20.0),
-        child: SingleChildScrollView
+    body: SingleChildScrollView
+      (
+        padding: EdgeInsets.all(16),
+        child: Column
         (
-          child: Column
-          (
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: 
-            [
-              Row
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: 
+          [
+            Row
+            (
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: 
+              [
+                Text("Registered Users",style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold,fontFamily: "Poppins",),),
+              ],
+            ),
+            SizedBox(height:40),
+            SingleChildScrollView
+            (
+              scrollDirection: Axis.horizontal, 
+              child: Table
               (
-                mainAxisAlignment: MainAxisAlignment.center,
+                border: TableBorder.all(color: Colors.grey.shade400,width: 1,),
+                columnWidths: const {
+                  0: FixedColumnWidth(50), 
+                  1: FixedColumnWidth(150), 
+                  2: FixedColumnWidth(220), 
+                  3: FixedColumnWidth(80),  
+                  4: FixedColumnWidth(160), 
+                  5: FixedColumnWidth(170),
+                },
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                 children: 
                 [
-                  Icon(Icons.business_outlined, size: 25.0, color: Colors.blue),
-                  SizedBox(width: 10),
-                  RichText(
-                    text: TextSpan
-                    (
-                      children: 
-                      [
-                        TextSpan(text:"Company Dashboard",style: TextStyle(color: Colors.black,fontSize: 15,fontWeight: FontWeight.bold,fontFamily: "Poppins",),),
-                      ],
-                    ),
+                  TableRow
+                  (
+                    decoration: BoxDecoration(color: Colors.green.shade100),
+                    children: const [
+                      Padding(padding: EdgeInsets.all(8), child: Text(" # ", style: TextStyle(fontWeight: FontWeight.bold))),
+                      Padding(padding: EdgeInsets.all(8), child: Text("Name", style: TextStyle(fontWeight: FontWeight.bold))),
+                      Padding(padding: EdgeInsets.all(8), child: Text("Email", style: TextStyle(fontWeight: FontWeight.bold))),
+                      Padding(padding: EdgeInsets.all(8), child: Text("Phone", style: TextStyle(fontWeight: FontWeight.bold))),
+                      Padding(padding: EdgeInsets.all(8), child: Text("Category", style: TextStyle(fontWeight: FontWeight.bold))),
+                      Padding(padding: EdgeInsets.all(8), child: Text("Action", style: TextStyle(fontWeight: FontWeight.bold))),
+                    ],
                   ),
                 ],
               ),
-              SizedBox(height: 40),
-              Container
-              (
-                width: double.infinity,
-                padding: EdgeInsets.all(40),
-                margin: EdgeInsets.symmetric(vertical: 10),
-                decoration: BoxDecoration(color: Colors.blue,borderRadius: BorderRadius.circular(12),),
-                child: Column
-                (
-                  children: 
-                  [
-                    Text("0",style: TextStyle(color: Colors.white,fontSize: 30,fontWeight: FontWeight.bold)),
-                    SizedBox(height: 10),
-                    Text("Total Companies",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.center,),
-                  ],
-                ),
-              ),
-              SizedBox(height: 30),
-              Container
-              (
-                width: double.infinity,
-                padding: EdgeInsets.all(40),
-                margin: EdgeInsets.symmetric(vertical: 10),
-                decoration: BoxDecoration(color: Colors.red,borderRadius: BorderRadius.circular(12),),
-                child: Column
-                (
-                  children: 
-                  [
-                    Text("0",style: TextStyle(color: Colors.white,fontSize: 30,fontWeight: FontWeight.bold)),
-                    SizedBox(height: 10),
-                    Text("Total Income",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.center,),
-                  ],
-                ),
-              ),
-              SizedBox(height: 30),
-               Container
-              (
-                width: double.infinity,
-                padding: EdgeInsets.all(40),
-                margin: EdgeInsets.symmetric(vertical: 10),
-                decoration: BoxDecoration(color: Colors.green,borderRadius: BorderRadius.circular(12),),
-                child: Column
-                (
-                  children: 
-                  [
-                    Text("0",style: TextStyle(color: Colors.white,fontSize: 30,fontWeight: FontWeight.bold)),
-                    SizedBox(height: 10),
-                    Text("Delivered Orders",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.center,),
-                  ],
-                ),
-              ),
-              SizedBox(height: 30),
-               Container
-              (
-                width: double.infinity,
-                padding: EdgeInsets.all(40),
-                margin: EdgeInsets.symmetric(vertical: 10),
-                decoration: BoxDecoration(color: Colors.orange,borderRadius: BorderRadius.circular(12),),
-                child: Column
-                (
-                  children: 
-                  [
-                    Text("0",style: TextStyle(color: Colors.white,fontSize: 30,fontWeight: FontWeight.bold)),
-                    SizedBox(height: 10),
-                    Text("Pending Orders",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.center,),
-                  ],
-                ),
-              ),
-              SizedBox(height: 30),
-               Container
-              (
-                width: double.infinity,
-                padding: EdgeInsets.all(40),
-                margin: EdgeInsets.symmetric(vertical: 10),
-                decoration: BoxDecoration(color: Colors.pink,borderRadius: BorderRadius.circular(12),),
-                child: Column
-                (
-                  children: 
-                  [
-                    Text("0",style: TextStyle(color: Colors.white,fontSize: 30,fontWeight: FontWeight.bold)),
-                    SizedBox(height: 10),
-                    Text("Picked Up Orders",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.center,),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

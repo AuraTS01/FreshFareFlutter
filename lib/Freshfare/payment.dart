@@ -48,36 +48,28 @@ class _PaymentPageState extends State<PaymentPage>
           title: const Text("Logout"),
           content: const Text("Are you sure you want to logout?"),
           actions: [
-            TextButton(
-              onPressed: () async {
-              final prefs = await SharedPreferences.getInstance();
-              await prefs.remove('isLoggedIn'); 
-              await prefs.remove('userId');     
-
-            
-              Navigator.of(context).pop();
-              
-              Navigator.of(context).pop();
-
-              
-              setState(() {
-                userName = '';
-                userEmail = '';
-              });
-              await prefs.remove('userEmail'); // clear login
-              
-              Fluttertoast.showToast(
-              msg: "Logout Successfully",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              backgroundColor: Colors.green,
-              textColor: Colors.white,
-              fontSize: 16.0,
-              );  
-             
-            },
-            child: const Text("Yes"),
-          ),
+            TextButton
+            (
+              onPressed: () async 
+              {
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.clear();    
+                setState(() {
+                  userName = '';
+                  userEmail = '';
+                });
+                Navigator.of(context).pop();
+                Fluttertoast.showToast(
+                msg: "Logout Successfully",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.CENTER,
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+                fontSize: 16.0,
+                );    
+              },
+               child: const Text("Yes"),
+            ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); 
@@ -129,7 +121,7 @@ class _PaymentPageState extends State<PaymentPage>
             UserAccountsDrawerHeader
               (
                 decoration: BoxDecoration(color: Colors.green),
-                accountName: Text("Hello $userName"),
+                accountName: Text(userName.isNotEmpty ? "Hello $userName" : "Hello Guest"),
                 accountEmail: Text(userEmail),
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Colors.white,

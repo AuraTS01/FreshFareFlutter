@@ -52,6 +52,7 @@ class _LoginPageState extends State<LoginPage>
         await prefs.setString('userEmail', data["email"]);
         await prefs.setString('category', data['category']);
         await prefs.setString('userId', data["signup_id"].toString());
+    
        
 
        if (data['category'] == "customer") {
@@ -131,6 +132,13 @@ class _LoginPageState extends State<LoginPage>
     passwordVisible=true;
   }    
 
+  InputDecoration _inputDecoration() 
+  {
+    return const InputDecoration(
+      contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10), 
+      border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -194,61 +202,50 @@ class _LoginPageState extends State<LoginPage>
                             TextFormField
                             (
                               controller: emailcontroller,
-                              decoration: InputDecoration(labelText: 'Email',
-                              border: const OutlineInputBorder(
-                                 borderRadius: BorderRadius.all(Radius.circular(0)))),                   
-                              validator: (value) 
-                              {
-                                if(value == null || value.isEmpty)
-                                {
-                                  return 'Email is required';
-                                }
-                                else if(!value.contains('@')){
-                                  return 'Enter valid email';
-                                }
-                                return null;
-                              },
+                              decoration: _inputDecoration().copyWith(
+                                        labelText: 'Email',prefixIcon: Icon(Icons.email)),
+                              keyboardType: TextInputType.emailAddress,
+                              validator: (v) =>
+                                    v!.isEmpty ? "Enter email" : null,
                             ),
                             SizedBox(height: 20),
                             TextFormField
                             (
                               obscureText: passwordVisible,
                               controller: passwordcontroller,
-                              decoration: InputDecoration(
-                              labelText: 'Password',                              
+                              decoration: _inputDecoration().copyWith(
+                              labelText: 'password',
+                              prefixIcon: Icon(Icons.password),
                               suffixIcon: IconButton(
-                                  icon: Icon(passwordVisible? Icons.visibility:Icons.visibility_off),
-                                  onPressed: () 
+                                    icon: Icon(passwordVisible? Icons.visibility: Icons.visibility_off),
+                                    onPressed: () 
                                     {
-                                      setState
-                                      (
-                                        (){
+                                      setState(
+                                        () {
                                           passwordVisible = !passwordVisible;
                                         },
                                       );
                                     },
                                   ),
-                                  alignLabelWithHint: false,
-                                  filled: true,
-                                  border: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(0)))
-                                ),
-                                validator : (value)
-                                {
+                              alignLabelWithHint: false,
+                              filled: true,
+                              border: const OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(0)))
+                              ),                               
+                              validator : (value)
+                              {
                                   if(value == null || value.isEmpty)
                                   {
                                     return 'Password is required';
                                   }
-                                  else if(value.length < 6)
-                                  {
+                                  else if(value.length < 6){
                                     return 'Minimum 6 characters or invlaid Password';
                                   }   
-                                  else if(value.length >= 15)
-                                  {
+                                  else if(value.length >= 15){
                                     return 'Miaximum 15 characters or invlaid Password';
                                   }  
                                   return null;
-                                },   
+                              },                     
                             ),                   
                             SizedBox(height: 20),
                             SizedBox

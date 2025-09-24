@@ -83,8 +83,13 @@ class _SignPageState extends State<SignPage>
     print("Data fetched");
   }
 
-  
-
+  InputDecoration _inputDecoration() 
+  {
+    return const InputDecoration(
+      contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10), 
+      border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+    );
+  }
 
   @override
   Widget build(BuildContext context) 
@@ -147,131 +152,108 @@ class _SignPageState extends State<SignPage>
                       Text("Create  Account",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20)),     
                       SizedBox(height: 20),                
                       TextFormField
-                      (
-                                controller: namecontroller,
-                                decoration: InputDecoration(labelText: 'username',
-                                border: const OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(0)))),
-                                validator: (value) {
-                                if(value == null || value.isEmpty)
-                                {
-                                  return 'Name is required';
-                                }
-                                return null;
-                                },
+                      (                           
+                        controller: namecontroller,
+                        decoration:_inputDecoration().copyWith(
+                                  labelText: 'username',prefixIcon: Icon(Icons.person)),
+                        validator: (v) => v!.isEmpty ? "Enter name" : null,
                       ),
                       SizedBox(height: 20),
                       TextFormField
                       (
-                                controller: emailcontroller,
-                                decoration: InputDecoration(labelText: 'email',
-                                border: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(0)))),
-                                validator: (value)
-                                {
-                                  if(value == null || value.isEmpty)
-                                  {
-                                    return 'Email is required';
-                                  }
-                                  else if(!value.contains('@'))
-                                  {
-                                    return 'Enter valid email';
-                                  }
-                                  return null;
-                                },
+                        controller: emailcontroller,
+                        decoration: _inputDecoration().copyWith(
+                                  labelText: 'Email',prefixIcon: Icon(Icons.email)),
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (v) =>
+                            v!.isEmpty ? "Enter email" : null,
+                      ),
+                      SizedBox(height: 20),
+                      TextFormField
+                      (                        
+                        controller: phonecontroller,
+                        decoration: _inputDecoration().copyWith(
+                                  labelText: 'mobile',prefixIcon: Icon(Icons.phone)),
+                        keyboardType: TextInputType.phone,
+                        validator: (v) =>
+                            v!.isEmpty ? "Enter mobile number" : null,
                       ),
                       SizedBox(height: 20),
                       TextFormField
                       (
-                                controller: phonecontroller,
-                                decoration: InputDecoration(labelText: 'mobile',
-                                border: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(0)))),
-                                validator: (value)
-                                {
-                                  if(value == null || value.isEmpty)
-                                  {                    
-                                    return 'Mobile number is required';
-                                  }
-                                  return null;
-                                },   
+                        obscureText: passwordVisible,
+                        controller: passwordcontroller,
+                        decoration: _inputDecoration().copyWith(
+                        labelText: 'password',
+                        prefixIcon: Icon(Icons.password),
+                        suffixIcon: IconButton(
+                              icon: Icon(passwordVisible? Icons.visibility: Icons.visibility_off),
+                              onPressed: () 
+                              {
+                                setState(
+                                  () {
+                                    passwordVisible = !passwordVisible;
+                                  },
+                                );
+                              },
+                            ),
+                        alignLabelWithHint: false,
+                        filled: true,
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(0)))
+                        ),                               
+                        validator : (value)
+                        {
+                            if(value == null || value.isEmpty)
+                            {
+                              return 'Password is required';
+                            }
+                            else if(value.length < 6){
+                              return 'Minimum 6 characters or invlaid Password';
+                            }   
+                            else if(value.length >= 15){
+                              return 'Miaximum 15 characters or invlaid Password';
+                            }  
+                            return null;
+                        },                     
                       ),
                       SizedBox(height: 20),
                       TextFormField
                       (
-                                obscureText: passwordVisible,
-                                controller: passwordcontroller,
-                                decoration: InputDecoration(
-                                labelText: 'password',
-                                suffixIcon: IconButton(
-                                      icon: Icon(passwordVisible? Icons.visibility: Icons.visibility_off),
-                                      onPressed: () 
-                                      {
-                                        setState(
-                                          () {
-                                            passwordVisible = !passwordVisible;
-                                          },
-                                        );
-                                      },
-                                    ),
-                                alignLabelWithHint: false,
-                                filled: true,
-                                border: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(0)))
-                               ),
-                                validator : (value)
-                                {
-                                    if(value == null || value.isEmpty)
-                                    {
-                                      return 'Password is required';
-                                    }
-                                    else if(value.length < 6){
-                                      return 'Minimum 6 characters or invlaid Password';
-                                    }   
-                                    else if(value.length >= 15){
-                                      return 'Miaximum 15 characters or invlaid Password';
-                                    }  
-                                    return null;
-                                },
-                          
-                      ),
-                      SizedBox(height: 20),
-                      TextFormField
-                      (
-                                obscureText: passwordVis,
-                                controller: confrimcontroller,
-                                decoration: InputDecoration(
-                                labelText: 'confrim password',
-                                suffixIcon: IconButton(
-                                      icon: Icon(passwordVis ? Icons.visibility : Icons.visibility_off),
-                                      onPressed: ()
-                                      {
-                                        setState
-                                        (
-                                          (){
-                                          passwordVis = !passwordVis;
-                                          },
-                                        );
-                                      },
-                                    ),
-                                alignLabelWithHint: false,
-                                filled: true,
-                                border: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(0)))
-                                ),
-                                validator : (value)
-                                {
-                                      if(value == null || value.isEmpty)
-                                      {
-                                        return 'Confrim password is required';
-                                      }
-                                      else if(value != passwordcontroller.text)
-                                      {
-                                        return 'Password does not match';
-                                      }   
-                                      return null;
-                                },
-                    
+                        obscureText: passwordVis,
+                        controller: confrimcontroller,
+                        decoration: _inputDecoration().copyWith(
+                        labelText: 'confrim password',
+                        prefixIcon: Icon(Icons.password),
+                        suffixIcon: IconButton(
+                              icon: Icon(passwordVis ? Icons.visibility : Icons.visibility_off),
+                              onPressed: ()
+                              {
+                                setState
+                                (
+                                  (){
+                                  passwordVis = !passwordVis;
+                                  },
+                                );
+                              },
+                            ),
+                        alignLabelWithHint: false,
+                        filled: true,
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(0)))
+                        ),
+                        validator : (value)
+                        {
+                              if(value == null || value.isEmpty)
+                              {
+                                return 'Confrim password is required';
+                              }
+                              else if(value != passwordcontroller.text)
+                              {
+                                return 'Password does not match';
+                              }   
+                              return null;
+                        },          
                       ),
                       SizedBox(height: 20),
                       ElevatedButton

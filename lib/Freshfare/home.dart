@@ -27,24 +27,26 @@ class HomePage extends StatefulWidget
 class _HomePageState extends State<HomePage> {
 
   final  pincodecontroller = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+  final GlobalKey butcherShopKey = GlobalKey();
 
   String ? selecteditem;
   final items =['Chicken','Mutton','Fish','Prawns','Mutton - Boti','Mutton - Liver','Beef','Beef - Liver','Beef - Boti','Quail','Duck'];
-  void navigate(String value)
-  {
-    if(value == 'Chicken'){
-       Navigator.push(context, MaterialPageRoute(builder: (context) => ChickenPage(selecteditem: '',),));
-    }
-    else if(value == 'Fish'){
-       Navigator.push(context, MaterialPageRoute(builder: (context) => FishPage(selecteditem: '',),),);
-    }
-    else if(value == 'Prawns'){
-       Navigator.push(context, MaterialPageRoute(builder: (context) => PrawnsPage(selecteditem: '',),),);
-    }
-    else if(value == 'Mutton'){
-       Navigator.push(context, MaterialPageRoute(builder: (context) => MuttonPage(selecteditem: '',),),);
-    }
-  }
+  // void navigate(String value)
+  // {
+  //   if(value == 'Chicken'){
+  //      Navigator.push(context, MaterialPageRoute(builder: (context) => ChickenPage(selecteditem: '',),));
+  //   }
+  //   else if(value == 'Fish'){
+  //      Navigator.push(context, MaterialPageRoute(builder: (context) => FishPage(selecteditem: '',),),);
+  //   }
+  //   else if(value == 'Prawns'){
+  //      Navigator.push(context, MaterialPageRoute(builder: (context) => PrawnsPage(selecteditem: '',),),);
+  //   }
+  //   else if(value == 'Mutton'){
+  //      Navigator.push(context, MaterialPageRoute(builder: (context) => MuttonPage(selecteditem: '',),),);
+  //   }
+  // }
 
 
   @override
@@ -63,36 +65,28 @@ class _HomePageState extends State<HomePage> {
           title: const Text("Logout"),
           content: const Text("Are you sure you want to logout?"),
           actions: [
-            TextButton(
-              onPressed: () async {
-              final prefs = await SharedPreferences.getInstance();
-              await prefs.remove('isLoggedIn'); 
-              await prefs.remove('userName');     
-
-            
-              Navigator.of(context).pop();
-              
-              // Navigator.of(context).pop();
-
-              
-              setState(() {
-                userName = '';
-                userEmail = '';
-              });
-              await prefs.remove('userEmail'); // clear login
-              
-              Fluttertoast.showToast(
-              msg: "Logout Successfully",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              backgroundColor: Colors.green,
-              textColor: Colors.white,
-              fontSize: 16.0,
-              );  
-             
-            },
-            child: const Text("Yes"),
-          ),
+            TextButton
+            (
+              onPressed: () async 
+              {
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.clear();    
+                setState(() {
+                  userName = '';
+                  userEmail = '';
+                });
+                Navigator.of(context).pop();
+                Fluttertoast.showToast(
+                msg: "Logout Successfully",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.CENTER,
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+                fontSize: 16.0,
+                );    
+              },
+               child: const Text("Yes"),
+            ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); 
@@ -390,14 +384,17 @@ class _HomePageState extends State<HomePage> {
                     }).toList(),
                     onChanged:(value)
                     {
-                        if(value != null)
-                        {
-                          setState(() {
-                          selecteditem = value ;
-                          });
-                        
-                          navigate(value);
-                        }    
+                      if(value == "Choose Your Butcher Shops")
+                      {
+                        // setState(() {
+                        // selecteditem = value ;
+                        // });                        
+                        // navigate(value);                        
+                          Scrollable.ensureVisible(
+                            butcherShopKey.currentContext!,
+                            duration: const Duration(milliseconds: 500),
+                          );
+                      }    
                     },
                   ),
                 ),
