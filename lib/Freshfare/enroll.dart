@@ -329,20 +329,29 @@ class _EnrollPageState extends State<EnrollPage>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: 
                       [
-                        Center
+                        Container
                         (
-                          child:Text("Enroll New Company",style:TextStyle(color:Colors.black,fontSize:20,fontWeight:FontWeight.bold)),
-                        ),
+                          width: double.infinity,  
+                          padding: EdgeInsets.all(12),
+                          decoration: BoxDecoration
+                          (
+                            color: Colors.green, 
+                            borderRadius: BorderRadius.vertical(top: Radius.circular(0)),
+                          ),                          
+                          child: Text("           Enroll New Company",style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.bold,),),                   
+                        ),                 
                         SizedBox(height:20),
-                        Text("Company Name"),
+                        Text("Company Name",style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 8),
                         TextFormField
                         (
                           controller: _nameController,
                           decoration:_inputDecoration(),
                           validator: (v) => v!.isEmpty ? "Enter company name" : null,
                         ),
-                        SizedBox(height:20),
-                        Text("Company Address"),
+                        SizedBox(height:15),
+                        Text("Company Address",style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 8),
                         TextFormField
                         (
                           controller: _addressController,
@@ -350,8 +359,9 @@ class _EnrollPageState extends State<EnrollPage>
                           maxLines: 2,
                           validator: (v) => v!.isEmpty ? "Enter address" : null,
                         ),
-                        SizedBox(height:20),
-                        Text("Company Sells:"),
+                        SizedBox(height:15),
+                        Text("Company Sells:",style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 8),
                         Column
                         (
                           children: items.map((item) 
@@ -402,8 +412,9 @@ class _EnrollPageState extends State<EnrollPage>
                           }
                           ).toList(),
                         ),
-                        SizedBox(height: 20),
-                        Text("Email"),
+                        SizedBox(height:15),
+                        Text("Email",style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 8),
                         TextFormField
                         (
                           controller: _emailController,
@@ -412,8 +423,9 @@ class _EnrollPageState extends State<EnrollPage>
                           validator: (v) =>
                               v!.isEmpty ? "Enter email" : null,
                         ),
-                        SizedBox(height:20),
-                        Text("Mobile Number"),
+                        SizedBox(height:15),                       
+                        Text("Mobile Number",style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 8),
                         TextFormField
                         (
                           controller: _mobileController,
@@ -422,8 +434,9 @@ class _EnrollPageState extends State<EnrollPage>
                           validator: (v) =>
                               v!.isEmpty ? "Enter mobile number" : null,
                         ),
-                        SizedBox(height:20),
-                        Text("Password"),
+                        SizedBox(height:15),                     
+                        Text("Password",style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 8),
                         Column
                         (
                           crossAxisAlignment: CrossAxisAlignment.stretch,

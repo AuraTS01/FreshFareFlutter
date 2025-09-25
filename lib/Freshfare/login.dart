@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage>
             context,
             MaterialPageRoute(builder: (context) => HomePage()),
           );
-        } else if (data['category'] == "Delivery agent") {
+        } else if (data['category'] == "delivery agent") {
           Fluttertoast.showToast(
             msg: "Login Successfully!",
             toastLength: Toast.LENGTH_SHORT,
@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage>
             MaterialPageRoute(builder: (context) => DeliveryPage()),
           );
         }
-         else if (data['category'] == "Company") {
+         else if (data['category'] == "company") {
           Fluttertoast.showToast(
             msg: "Login Successfully!",
             toastLength: Toast.LENGTH_SHORT,
