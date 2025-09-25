@@ -51,7 +51,7 @@ if (count($columns) === 0) {
     exit;
 }
 
-$types .= 'i';   // for company_id
+$types .= 'i';   
 $params[] = $company_id;
 
 $sql = "UPDATE item_price SET " . implode(", ", $columns) . " WHERE company_id = ?";

@@ -21,7 +21,7 @@ if (empty($email) || empty($number)) {
     exit;
 }
 
-// Check if user exists
+//Check if user exists
 $sql = "SELECT * FROM fresh_fare_signup WHERE email = '$email' AND mob_num = '$number'";
 $result = mysqli_query($conn, $sql);
 $count = mysqli_num_rows($result);
