@@ -36,7 +36,7 @@ class _SignPageState extends State<SignPage>
     var data = json.decode(response.body);
       if(data['status'] == "Error"){
         Fluttertoast.showToast(
-                    msg: "This user Already Exist!",
+                    msg: "Database error: ${data['message'] ?? 'Unknown error'}",
                     toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.CENTER,
                     backgroundColor: Colors.red,
@@ -44,11 +44,15 @@ class _SignPageState extends State<SignPage>
                     fontSize: 16.0,
                   );
       }
-    else if(data['status'] == "Success"){
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('userId', data["signup_id"].toString()); 
+    else if (data['status'] == "Success" || data['status'] == "Exists") {
+  int signupId = data["signup_id"];
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('userId', signupId.toString());
+
       Fluttertoast.showToast(
-          msg: "Registration Successful",
+          msg: data['status'] == "Success"
+        ? "Registration Successful"
+        : "User already exists, using existing account",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           backgroundColor: Colors.green,

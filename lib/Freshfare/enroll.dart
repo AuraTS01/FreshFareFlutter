@@ -87,7 +87,7 @@ class _EnrollPageState extends State<EnrollPage>
           "selling_items: $sellingItems, "
           "signup_id: $signupId "
           "}");
-
+                                                                                     
 
 
     // Send to PHP
@@ -105,6 +105,7 @@ class _EnrollPageState extends State<EnrollPage>
         var data = jsonDecode(response.body);
         if (data["status"] == "Success")
         {
+
           Fluttertoast.showToast(
             msg: "Enroll Company Successful",
             toastLength: Toast.LENGTH_SHORT,
