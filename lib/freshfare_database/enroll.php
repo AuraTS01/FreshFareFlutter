@@ -22,7 +22,7 @@ if (empty($company_name) || !isset($signup_id) || $signup_id <= 0) {
 
 
 //Make sure signup_id is an integer
-$signup_id = (int)$signup_id;  
+$signup_id = (int)$signup_id; 
 
 //Check if signup_id exists
 $checkSignup = $conn->prepare("SELECT id FROM fresh_fare_signup WHERE id = ?");

@@ -1,44 +1,51 @@
 <?php
 include 'database.php'; 
 
-$email = isset($_POST['email']) ? $_POST['email'] : '';
-$number = isset($_POST['number']) ? $_POST['number'] : '';
-$name = isset($_POST['name']) ? $_POST['name'] : '';
-$password = isset($_POST['password']) ? $_POST['password'] : '';
+$email    = $_POST['email']    ?? '';
+$number   = $_POST['number']   ?? '';
+$name     = $_POST['name']     ?? '';
+$password = $_POST['password'] ?? '';
 
-$category = "customer";
-$access = 1;
-$role = "undefined";
-$country = "undefined";
+$category  = "customer";
+$access    = 1;
+$role      = "undefined";
+$country   = "undefined";
 $Address_1 = "undefined";
 $Address_2 = "undefined";
-$town = "undefined";
-$state = "undefined";
-
+$town      = "undefined";
+$state     = "undefined";
 
 if (empty($email) || empty($number)) {
     echo json_encode(["error" => "Missing email or number"]);
     exit;
 }
 
-//Check if user exists
-$sql = "SELECT * FROM fresh_fare_signup WHERE email = '$email' AND mob_num = '$number'";
+// ✅ Check if user exists
+$sql = "SELECT id FROM fresh_fare_signup WHERE email = '$email' AND mob_num = '$number'";
 $result = mysqli_query($conn, $sql);
-$count = mysqli_num_rows($result);
 
-if ($count >= 1) {
-    echo json_encode(["status" => "Error"]);
+if (mysqli_num_rows($result) >= 1) {
+    $row = mysqli_fetch_assoc($result);
+    echo json_encode([
+        "status"    => "Exists",
+        "signup_id" => $row['id']
+    ]);
 } else {
-    $insert = "INSERT INTO fresh_fare_signup (username, email, mob_num, password, category, access, role, country, Address_1, Address_2, town, state)
-     VALUES ('$name', '$email', '$number', '$password', '$category', '$access', '$role', '$country', '$Address_1', '$Address_2', '$town', '$state')";
+    // ✅ Insert new user
+    $insert = "INSERT INTO fresh_fare_signup 
+        (username, email, mob_num, password, category, access, role, country, Address_1, Address_2, town, state)
+        VALUES ('$name', '$email', '$number', '$password', '$category', '$access', '$role', '$country', '$Address_1', '$Address_2', '$town', '$state')";
+    
     if (mysqli_query($conn, $insert)) {
         $last_id = mysqli_insert_id($conn); 
         echo json_encode([
-            "status" => "Success",
-            "signup_id" => $last_id
+            "status"    => "Success",
+            "signup_id" => $last_id,
+            "debug_sql" => $insert,   // ✅ check SQL
+            "debug_last_id" => $last_id
         ]);
     } else {
-        echo json_encode("Database error: " . mysqli_error($conn));
+        echo json_encode(["status" => "Error", "message" => mysqli_error($conn)]);
     }
 }
 ?>
