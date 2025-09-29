@@ -20,7 +20,6 @@ if (empty($email) || empty($number)) {
     exit;
 }
 
-// ✅ Check if user exists
 $sql = "SELECT id FROM fresh_fare_signup WHERE email = '$email' AND mob_num = '$number'";
 $result = mysqli_query($conn, $sql);
 
@@ -31,7 +30,6 @@ if (mysqli_num_rows($result) >= 1) {
         "signup_id" => $row['id']
     ]);
 } else {
-    // ✅ Insert new user
     $insert = "INSERT INTO fresh_fare_signup 
         (username, email, mob_num, password, category, access, role, country, Address_1, Address_2, town, state)
         VALUES ('$name', '$email', '$number', '$password', '$category', '$access', '$role', '$country', '$Address_1', '$Address_2', '$town', '$state')";
@@ -41,7 +39,7 @@ if (mysqli_num_rows($result) >= 1) {
         echo json_encode([
             "status"    => "Success",
             "signup_id" => $last_id,
-            "debug_sql" => $insert,   // ✅ check SQL
+            "debug_sql" => $insert,  
             "debug_last_id" => $last_id
         ]);
     } else {
