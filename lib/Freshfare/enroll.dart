@@ -76,7 +76,6 @@ class _EnrollPageState extends State<EnrollPage>
           .toList());
       }
 
-    // Convert to JSON string
        String sellingItems = selected.join(",");
 
        print("POST body: { "
@@ -89,8 +88,6 @@ class _EnrollPageState extends State<EnrollPage>
           "}");
                                                                                      
 
-
-    // Send to PHP
       var url = Uri.parse("http://192.168.86.9/FreshFareFlutter/lib/freshfare_database/enroll.php");
       var response = await http.post(url, body: {
         "company_name": _nameController.text,

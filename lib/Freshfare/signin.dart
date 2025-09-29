@@ -44,11 +44,14 @@ class _SignPageState extends State<SignPage>
                     fontSize: 16.0,
                   );
       }
-    else if (data['status'] == "Success" || data['status'] == "Exists") {
-  int signupId = data["signup_id"];
+   else if (data['status'] == "Success" || data['status'] == "Exists") {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setString('userId', signupId.toString());
 
+  // ✅ Safely read signup_id
+  String signupId = data["signup_id"]?.toString() ?? "0";  
+
+  print("DEBUG signupId from API: $signupId"); // <-- check console
+  await prefs.setString('userId', signupId);
       Fluttertoast.showToast(
           msg: data['status'] == "Success"
         ? "Registration Successful"
