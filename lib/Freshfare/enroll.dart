@@ -304,6 +304,7 @@ class _EnrollPageState extends State<EnrollPage>
         child:Container
           (
             decoration:BoxDecoration(color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
             boxShadow:
             [
               BoxShadow
