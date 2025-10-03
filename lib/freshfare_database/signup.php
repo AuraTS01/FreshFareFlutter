@@ -39,11 +39,10 @@ if (mysqli_num_rows($result) >= 1) {
         echo json_encode([
             "status"    => "Success",
             "signup_id" => $last_id,
-            "debug_sql" => $insert,  
-            "debug_last_id" => $last_id
         ]);
     } else {
         echo json_encode(["status" => "Error", "message" => mysqli_error($conn)]);
     }
 }
+
 ?>
