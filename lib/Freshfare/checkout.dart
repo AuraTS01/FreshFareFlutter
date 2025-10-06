@@ -324,105 +324,103 @@ class _CheckoutPageState extends State<CheckoutPage>
               ]
           ],
         ),
-      ),
-      
-        body: ListView
-          (  
+      ),  
+      body : ListView
+      (  
+        children: 
+        [
+          Row
+          (
             children: 
             [
-                Row
+              Expanded
+              (
+                child: TextField
                 (
-                  children: 
-                  [
-                    Expanded
-                    (
-                      child: TextField
-                      (
-                        controller:searchcontroller,
-                        decoration: InputDecoration
-                        (
-                          hintText: 'what do you need?',
-                          border: OutlineInputBorder(),
-                          
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    SizedBox(
-                      width: 120.0,
-                      height: 45.0,
-                    child:ElevatedButton
-                    (
-                      
-                      style: ElevatedButton.styleFrom
-                      (
-                        backgroundColor: Colors.green,
-                        shape: RoundedRectangleBorder
-                        (
-                          borderRadius: BorderRadius.circular(0),
-                        ),
-                      ),
-                      onPressed:search,
-                      child: Text('search',style: TextStyle(color: Colors.white),),
-                    ),
-                    ),
-                  ],
+                  controller:searchcontroller,
+                  decoration: InputDecoration
+                  (
+                    hintText: 'what do you need?',
+                    border: OutlineInputBorder(),
+                    
+                  ),
                 ),
-              SizedBox(height: 30),
-                Row
+              ),
+              SizedBox(width: 10),
+              SizedBox
+              (
+                width: 120.0,
+                height: 45.0,
+                child:ElevatedButton
                 (
-                  children:
-                  [
-                    Icon(Icons.phone,color: Colors.green),
-                    SizedBox(width: 10),
-                    Column
-                    (
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: 
-                      [
-                        Text('+91 8754364997',style: TextStyle(fontWeight: FontWeight.bold)),
-                        Text('support 24/7 '),
-                      ],
-                    )
-                  ],
-                ),
-                SizedBox(height: 30),
-                 Column
-                (
-                  children: 
-                  [
-                    Text("Checkout",style: TextStyle(
-                    color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold, ),),
-                    SizedBox(height: 5),
-                    Container
-                    (
-                      width: 40,
-                      height: 4,
-                      color: Colors.green,
-                    ),
-                  ],
-                ),
-                SizedBox(height: 30),
-                
-                Form(
-                  key: _formkey,  
-                  child:Padding
-                (
-                  padding: EdgeInsets.all(16.0),
-                  child: Column(
-                
-                
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: 
-                  [
-                    Text("Note : If you have already saved your billing Address and its not visisble, Kindly logout and Login back,You will be provided with the Address that are saved.",
-                          style: TextStyle(fontSize: 12)),
-                    SizedBox(height: 30),
-                    Text("Billing Detail",style: TextStyle(color:Colors.black,fontSize: 20,fontWeight: FontWeight.bold)),
                   
-                SizedBox(height: 30),
-                TextFormField
-                (
+                  style: ElevatedButton.styleFrom
+                  (
+                    backgroundColor: Colors.green,
+                    shape: RoundedRectangleBorder
+                    (
+                      borderRadius: BorderRadius.circular(0),
+                    ),
+                  ),
+                  onPressed:search,
+                  child:Text('search',style: TextStyle(color: Colors.white),),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 30),
+          Row
+          (
+            children:
+            [
+              Icon(Icons.phone,color: Colors.green),
+              SizedBox(width: 10),
+              Column
+              (
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: 
+                [
+                  Text('+91 8754364997',style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('support 24/7 '),
+                ],
+              )
+            ],
+          ),
+          SizedBox(height: 30),
+          Column
+          (
+            children: 
+            [
+              Text("Checkout",style: TextStyle(
+              color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold, ),),
+              SizedBox(height: 5),
+              Container
+              (
+                width: 40,
+                height: 4,
+                color: Colors.green,
+              ),
+            ],
+          ),
+          SizedBox(height: 30),           
+          Form
+          (
+            key: _formkey,  
+            child:Padding
+            (
+              padding: EdgeInsets.all(16.0),
+              child: Column
+              (              
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: 
+                [
+                  Text("Note : If you have already saved your billing Address and its not visisble, Kindly logout and Login back,You will be provided with the Address that are saved.",
+                        style: TextStyle(fontSize: 12)),
+                  SizedBox(height: 30),
+                  Text("Billing Detail",style: TextStyle(color:Colors.black,fontSize: 20,fontWeight: FontWeight.bold)),
+                  SizedBox(height: 30),
+                  TextFormField
+                  (
                     controller: namecontroller,                  
                     decoration: InputDecoration(labelText: 'Full Name*',
                     border: const OutlineInputBorder(
@@ -434,210 +432,241 @@ class _CheckoutPageState extends State<CheckoutPage>
                     }
                     return null;
                     },
-                ),
-              SizedBox(height: 20),
-              TextFormField
-                (
-                    controller: countrycontroller,
-                    decoration: InputDecoration(labelText: 'Country*',
-                    border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(0)))),
-                    validator: (value)
-                    {
-                      if(value == null || value.isEmpty)
-                      {
-                        return 'Country is required';
-                      }
-                    },
-                ),
-                SizedBox(height: 20),
-                TextFormField
-                (
-                    controller: addresscontroller,
-                    decoration: InputDecoration(labelText: 'Address*',
-                    border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(0)))),
-                    validator: (value)
-                    {
-                      if(value == null || value.isEmpty)
-                      {                    
-                        return 'Address  is required';
-                      }
-                      return null;
-                    },   
-                ),
-                SizedBox(height: 20),
-                TextFormField
-                (
-                    controller: towncontroller,
-                    decoration: InputDecoration(labelText: 'Town / City*',
-                    border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(0)))),
-                    validator: (value)
-                    {
-                      if(value == null || value.isEmpty)
-                      {                    
-                        return 'City is required';
-                      }
-                      return null;
-                    },   
-                ),
-                SizedBox(height: 20),
-                TextFormField
-                (
-                    controller: statecontroller,
-                    decoration: InputDecoration(labelText: 'State*',
-                    border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(0)))),
-                    validator: (value)
-                    {
-                      if(value == null || value.isEmpty)
-                      {                    
-                        return 'State is required';
-                      }
-                      return null;
-                    },   
-                ),  
-                SizedBox(height: 20),    
-                TextFormField
-                (
-                    controller: zipcontroller,
-                    decoration: InputDecoration(labelText: 'Postcode / ZIP*',
-                    border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(0)))),
-                    validator: (value)
-                    {
-                      if(value == null || value.isEmpty)
-                      {                    
-                        return 'Code is required';
-                      }
-                      return null;
-                    },   
-                ),      
-                SizedBox(height: 20),
-                TextFormField
-                (
-                    controller: emailcontroller,
-                    decoration: InputDecoration(labelText: 'Email*',
-                    border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(0)))),
-                    validator: (value)
-                    {
-                      if(value == null || value.isEmpty)
-                      {
-                        return 'Email is required';
-                      }
-                      else if(!value.contains('@'))
-                      {
-                        return 'Enter valid email';
-                      }
-                      return null;
-                    },
-                ),
-                SizedBox(height: 20),    
-                TextFormField
-                (
-                    controller: phonecontroller,
-                    decoration: InputDecoration(labelText: 'Mobile*',
-                    border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(0)))),
-                    validator: (value)
-                    {
-                      if(value == null || value.isEmpty)
-                      {                    
-                        return 'Mobile number is required';
-                      }
-                      return null;
-                    },   
-                ),       
-                SizedBox(height: 20),
-                SizedBox
-                (
-                  width: double.infinity,
-                  child: ElevatedButton                                             
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField
                     (
-                      onPressed: (){
-                        if (_formkey.currentState!.validate()) {
-                          saveBillingDetails();  
+                      controller: countrycontroller,
+                      decoration: InputDecoration(labelText: 'Country*',
+                      border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(0)))),
+                      validator: (value)
+                      {
+                        if(value == null || value.isEmpty)
+                        {
+                          return 'Country is required';
                         }
-                      }, 
-                      style: ElevatedButton.styleFrom
+                      },
+                    ),
+                    SizedBox(height: 20),
+                    TextFormField
+                    (
+                      controller: addresscontroller,
+                      decoration: InputDecoration(labelText: 'Address*',
+                      border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(0)))),
+                      validator: (value)
+                      {
+                        if(value == null || value.isEmpty)
+                        {                    
+                          return 'Address  is required';
+                        }
+                        return null;
+                      },   
+                    ),
+                    SizedBox(height: 20),
+                    TextFormField
+                    (
+                      controller: towncontroller,
+                      decoration: InputDecoration(labelText: 'Town / City*',
+                      border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(0)))),
+                      validator: (value)
+                      {
+                        if(value == null || value.isEmpty)
+                        {                    
+                          return 'City is required';
+                        }
+                        return null;
+                      },   
+                    ),
+                    SizedBox(height: 20),
+                    TextFormField
+                    (
+                      controller: statecontroller,
+                      decoration: InputDecoration(labelText: 'State*',
+                      border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(0)))),
+                      validator: (value)
+                      {
+                        if(value == null || value.isEmpty)
+                        {                    
+                          return 'State is required';
+                        }
+                        return null;
+                      },   
+                    ),  
+                    SizedBox(height: 20),    
+                    TextFormField
+                    (
+                      controller: zipcontroller,
+                      decoration: InputDecoration(labelText: 'Postcode / ZIP*',
+                      border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(0)))),
+                      validator: (value)
+                      {
+                        if(value == null || value.isEmpty)
+                        {                    
+                          return 'Code is required';
+                        }
+                        return null;
+                      },   
+                    ),      
+                    SizedBox(height: 20),
+                    TextFormField
+                    (
+                      controller: emailcontroller,
+                      decoration: InputDecoration(labelText: 'Email*',
+                      border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(0)))),
+                      validator: (value)
+                      {
+                        if(value == null || value.isEmpty)
+                        {
+                          return 'Email is required';
+                        }
+                        else if(!value.contains('@'))
+                        {
+                          return 'Enter valid email';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 20),    
+                    TextFormField
+                    (
+                      controller: phonecontroller,
+                      decoration: InputDecoration(labelText: 'Mobile*',
+                      border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(0)))),
+                      validator: (value)
+                      {
+                        if(value == null || value.isEmpty)
+                        {                    
+                          return 'Mobile number is required';
+                        }
+                        return null;
+                      },   
+                    ),       
+                    SizedBox(height: 20),
+                    SizedBox
+                    (
+                      width: double.infinity,
+                      child: ElevatedButton                                             
+                        (
+                          onPressed: (){
+                            if (_formkey.currentState!.validate()) {
+                              saveBillingDetails();  
+                            }
+                          }, 
+                          style: ElevatedButton.styleFrom
+                              (
+                                backgroundColor: Colors.green,
+                                padding: EdgeInsets.symmetric(horizontal: 50,vertical: 15),
+                                shape: RoundedRectangleBorder
+                                (
+                                  borderRadius: BorderRadius.circular(0),
+                                ),
+                              ),
+                          child: Text("SAVE BILLING DETAILS",style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)
+                        ),
+                    ),
+                    SizedBox(height: 30),                         
+                    Divider(height: 30),
+                    Container
+                    (
+                      width: double.infinity,
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration
+                      (
+                        color: Colors.grey[100],
+                        border: Border.all(color: Colors.grey.shade300),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Column
+                      (                 
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: 
+                        [
+                          Text("Your Order", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                          Divider(height: 30),
+                          ListView.builder
                           (
-                            backgroundColor: Colors.green,
-                            padding: EdgeInsets.symmetric(horizontal: 50,vertical: 15),
-                            shape: RoundedRectangleBorder
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: cart.items.length,               
+                            itemBuilder: (context,index)
+                            {
+                              final product = cart.items[index];
+                              return ListTile
+                              (
+                                title: Text(product.name),
+                                subtitle: Text("Qty: ${product.quantity}"),
+                                trailing: Text("₹${product.price}"),  
+                              );                
+                            }
+                          ),
+                          Divider(height: 20),
+                          Row
+                          (
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: 
+                            [
+                              Text("Subtotal",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
+                              Text("₹${cart.totalPrice}",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))
+                            ],
+                          ),
+                          Divider(height: 20),
+                          Row
+                          (
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: 
+                            [
+                              Text("GST (5%)", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                              Text("₹${(cart.totalPrice * 0.05).toStringAsFixed(2)}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                          Divider(height: 30),
+                          Row
+                          (
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: 
+                            [
+                              Text("Total",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
+                              Text("₹${(cart.totalPrice * 1.05).toStringAsFixed(2)}",
+                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                            ],
+                          ),
+                          Divider(height: 30),
+                          SizedBox
+                          (
+                            width: double.infinity,
+                            child: ElevatedButton
                             (
-                              borderRadius: BorderRadius.circular(0),
+                              onPressed: () 
+                              {
+                                if (_formkey.currentState!.validate()) {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage()));
+                                }
+                              },
+                              style: ElevatedButton.styleFrom
+                              (
+                                backgroundColor: Colors.green,
+                                padding: EdgeInsets.symmetric(vertical: 15),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                              ),
+                              child: Text("PROCEED TO PAYMENT",style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
                             ),
                           ),
-                      child: Text("SAVE BILLING DETAILS",style: TextStyle(color: Colors.white),)
+                        ],
+                      ),
                     ),
-                ),
-                SizedBox(height: 30),
-                Text("Your Order",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
-                SizedBox(height: 10),
-                ListView.builder
-                (
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: cart.items.length,               
-                  itemBuilder: (context,index)
-                  {
-                    final product = cart.items[index];
-                    return ListTile
-                    (
-                      title: Text(product.name),
-                      subtitle: Text("Qty: ${product.quantity}"),
-                      trailing: Text("₹${product.price}"),  
-                    );                
-                  }
-                ),
-                Divider(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Subtotal",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
-                    Text("₹${cart.totalPrice}",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))
                 ],
-                ),
-                Divider(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Total",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
-                    Text("₹${cart.totalPrice}",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))
-                ],
-                ),
-                Divider(height: 30),
-                SizedBox
-                (
-                  width: double.infinity,
-                  child: ElevatedButton                                             
-                    (
-                      onPressed: () {
-                        if (_formkey.currentState!.validate()) 
-                          {
-                             Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage()));
-                          }
-                        },                     
-                        style: ElevatedButton.styleFrom
-                            (
-                              backgroundColor: Colors.green,
-                              padding: EdgeInsets.symmetric(horizontal: 50,vertical: 15),
-                              shape: RoundedRectangleBorder
-                              (
-                                borderRadius: BorderRadius.circular(0),
-                              ),
-                            ),
-                      child: Text("PROCEED TO PAYMENT",style: TextStyle(color: Colors.white),)
-                    ),
-                ),
-              ],
               ),
             ),
-           ),
-            ],
           ),
+        ],
+      ),
     ); 
   }
 }

@@ -234,11 +234,13 @@ class _SummaryPageState extends State<SummaryPage>
                         SizedBox(height: 30),
                         Text("Order Details", style: TextStyle( fontSize: 16, fontWeight: FontWeight.bold,)),
                         SizedBox(height: 20),
-                        Text("Order ID:", style: TextStyle(fontSize: 14,)),
+                        Text("Order ID :", style: TextStyle(fontSize: 14,)),
                         SizedBox(height: 20),
                         Text("Date : $formattedDate $formattedTime", style: TextStyle(fontSize: 14,)),
                         SizedBox(height: 20),
-                        Text("Payment Mode: Cash On Delivery", style: TextStyle(fontSize: 14,)),
+                        Text("Payment Mode : Cash On Delivery", style: TextStyle(fontSize: 14,)),
+                        SizedBox(height: 20),
+                        Text("Status : ", style: TextStyle(fontSize: 14,)),
                         SizedBox(height: 20),
                         Text("Items", style: TextStyle(fontSize: 14,)),
                         Divider(height: 20),
@@ -262,9 +264,31 @@ class _SummaryPageState extends State<SummaryPage>
                         Row
                         (
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Total",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
+                          children: 
+                          [
+                            Text("Subtotal",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
                             Text("₹${cart.totalPrice}",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))
+                          ],
+                        ),
+                        Divider(height: 20),
+                        Row
+                        (
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: 
+                          [
+                            Text("GST (5%)", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                            Text("₹${(cart.totalPrice * 0.05).toStringAsFixed(2)}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                        Divider(height: 30),
+                        Row
+                        (
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: 
+                          [
+                            Text("Total",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
+                            Text("₹${(cart.totalPrice * 1.05).toStringAsFixed(2)}",
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                           ],
                         ),
                       ],

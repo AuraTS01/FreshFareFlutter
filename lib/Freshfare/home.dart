@@ -215,6 +215,7 @@ class _HomePageState extends State<HomePage> {
   String userEmail = '';
 
   Future<void> _loadUserData() async {
+    await Future.delayed(const Duration(milliseconds: 100));
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       userName = prefs.getString('userName') ?? '';
