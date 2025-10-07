@@ -53,6 +53,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _loadUserData();
+    fetchCompanies();
   }
 
  
@@ -233,6 +234,92 @@ class _HomePageState extends State<HomePage> {
                   Product(name:"Shrimp", baseprice: 350.0, image:"assets/Shrimp.png"),
   ];
 
+  List<dynamic> companies = [];
+
+  Future<void> fetchCompanies() async {
+    try {
+      final response = await http.get(
+        Uri.parse("http://192.168.86.9/FreshFareFlutter/lib/freshfare_database/get_companies.php"),
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          companies = json.decode(response.body);
+        });
+      }
+    } catch (e) {
+      print("Error fetching companies: $e");
+    }
+  }
+
+  Future<void> showProductDialog(String companyId, String companyName) async 
+  {
+    List<dynamic> products = [];
+
+    try {
+      final response = await http.post(
+        Uri.parse("http://192.168.86.9/FreshFareFlutter/lib/freshfare_database/get_products.php"),
+        body: {'company_id': companyId},
+      );
+
+      if (response.statusCode == 200) {
+        products = json.decode(response.body);
+      }
+    } catch (e) {
+      print("Error fetching products: $e");
+    }
+
+    // Show popup dialog with product list
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          title: Text("$companyName Products", style: const TextStyle(fontWeight: FontWeight.bold)),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: products.isEmpty
+                ? const Text("No products available.")
+                : ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: products.length,
+                    itemBuilder: (context, index) {
+                      final product = products[index];
+                      return ListTile(
+                        title: Text(product['item_name']),
+                        subtitle: Text("₹${product['price']} per kg"),
+                        trailing: ElevatedButton(
+                          style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                          onPressed: () {
+                            // Add your add-to-cart logic here
+                            Fluttertoast.showToast(
+                              msg: "${product['item_name']} added to cart",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              backgroundColor: Colors.green,
+                              textColor: Colors.white,
+                            );
+                          },
+                          child: const Text("Add", style: TextStyle(color: Colors.white)),
+                        ),
+                      );
+                    },
+                  ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Close"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+
+
 
   @override
   Widget build(BuildContext context) 
@@ -293,6 +380,14 @@ class _HomePageState extends State<HomePage> {
               (
                 leading: const Icon(Icons.shopping_cart),
                 title: const Text('My Cart'),
+                onTap: () {   
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),));                    
+                },
+              ),
+              ListTile
+              (
+                leading: const Icon(Icons.auto_stories_outlined),
+                title: const Text('Order History'),
                 onTap: () {   
                   Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),));                    
                 },
@@ -435,20 +530,53 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               SizedBox(height: 30),
-              ListView.builder
-              (
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(), 
-                itemCount: products.length,
-                itemBuilder: (context, index) 
-                {
-                  final product = products[index];
-                  return Container(
-                    // color: Colors.white,
-                    child: productCard(context, product),
-                  );
-                },
-              ),
+              companies.isEmpty
+              ? const Center(child: CircularProgressIndicator())
+              : ListView.builder
+                (
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: companies.length,
+                  itemBuilder: (context, index) {
+                    final company = companies[index];
+                    return Card
+                    (
+                      margin: const EdgeInsets.symmetric(vertical: 8),
+                      elevation: 2,
+                      child: ListTile
+                      (
+                        leading: const Icon(Icons.store, color: Colors.green, size: 40),
+                        title: Text(company['company_name'],
+                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        subtitle: Text(company['email']),
+                        trailing: ElevatedButton
+                        (
+                          style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                          onPressed: () 
+                          {
+                            showProductDialog(company['company_id'], company['company_name']);
+                          },
+                          child: const Text("View Products", style: TextStyle(color: Colors.white)),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+
+              // ListView.builder
+              // (
+              //   shrinkWrap: true,
+              //   physics: NeverScrollableScrollPhysics(), 
+              //   itemCount: products.length,
+              //   itemBuilder: (context, index) 
+              //   {
+              //     final product = products[index];
+              //     return Container(
+              //       // color: Colors.white,
+              //       child: productCard(context, product),
+              //     );
+              //   },
+              // ),
             ],                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
           ),
         ),
