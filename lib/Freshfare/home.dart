@@ -254,72 +254,66 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> showProductDialog(String companyId, String companyName) async 
   {
-    List<dynamic> products = [];
+    // List<dynamic> products = [];
 
-    try {
+    // try 
+    // {
       final response = await http.post(
         Uri.parse("http://192.168.86.9/FreshFareFlutter/lib/freshfare_database/get_products.php"),
         body: {'company_id': companyId},
       );
 
-      if (response.statusCode == 200) {
-        products = json.decode(response.body);
-      }
-    } catch (e) {
-      print("Error fetching products: $e");
-    }
-
-    // Show popup dialog with product list
-    showDialog(
+    //   if (response.statusCode == 200) 
+    //   {
+    //     products = json.decode(response.body);
+    //     print("Sending company_id: $companyId");
+    //   }
+    // } 
+    // catch (e) 
+    // {
+    //   print("Error fetching products: $e");
+    // }
+  // void showProductDialog(BuildContext context)
+  // {
+   
+    showDialog
+    (
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
+      builder: (BuildContext context) 
+      {
+        return AlertDialog
+        (
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           title: Text("$companyName Products", style: const TextStyle(fontWeight: FontWeight.bold)),
-          content: SizedBox(
+          content: SizedBox
+          (
             width: double.maxFinite,
-            child: products.isEmpty
-                ? const Text("No products available.")
-                : ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: products.length,
-                    itemBuilder: (context, index) {
-                      final product = products[index];
-                      return ListTile(
-                        title: Text(product['item_name']),
-                        subtitle: Text("₹${product['price']} per kg"),
-                        trailing: ElevatedButton(
-                          style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                          onPressed: () {
-                            // Add your add-to-cart logic here
-                            Fluttertoast.showToast(
-                              msg: "${product['item_name']} added to cart",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.CENTER,
-                              backgroundColor: Colors.green,
-                              textColor: Colors.white,
-                            );
-                          },
-                          child: const Text("Add", style: TextStyle(color: Colors.white)),
-                        ),
-                      );
-                    },
-                  ),
+            child: products.isEmpty ? const Text("No products available.") : ListView.builder
+            (
+              // shrinkWrap: true,
+              // physics: NeverScrollableScrollPhysics(), 
+              itemCount: products.length,
+              itemBuilder: (context, index) 
+              {
+                final product = products[index];
+                return Container(
+                  child: productCard(context, product),
+                );
+              },
+            ),
           ),
-          actions: [
-            TextButton(
+          actions: 
+          [
+            TextButton
+            (
               onPressed: () => Navigator.pop(context),
-              child: const Text("Close"),
+              child: Text("Close"),
             ),
           ],
         );
       },
     );
   }
-
-
-
-
 
   @override
   Widget build(BuildContext context) 
@@ -333,8 +327,7 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.center,           
             children: 
             [
-              Image.asset('assets/logo.png',
-              height:45),
+              Image.asset('assets/logo.png',height:45),
               SizedBox(width: 8),
               RichText(text: TextSpan
               (
@@ -541,22 +534,59 @@ class _HomePageState extends State<HomePage> {
                     final company = companies[index];
                     return Card
                     (
-                      margin: const EdgeInsets.symmetric(vertical: 8),
-                      elevation: 2,
-                      child: ListTile
+                      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                      elevation: 3,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      child: Padding
                       (
-                        leading: const Icon(Icons.store, color: Colors.green, size: 40),
-                        title: Text(company['company_name'],
-                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                        subtitle: Text(company['email']),
-                        trailing: ElevatedButton
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column
                         (
-                          style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                          onPressed: () 
-                          {
-                            showProductDialog(company['company_id'], company['company_name']);
-                          },
-                          child: const Text("View Products", style: TextStyle(color: Colors.white)),
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: 
+                          [
+                            Row
+                            (
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: 
+                              [                             
+                                Image.asset('assets/logo.png',height:45),
+                                SizedBox(width: 12),
+                                Expanded
+                                (
+                                  child: Column
+                                  (
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children:
+                                    [
+                                      Text(company['company_name'],style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold,),),
+                                      SizedBox(height: 4),
+                                      Text(company['email'],style: const TextStyle(color: Colors.black54),),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 12),
+                            Align
+                            (
+                              alignment: Alignment.center,
+                              child: ElevatedButton
+                              (
+                                style: ElevatedButton.styleFrom
+                                (
+                                  backgroundColor: Colors.blue,
+                                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),),
+                                ),
+                                onPressed: () 
+                                {
+                                  showProductDialog(company['company_id'],company['company_name'],);
+                                },
+                                child : Text("View Products",style: TextStyle(color: Colors.white,fontWeight:FontWeight.bold),),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     );
