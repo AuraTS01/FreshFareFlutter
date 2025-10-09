@@ -12,7 +12,7 @@ import 'package:freshfare/freshfare/notification.dart';
 import 'package:freshfare/freshfare/prawns.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:freshfare/freshfare/orderhistory.dart';
 
 class CartPage extends StatefulWidget 
 {
@@ -106,14 +106,16 @@ class _CartPageState extends State<CartPage>
                 fontSize: 16.0,
                 );    
               },
-               child: const Text("Yes"),
+              child: const Text("Yes"),
             ),
-            TextButton(
-              onPressed: () {
+            TextButton
+            (
+              onPressed: () 
+              {
                 Navigator.of(context).pop(); 
               },
               child: const Text("No"),
-            ),            
+            ),        
           ],
         );
       },
@@ -177,13 +179,21 @@ class _CartPageState extends State<CartPage>
               },
             ),
             ListTile
-              (
-                leading: const Icon(Icons.shopping_cart),
-                title: const Text('My Cart'),
-                onTap: () {   
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),));                    
-                },
-              ),
+            (
+              leading: const Icon(Icons.shopping_cart),
+              title: const Text('My Cart'),
+              onTap: () {   
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),));                    
+              },
+            ),
+            ListTile
+            (
+              leading: const Icon(Icons.auto_stories_outlined),
+              title: const Text('Order History'),
+              onTap: () {   
+                Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryPage(),));                    
+              },
+            ),
             ListTile
             (
                   leading: Icon(Icons.notifications_outlined),

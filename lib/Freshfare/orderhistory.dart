@@ -1,26 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/cart.dart';
 import 'package:freshfare/freshfare/home.dart';
 import 'package:freshfare/freshfare/login.dart';
-import 'package:freshfare/freshfare/notification.dart';
-import 'package:freshfare/freshfare/summary.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:freshfare/freshfare/notification.dart';
 import 'package:freshfare/freshfare/orderhistory.dart';
 
-
-class PaymentPage extends StatefulWidget 
+class HistoryPage extends StatefulWidget 
 {
-  const PaymentPage({super.key});
+  const HistoryPage({super.key});
   @override
-  State<PaymentPage> createState() => _PaymentPageState();
+  State<HistoryPage> createState() => _HistoryPageState();
 }
 
-class _PaymentPageState extends State<PaymentPage>
+class _HistoryPageState extends State<HistoryPage>
 {
-
-  
-  String selectedPayment = 'Pay on Delivery';
 
   String userName = '';
   String userEmail = '';
@@ -81,16 +76,15 @@ class _PaymentPageState extends State<PaymentPage>
       },
     );
   }
-
+ 
   @override
-  Widget build(BuildContext context) 
-  {
+  Widget build(BuildContext context) {
     return  Scaffold
     (
       appBar: AppBar
       (
         title:Row
-       (
+        (
             crossAxisAlignment: CrossAxisAlignment.center,
             children: 
             [
@@ -109,7 +103,7 @@ class _PaymentPageState extends State<PaymentPage>
               ),
               ),
             ],
-          ),   
+          ),
       ),
       drawer:Drawer
       ( 
@@ -118,7 +112,7 @@ class _PaymentPageState extends State<PaymentPage>
           padding: EdgeInsets.zero,
           children: 
           [
-            UserAccountsDrawerHeader
+           UserAccountsDrawerHeader
               (
                 decoration: BoxDecoration(color: Colors.green),
                 accountName: Text(userName.isNotEmpty ? "Hello $userName" : "Hello Guest"),
@@ -189,94 +183,11 @@ class _PaymentPageState extends State<PaymentPage>
           ],
         ),
       ),
-      
-        body: SingleChildScrollView
-        (
-          padding: EdgeInsets.all(50.0),
-          child: Column
-          (  
-            children: 
-            [
-                      Text("Payment Options",style: TextStyle(color: Colors.black,fontSize: 30),),
-                      Divider(height: 30,thickness: 1,),
-                      Column
-                      (
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: 
-                        [ 
-                          RadioListTile
-                          (
-                            title: Text('Pay Online (UPI / Card / Netbanking / Wallet)'),
-                            value: 'Card', 
-                            groupValue: selectedPayment, 
-                            onChanged: (value)
-                            {
-                              setState(() {
-                                selectedPayment =  value.toString();
-                              });
-                            },
-                          ),
-                          SizedBox(height: 20),
-                          RadioListTile
-                          (
-                            title: Text('Pay on Delivery'),
-                            value: 'Pay on Delivery', 
-                            groupValue: selectedPayment, 
-                            onChanged: (value)
-                            {
-                              setState(() {
-                                selectedPayment =  value.toString();
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      if(selectedPayment == 'Pay on Delivery')
-                        Container
-                        (
-                          padding: EdgeInsets.all(10),
-                          color: Colors.green.shade50,
-                          child: Text('You’ve selected Pay on Delivery. Please keep the amount ready when your order arrives.',
-                          style: TextStyle(color:Colors.green.shade900),),
-                        ),
-                      if(selectedPayment == 'Card')
-                        Container
-                        (
-                          padding: EdgeInsets.all(10),
-                          color: Colors.green.shade50,
-                          child: Text('You’ve selected Online Payment. Complete the payment securely with Razorpay.',
-                          style: TextStyle(color:Colors.green.shade900),),
-                        ),  
-                      SizedBox(height: 30),
-                      ElevatedButton
-                      (
-                        onPressed:(){
-                                Navigator.push( context,MaterialPageRoute(builder: (context) => const SummaryPage()));
-                                Fluttertoast.showToast(
-                                      msg: "Order is Placed",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.CENTER,
-                                      timeInSecForIosWeb: 3,
-                                      backgroundColor: Colors.green,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0,
-                                    );
-                        },
-                        style: ElevatedButton.styleFrom
-                        (
-                          backgroundColor: Colors.green,
-                          padding: EdgeInsets.symmetric(horizontal: 50,vertical: 15),
-                          shape: RoundedRectangleBorder
-                          (
-                            borderRadius: BorderRadius.circular(0),
-                          ),
-                        ),
-                        child: Text('Place Order',style: TextStyle(color: Colors.white,fontSize: 16),)
-                      ),  
-                    ],
-                ),
-        ),   
+      body:Center
+      (
+       child: Text('Order History',style: TextStyle(color: Colors.black,fontSize: 15),),
+      ),  
     ); 
   }
 }
+

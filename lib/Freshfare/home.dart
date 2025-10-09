@@ -14,6 +14,7 @@ import 'package:freshfare/freshfare/profile.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:freshfare/freshfare/orderhistory.dart';
 
 
 class HomePage extends StatefulWidget 
@@ -382,7 +383,7 @@ class _HomePageState extends State<HomePage> {
                 leading: const Icon(Icons.auto_stories_outlined),
                 title: const Text('Order History'),
                 onTap: () {   
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),));                    
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryPage(),));                    
                 },
               ),
               ListTile
@@ -612,53 +613,71 @@ class _HomePageState extends State<HomePage> {
         ),
     );
   }
-
-  Widget productCard(BuildContext context,Product product){
-    return  Card(
-       child:Column
+  Widget productCard(BuildContext context, Product product) 
+  {
+    return StatefulBuilder
+    (
+      builder: (context, setDialogState) 
+      {
+        return Card
         (
-        children: 
-        [
-          Image.asset(product.image,height: 150,fit: BoxFit.cover),
-          Text(product.name,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
-          Text("₹${product.price} / KG"),
-          ElevatedButton.icon
+          margin: EdgeInsets.symmetric(vertical: 8),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 3,
+          child: Column
           (
-            style: ElevatedButton.styleFrom
-            (
-              backgroundColor: Colors.green, 
-              shape: RoundedRectangleBorder
-                        (
-                          borderRadius: BorderRadius.circular(0),
-                        ),                             
-            ),
-            onPressed: ()
-            {
-              if(product.isAdded){             
-                 Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),)); 
-              }
-              else{
-                Provider.of<CartProvider>(context,listen:false).addProduct(product);
-                setState((){
-                  product.isAdded = true;
-                });
-              }
-              Fluttertoast.showToast(
-              msg: "${product.name} Added to cart",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              backgroundColor: Colors.green,
-              textColor: Colors.white,
-              fontSize: 16.0,
-              );           
+            children: 
+            [
+              Image.asset(product.image, height: 150, fit: BoxFit.cover),
+              SizedBox(height: 8),
+              Text(product.name,style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              SizedBox(height: 4),
+              Text("₹${product.price} / KG",style: TextStyle(color: Colors.black54)),
+              SizedBox(height: 8),
+              ElevatedButton.icon
+              (
+                style: ElevatedButton.styleFrom
+                (
+                  backgroundColor:Colors.green,
+                  shape: RoundedRectangleBorder
+                  (
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                onPressed: () 
+                {
+                  if (product.isAdded) 
+                  {                 
+                    Navigator.push(context,MaterialPageRoute(builder: (context) => CartPage()),);
+                  } 
+                  else 
+                  {
+                    Provider.of<CartProvider>(context, listen: false)
+                        .addProduct(product);
 
-            },
-            icon:Icon(product.isAdded ?  Icons.shopping_cart : Icons.add_shopping_cart,color: Colors.white),
-            label: Text(product.isAdded ? "View Cart" : "Add to Cart",style: TextStyle(color: Colors.white)),
-          )
-        ],
-        ),
+                    setDialogState(() 
+                    {
+                      product.isAdded = true;
+                    });
+                    Fluttertoast.showToast
+                    (
+                      msg: "${product.name} added to cart",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      backgroundColor: Colors.green,
+                      textColor: Colors.white,
+                      fontSize: 16.0,
+                    );
+                  }
+                  },
+                  icon: Icon(product.isAdded ? Icons.shopping_cart : Icons.add_shopping_cart,color: Colors.white,),
+                  label: Text(product.isAdded ? "View Cart" : "Add to Cart",style: TextStyle(color: Colors.white),),
+              ),
+              SizedBox(height: 8),
+            ],
+          ),
+        );
+      },
     );
-
   }
 }

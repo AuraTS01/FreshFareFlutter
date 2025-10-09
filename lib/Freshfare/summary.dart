@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:freshfare/freshfare/cartprovider.dart';
 import 'package:intl/intl.dart';
-
+import 'package:freshfare/freshfare/orderhistory.dart';
 
 class SummaryPage extends StatefulWidget 
 {
@@ -156,13 +156,21 @@ class _SummaryPageState extends State<SummaryPage>
               },
             ),
             ListTile
-              (
-                leading: const Icon(Icons.shopping_cart),
-                title: const Text('My Cart'),
-                onTap: () {   
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),));                    
-                },
-              ),
+            (
+              leading: const Icon(Icons.shopping_cart),
+              title: const Text('My Cart'),
+              onTap: () {   
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),));                    
+              },
+            ),
+            ListTile
+            (
+              leading: const Icon(Icons.auto_stories_outlined),
+              title: const Text('Order History'),
+              onTap: () {   
+                Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryPage(),));                    
+              },
+            ),
             ListTile
             (
                   leading: Icon(Icons.notifications_outlined),

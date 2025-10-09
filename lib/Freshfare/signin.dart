@@ -47,10 +47,10 @@ class _SignPageState extends State<SignPage>
    else if (data['status'] == "Success" || data['status'] == "Exists") {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  // ✅ Safely read signup_id
+
   String signupId = data["signup_id"]?.toString() ?? "0";  
 
-  print("DEBUG signupId from API: $signupId"); // <-- check console
+  print("DEBUG signupId from API: $signupId"); 
   await prefs.setString('userId', signupId);
       Fluttertoast.showToast(
           msg: data['status'] == "Success"
@@ -85,7 +85,7 @@ class _SignPageState extends State<SignPage>
   }  
 
   Future<void> fetchData() async {
-    // simulate heavy work
+    
     await Future.delayed(Duration(seconds: 2));
     print("Data fetched");
   }
