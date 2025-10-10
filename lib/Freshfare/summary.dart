@@ -262,8 +262,17 @@ class _SummaryPageState extends State<SummaryPage>
                             final product = cart.items[index];
                             return ListTile
                             (
-                              title: Text(product.name),
-                              subtitle: Text("Qty: ${product.quantity}"),
+                              title: Text("${product.companyName ?? 'FreshChicken'}",style: const TextStyle(fontWeight: FontWeight.bold,),),
+                              subtitle:Column
+                              (
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children:
+                                [
+                                  Text(product.name),
+                                  Text("Qty: ${product.quantity}"),
+                                  
+                                ],
+                              ),                               
                               trailing: Text("₹${product.price}"),  
                             );                
                           }

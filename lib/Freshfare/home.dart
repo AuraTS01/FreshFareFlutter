@@ -253,9 +253,10 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+
   Future<void> showProductDialog(String companyId, String companyName) async 
   {
-    // List<dynamic> products = [];
+       // List<dynamic> products = [];
 
     // try 
     // {
@@ -282,39 +283,119 @@ class _HomePageState extends State<HomePage> {
       context: context,
       builder: (BuildContext context) 
       {
-        return AlertDialog
+        return StatefulBuilder
         (
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          title: Text("$companyName Products", style: const TextStyle(fontWeight: FontWeight.bold)),
-          content: SizedBox
-          (
-            width: double.maxFinite,
-            child: products.isEmpty ? const Text("No products available.") : ListView.builder
+          builder: (context, setDialogState) 
+          {
+            return Dialog
             (
-              // shrinkWrap: true,
-              // physics: NeverScrollableScrollPhysics(), 
-              itemCount: products.length,
-              itemBuilder: (context, index) 
-              {
-                final product = products[index];
-                return Container(
-                  child: productCard(context, product),
-                );
-              },
-            ),
-          ),
-          actions: 
-          [
-            TextButton
-            (
-              onPressed: () => Navigator.pop(context),
-              child: Text("Close"),
-            ),
-          ],
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),),
+              child: Container
+              (
+                width: double.maxFinite,
+                height: 500,
+                padding: const EdgeInsets.all(16),
+                child: Column
+                (
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: 
+                  [
+                    Text(companyName,style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                    SizedBox(height: 16),
+                    Expanded
+                    (
+                      child: SingleChildScrollView
+                      (
+                        child: Wrap
+                        (
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: products.map<Widget>((product) 
+                          {
+                            return productCard
+                            (
+                              context,
+                              product,
+                              companyName: companyName,
+                              companyId: companyId,
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
         );
       },
     );
   }
+
+//  Future<void> showProductDialog(String companyId, String companyName) async 
+//   {
+//     // List<dynamic> products = [];
+
+//     // try 
+//     // {
+//       final response = await http.post(
+//         Uri.parse("http://192.168.86.9/FreshFareFlutter/lib/freshfare_database/get_products.php"),
+//         body: {'company_id': companyId},
+//       );
+
+//     //   if (response.statusCode == 200) 
+//     //   {
+//     //     products = json.decode(response.body);
+//     //     print("Sending company_id: $companyId");
+//     //   }
+//     // } 
+//     // catch (e) 
+//     // {
+//     //   print("Error fetching products: $e");
+//     // }
+//   // void showProductDialog(BuildContext context)
+//   // {
+   
+//     showDialog
+//     (
+//       context: context,
+//       builder: (BuildContext context) 
+//       {
+//         return AlertDialog
+//         (
+//           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+//           title: Text("$companyName Products", style: const TextStyle(fontWeight: FontWeight.bold)),
+//           content: SizedBox
+//           (
+//             width: double.maxFinite,
+//             child: products.isEmpty ? const Text("No products available.") : ListView.builder
+//             (
+//               // shrinkWrap: true,
+//               // physics: NeverScrollableScrollPhysics(), 
+//               itemCount: products.length,
+//               itemBuilder: (context, index) 
+//               {
+//                 final product = products[index];
+//                 return Container(
+//                   child: productCard(context, product),
+//                 );
+//               },
+//             ),
+//           ),
+//           actions: 
+//           [
+//             TextButton
+//             (
+//               onPressed: () => Navigator.pop(context),
+//               child: Text("Close"),
+//             ),
+//           ],
+//         );
+//       },
+//     );
+//   }
+
 
   @override
   Widget build(BuildContext context) 
@@ -613,7 +694,9 @@ class _HomePageState extends State<HomePage> {
         ),
     );
   }
-  Widget productCard(BuildContext context, Product product) 
+
+  Widget productCard(BuildContext context, Product product,
+    {required String companyName, required String companyId}) 
   {
     return StatefulBuilder
     (
@@ -646,32 +729,33 @@ class _HomePageState extends State<HomePage> {
                 ),
                 onPressed: () 
                 {
-                  if (product.isAdded) 
-                  {                 
-                    Navigator.push(context,MaterialPageRoute(builder: (context) => CartPage()),);
-                  } 
-                  else 
+                  if (!product.isAdded)
                   {
-                    Provider.of<CartProvider>(context, listen: false)
-                        .addProduct(product);
+                    product.companyId = companyId;
+                    product.companyName = companyName;
 
-                    setDialogState(() 
-                    {
-                      product.isAdded = true;
-                    });
+                    Provider.of<CartProvider>(context, listen: false)
+                          .addProduct(product);
+
+                    product.isAdded = true;
+
                     Fluttertoast.showToast
                     (
-                      msg: "${product.name} added to cart",
+                      msg: "${product.name} from ${product.companyName} added to cart",
                       toastLength: Toast.LENGTH_SHORT,
                       gravity: ToastGravity.CENTER,
                       backgroundColor: Colors.green,
                       textColor: Colors.white,
                       fontSize: 16.0,
                     );
+                  } 
+                  else 
+                  {
+                     Navigator.push(context,MaterialPageRoute(builder: (context) => CartPage()),);
                   }
-                  },
-                  icon: Icon(product.isAdded ? Icons.shopping_cart : Icons.add_shopping_cart,color: Colors.white,),
-                  label: Text(product.isAdded ? "View Cart" : "Add to Cart",style: TextStyle(color: Colors.white),),
+                },
+                icon: Icon(product.isAdded ? Icons.shopping_cart : Icons.add_shopping_cart,color: Colors.white,),
+                label: Text(product.isAdded ? "View Cart" : "Add to Cart",style: TextStyle(color: Colors.white),),
               ),
               SizedBox(height: 8),
             ],
@@ -681,3 +765,68 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+// Widget productCard(BuildContext context, Product product,
+//     {required String companyName, required String companyId}) {
+//   return Container(
+//     width: 160,
+//     padding: const EdgeInsets.all(10),
+//     decoration: BoxDecoration(
+//       color: Colors.white,
+//       borderRadius: BorderRadius.circular(12),
+//       boxShadow: const [
+//         BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2)
+//       ],
+//     ),
+//     child: Column(
+//       children: [
+//         Image.asset(product.image, height: 150, fit: BoxFit.cover),
+//         const SizedBox(height: 8),
+//         Text(
+//           product.name,
+//           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+//         ),
+//         Text("₹${product.baseprice.toStringAsFixed(2)}"),
+//         const SizedBox(height: 8),
+//         ElevatedButton.icon
+//         (
+//           onPressed: () {
+//             if (!product.isAdded) {
+//               // Assign company info to product
+//               product.companyId = companyId;
+//               product.companyName = companyName;
+
+//               Provider.of<CartProvider>(context, listen: false)
+//                   .addProduct(product);
+
+//               product.isAdded = true;
+
+//               Fluttertoast.showToast(
+//                 msg: "${product.name} from ${product.companyName} added to cart",
+//                 backgroundColor: Colors.green,
+//                 textColor: Colors.white,
+//                 gravity: ToastGravity.CENTER,
+//               );
+//             } else {
+//               Navigator.push(
+//                 context,
+//                 MaterialPageRoute(builder: (context) => CartPage()),
+//               );
+//             }
+//           },
+//            style: ElevatedButton.styleFrom
+//                 (
+//                   backgroundColor:Colors.green,
+//                   shape: RoundedRectangleBorder
+//                   (
+//                     borderRadius: BorderRadius.circular(8),
+//                   ),
+//                 ),
+//           icon: Icon(product.isAdded ? Icons.shopping_cart : Icons.add_shopping_cart,color: Colors.white,),
+//           label: Text(product.isAdded ? "View Cart" : "Add to Cart",style: TextStyle(color: Colors.white),),
+//         )
+//       ],
+//     ),
+//   );
+// }
+
+

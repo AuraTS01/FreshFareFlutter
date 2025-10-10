@@ -6,6 +6,8 @@ class Product {
   int quantity;
   String weight;
   bool isAdded;
+  String? companyId;      // ✅ new
+  String? companyName;    
 
   Product({
     required this.name,
@@ -14,6 +16,8 @@ class Product {
     this.quantity = 1,
     this.weight = "1kg", 
     this.isAdded = false,
+    this.companyId,
+    this.companyName,
   });
 
   double get price {

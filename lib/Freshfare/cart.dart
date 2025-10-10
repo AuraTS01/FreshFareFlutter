@@ -1,4 +1,5 @@
-
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/cartprovider.dart';
@@ -121,6 +122,25 @@ class _CartPageState extends State<CartPage>
       },
     );
   }
+
+  List<dynamic> companies = [];
+
+  Future<void> fetchCompanies() async {
+    try {
+      final response = await http.get(
+        Uri.parse("http://192.168.86.9/FreshFareFlutter/lib/freshfare_database/get_companies.php"),
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          companies = json.decode(response.body);
+        });
+      }
+    } catch (e) {
+      print("Error fetching companies: $e");
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) 
@@ -308,71 +328,143 @@ class _CartPageState extends State<CartPage>
                   color: Colors.green,
                 ),
                 SizedBox(height: 30),
-                SizedBox(
+                SizedBox
+                (
                   height: 400,
-                  child: cart.items.isEmpty
-                  ? const Center(
-                      child: Text(
-                        "🛒 Your cart is empty",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                    )
+                  child: cart.items.isEmpty ? const Center
+                  (
+                    child: Text("🛒 Your cart is empty",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.black,),),
+                  )
                   : ListView.builder
                   (
                     itemCount: cart.items.length,
-                    itemBuilder: (context,index){
-                      final item =  cart.items[index];
-                      return ListTile(
-                        leading:Image.asset(item.image,
-                        width: 50,
-                        height : 50,
-                        fit: BoxFit.cover,
-                        ),                            
-                        title: Text(item.name),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("₹${item.price}  * ${item.quantity}"),
-                            DropdownButton<String>(value: item.weight, items : ["0.5kg" , "1kg"].map((String value){
-                              return DropdownMenuItem<String>(value: value, child: Text(value),);
-                            }).toList(),
-                            onChanged: (newvalue){
-                              if(newvalue != null){
-                                item.weight = newvalue;
-                                cart.notifyListeners();
-                              }
-                            },),
-                            ],),
-                        trailing:Row( 
-                          mainAxisSize: MainAxisSize.min,
-                          children: [                    
-                            IconButton(icon: Icon(Icons.remove_circle,color: Colors.red),
-                            onPressed: (){
-                              Provider.of<CartProvider>(context,listen:false).decreaseQuantity(item);
-                            }),
-                            Text(item.quantity.toString(),style: TextStyle(fontSize: 16)),
-                            IconButton(icon: Icon(Icons.add_circle,color: Colors.green),
-                            onPressed: (){
-                              Provider.of<CartProvider>(context,listen:false).increaseQuantity(item);
-                            }),
-                            IconButton(icon: Icon(Icons.delete,color:Colors.red),                        
-                            onPressed: (){
-                              Provider.of<CartProvider>(context,listen:false).removeProduct(item);
-                                Fluttertoast.showToast(
-                                  msg: "${item.name} Removed to cart",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.CENTER,
-                                  backgroundColor: Colors.red,
-                                  textColor: Colors.white,
-                                  fontSize: 16.0,
-                                  );
-                            },)
-                          ],
-                        ),
+                    itemBuilder: (context,index)
+                    {
+                      final item =  cart.items[index];                   
+                      return Column
+                      (
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: 
+                        [
+                          Padding
+                          (
+                            padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                            child: Text("${item.companyName ?? 'FreshChicken'}",style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold,),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Padding
+                          (
+                            padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                            child: Row
+                            (                             
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: 
+                              [                              
+                                Image.asset(item.image,width: 60,height: 60,fit: BoxFit.cover,),
+                                SizedBox(width: 8),
+                                Expanded
+                                (
+                                  child: Column
+                                  (
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: 
+                                    [
+                                      Text
+                                      (
+                                        item.name,style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                        maxLines: 1,overflow: TextOverflow.ellipsis,
+                                      ),
+                                      SizedBox(height: 4),
+                                      Text("₹${item.price}  × ${item.quantity}",style: const TextStyle(fontSize: 14),),
+                                      const SizedBox(height: 4),
+                                      DropdownButton<String>
+                                      (
+                                        value: item.weight,
+                                        items: ["0.5kg", "1kg"].map((String value) 
+                                        {
+                                          return DropdownMenuItem<String>
+                                          (
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                        onChanged: (newValue) 
+                                        {
+                                          if (newValue != null) 
+                                          {
+                                            item.weight = newValue;
+                                            cart.notifyListeners();
+                                          }
+                                        },
+                                        isDense: true,
+                                        underline: Container(height: 1, color: Colors.grey),
+                                      ),
+                                    ],
+                                  ),
+                                ),         
+                                Column
+                                (
+                                  children:
+                                  [
+                                    Row
+                                    (
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: 
+                                      [
+                                        IconButton
+                                        (
+                                          icon:Icon(Icons.remove_circle, color: Colors.red),
+                                          onPressed: () 
+                                          {
+                                            Provider.of<CartProvider>(context, listen: false)
+                                                .decreaseQuantity(item);
+                                          },
+                                        ),
+                                        Text(item.quantity.toString(),style: const TextStyle(fontSize: 16),),
+                                        IconButton
+                                        (
+                                          icon: const Icon(Icons.add_circle, color: Colors.green),
+                                          onPressed: () 
+                                          {
+                                            Provider.of<CartProvider>(context, listen: false)
+                                                .increaseQuantity(item);
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                    ElevatedButton
+                                    (
+                                      onPressed: () 
+                                      {
+                                        Provider.of<CartProvider>(context, listen: false)
+                                            .removeProduct(item);
+                                        Fluttertoast.showToast
+                                        (
+                                          msg: "${item.name} removed from cart",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.CENTER,
+                                          backgroundColor: Colors.red,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0,
+                                        );
+                                      },
+                                      style: ElevatedButton.styleFrom
+                                      (
+                                        backgroundColor: Colors.red,
+                                        // padding: EdgeInsets.symmetric(vertical: 15),
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                                      ),
+                                      child: Text("Remove",style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Divider(),
+                        ],
                       );
                     },
                   ),
