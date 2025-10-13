@@ -100,48 +100,56 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
-  Future<void> checkPincode() async {
+  Future<void> checkPincode() async 
+  {
     String pincode = pincodecontroller.text.trim();
 
-    if (pincode.isEmpty) {
-      Fluttertoast.showToast(
-              msg: "Please enter your pincode",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              backgroundColor: Colors.green,
-              textColor: Colors.white,
-              fontSize: 16.0,
-              );           
+    if (pincode.isEmpty) 
+    {
+      Fluttertoast.showToast
+      (
+        msg: "Please enter your pincode",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );           
       return;
     }
 
-    try {
+    try 
+    {
       var response = await http.post(
         Uri.parse("http://192.168.86.9/FreshFareFlutter/lib/freshfare_database/pincode.php"),
         body: {"pincode": pincode},
       );
-
       var data = json.decode(response.body);
-      if (data["status"] == "success") {
-              Fluttertoast.showToast(
-              msg: data["message"],
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              backgroundColor: Colors.green,
-              textColor: Colors.white,
-              fontSize: 16.0,
-              ); 
-              Navigator.pop(context); 
-      } else {
-         Fluttertoast.showToast(
-              msg: data["message"],
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 16.0,
-              ); 
-              Navigator.pop(context); 
+      if (data["status"] == "success") 
+      {
+        Fluttertoast.showToast
+        (
+          msg: data["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        ); 
+        Navigator.pop(context); 
+      } 
+      else 
+      {
+        Fluttertoast.showToast
+        (
+          msg: data["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        ); 
+        Navigator.pop(context); 
       }
      
     } catch (e) {
@@ -164,7 +172,8 @@ class _HomePageState extends State<HomePage> {
         return AlertDialog(
           title: const Text("Enter Your Pincode"),
           content: 
-          Column(
+          Column
+          (
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
@@ -185,7 +194,8 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-          actions: [
+          actions: 
+          [
             TextButton(
               onPressed: () {
                 pincodecontroller.clear(); 
@@ -271,66 +281,74 @@ class _HomePageState extends State<HomePage> {
     //     print("Sending company_id: $companyId");
     //   }
     // } 
-    // catch (e) 
-    // {
+    // ca1
+    //.0tch (e) 
+    // {+
     //   print("Error fetching products: $e");
     // }
   // void showProductDialog(BuildContext context)
   // {
    
-    showDialog
-    (
-      context: context,
-      builder: (BuildContext context) 
-      {
-        return StatefulBuilder
-        (
-          builder: (context, setDialogState) 
-          {
-            return Dialog
+  showDialog
+  (
+    context: context,
+    builder: (BuildContext context) 
+    {
+      return StatefulBuilder
+      (
+        builder: (context, setDialogState) 
+        {
+          return AlertDialog
+          (
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),),
+            title: Text(companyName,style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+            content: Container
             (
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),),
-              child: Container
-              (
-                width: double.maxFinite,
-                height: 500,
-                padding: const EdgeInsets.all(16),
-                child: Column
-                (
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: 
-                  [
-                    Text(companyName,style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                    SizedBox(height: 16),
-                    Expanded
+              width: double.maxFinite,
+              height: 400,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children:
+                [
+                  Text("Note: You can Change / Modify the Quantity in Cart / View Cart Page",style: TextStyle(fontSize: 15, color: Colors.black54)),
+                  SizedBox(height: 16),
+                  Expanded
+                  (
+                    child: SingleChildScrollView
                     (
-                      child: SingleChildScrollView
+                      child: Wrap
                       (
-                        child: Wrap
-                        (
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: products.map<Widget>((product) 
-                          {
-                            return productCard
-                            (
-                              context,
-                              product,
-                              companyName: companyName,
-                              companyId: companyId,
-                            );
-                          }).toList(),
-                        ),
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: products.map<Widget>((product) 
+                        {
+                          return productCard
+                          (
+                            context,
+                            product,
+                            companyName: companyName,
+                            companyId: companyId,
+                          );
+                        }).toList(),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            );
-          },
-        );
-      },
-    );
+            ),
+            actions: 
+            [
+              TextButton
+              (
+                onPressed: () => Navigator.pop(context),
+                child: Text("Close"),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
   }
 
 //  Future<void> showProductDialog(String companyId, String companyName) async 
@@ -702,16 +720,25 @@ class _HomePageState extends State<HomePage> {
     (
       builder: (context, setDialogState) 
       {
-        return Card
+        return Container
         (
-          margin: EdgeInsets.symmetric(vertical: 8),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          elevation: 3,
+          width: 300, // 👈 ensures consistent box width
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration
+          (
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2)],
+          ),
           child: Column
           (
             children: 
             [
-              Image.asset(product.image, height: 150, fit: BoxFit.cover),
+              ClipRRect
+              (
+                borderRadius: BorderRadius.circular(10),
+                child: Image.asset(product.image,height: 150,width: double.infinity,fit: BoxFit.cover,),
+              ),
               SizedBox(height: 8),
               Text(product.name,style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               SizedBox(height: 4),
@@ -729,33 +756,35 @@ class _HomePageState extends State<HomePage> {
                 ),
                 onPressed: () 
                 {
-                  if (!product.isAdded)
+                  final cart = Provider.of<CartProvider>(context, listen: false);
+                  final isAdded = cart.isInCart(product);
+
+                  if(isAdded)
+                  {             
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),)); 
+                  }
+                  else
                   {
                     product.companyId = companyId;
                     product.companyName = companyName;
 
-                    Provider.of<CartProvider>(context, listen: false)
-                          .addProduct(product);
-
-                    product.isAdded = true;
-
-                    Fluttertoast.showToast
-                    (
-                      msg: "${product.name} from ${product.companyName} added to cart",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                      backgroundColor: Colors.green,
-                      textColor: Colors.white,
-                      fontSize: 16.0,
-                    );
-                  } 
-                  else 
-                  {
-                     Navigator.push(context,MaterialPageRoute(builder: (context) => CartPage()),);
+                    Provider.of<CartProvider>(context,listen:false).addProduct(product);
+                    setState((){
+                      product.isAdded = true;
+                    });
                   }
+                  Fluttertoast.showToast
+                  (
+                    msg: "${product.name} Added to cart, from ${product.companyName}",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    backgroundColor: Colors.green,
+                    textColor: Colors.white,
+                    fontSize: 16.0,
+                  );           
                 },
-                icon: Icon(product.isAdded ? Icons.shopping_cart : Icons.add_shopping_cart,color: Colors.white,),
-                label: Text(product.isAdded ? "View Cart" : "Add to Cart",style: TextStyle(color: Colors.white),),
+                icon:Icon(context.watch<CartProvider>().isInCart(product) ?  Icons.shopping_cart : Icons.add_shopping_cart,color: Colors.white),
+                label: Text(context.watch<CartProvider>().isInCart(product) ? "View Cart" : "Add to Cart",style: TextStyle(color: Colors.white)),
               ),
               SizedBox(height: 8),
             ],
