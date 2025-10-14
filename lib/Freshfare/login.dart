@@ -135,7 +135,7 @@ class _LoginPageState extends State<LoginPage>
   {
     return const InputDecoration(
       contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10), 
-      border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+      border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
     );
   }
 
@@ -175,16 +175,17 @@ class _LoginPageState extends State<LoginPage>
        (
           child:Container
           (
-              decoration:BoxDecoration(color: Colors.white,             
+              decoration:BoxDecoration(color: Colors.white, 
+              borderRadius: BorderRadius.circular(20),             
               boxShadow:[
               BoxShadow( color: Colors.black26,
-              blurRadius: 5,
-              spreadRadius: 4,
+              blurRadius: 7,
+              spreadRadius: 6,
               offset: Offset(0,5,),
               ),
               ],
               ),
-              margin:EdgeInsets.all(20.0),
+              margin:EdgeInsets.all(25.0),
               child:Form
               (
                   key: _formkey,
@@ -257,7 +258,7 @@ class _LoginPageState extends State<LoginPage>
                                   backgroundColor: Colors.green,
                                   shape: RoundedRectangleBorder
                                   (
-                                    borderRadius: BorderRadius.circular(0),
+                                    borderRadius: BorderRadius.circular(6),
                                   ),
                                   ),
                                   onPressed: () 
