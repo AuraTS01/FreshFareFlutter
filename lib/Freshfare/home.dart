@@ -310,7 +310,7 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children:
                 [
-                  Text("Note: You can Change / Modify the Quantity in Cart / View Cart Page",style: TextStyle(fontSize: 15, color: Colors.black54)),
+                  Text("Note: You can Change / Modify the Quantity in Cart / View Cart Page",style: TextStyle(fontSize: 10, color: Colors.black54)),
                   SizedBox(height: 16),
                   Expanded
                   (
@@ -794,68 +794,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-// Widget productCard(BuildContext context, Product product,
-//     {required String companyName, required String companyId}) {
-//   return Container(
-//     width: 160,
-//     padding: const EdgeInsets.all(10),
-//     decoration: BoxDecoration(
-//       color: Colors.white,
-//       borderRadius: BorderRadius.circular(12),
-//       boxShadow: const [
-//         BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2)
-//       ],
-//     ),
-//     child: Column(
-//       children: [
-//         Image.asset(product.image, height: 150, fit: BoxFit.cover),
-//         const SizedBox(height: 8),
-//         Text(
-//           product.name,
-//           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-//         ),
-//         Text("₹${product.baseprice.toStringAsFixed(2)}"),
-//         const SizedBox(height: 8),
-//         ElevatedButton.icon
-//         (
-//           onPressed: () {
-//             if (!product.isAdded) {
-//               // Assign company info to product
-//               product.companyId = companyId;
-//               product.companyName = companyName;
-
-//               Provider.of<CartProvider>(context, listen: false)
-//                   .addProduct(product);
-
-//               product.isAdded = true;
-
-//               Fluttertoast.showToast(
-//                 msg: "${product.name} from ${product.companyName} added to cart",
-//                 backgroundColor: Colors.green,
-//                 textColor: Colors.white,
-//                 gravity: ToastGravity.CENTER,
-//               );
-//             } else {
-//               Navigator.push(
-//                 context,
-//                 MaterialPageRoute(builder: (context) => CartPage()),
-//               );
-//             }
-//           },
-//            style: ElevatedButton.styleFrom
-//                 (
-//                   backgroundColor:Colors.green,
-//                   shape: RoundedRectangleBorder
-//                   (
-//                     borderRadius: BorderRadius.circular(8),
-//                   ),
-//                 ),
-//           icon: Icon(product.isAdded ? Icons.shopping_cart : Icons.add_shopping_cart,color: Colors.white,),
-//           label: Text(product.isAdded ? "View Cart" : "Add to Cart",style: TextStyle(color: Colors.white),),
-//         )
-//       ],
-//     ),
-//   );
-// }
-
-
