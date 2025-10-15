@@ -228,9 +228,7 @@ class _LoginPageState extends State<LoginPage>
                                     },
                                   ),
                               alignLabelWithHint: false,
-                              filled: true,
-                              border: const OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(0)))
+                              filled: true,                        
                               ),                               
                               validator : (value)
                               {
@@ -272,12 +270,12 @@ class _LoginPageState extends State<LoginPage>
                               ),
                             ),
                             SizedBox(height: 20),
-                            Wrap
+                            Row
                             (
-                              alignment: WrapAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: 
                               [
-                                Text("Don't have an account?",),                              
+                                Text("Don't have an account?"),
                                 TextButton
                                 (
                                   onPressed: () 
@@ -288,8 +286,7 @@ class _LoginPageState extends State<LoginPage>
                                 ),
                               ],
                             ),
-                          ],
-                      
+                          ],                      
                       ),
                   ),
               ),

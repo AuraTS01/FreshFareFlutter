@@ -25,7 +25,8 @@ class HomePage extends StatefulWidget
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> 
+{
 
   final  pincodecontroller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
@@ -33,22 +34,6 @@ class _HomePageState extends State<HomePage> {
 
   String ? selecteditem;
   final items =['Chicken','Mutton','Fish','Prawns','Mutton - Boti','Mutton - Liver','Beef','Beef - Liver','Beef - Boti','Quail','Duck'];
-  // void navigate(String value)
-  // {
-  //   if(value == 'Chicken'){
-  //      Navigator.push(context, MaterialPageRoute(builder: (context) => ChickenPage(selecteditem: '',),));
-  //   }
-  //   else if(value == 'Fish'){
-  //      Navigator.push(context, MaterialPageRoute(builder: (context) => FishPage(selecteditem: '',),),);
-  //   }
-  //   else if(value == 'Prawns'){
-  //      Navigator.push(context, MaterialPageRoute(builder: (context) => PrawnsPage(selecteditem: '',),),);
-  //   }
-  //   else if(value == 'Mutton'){
-  //      Navigator.push(context, MaterialPageRoute(builder: (context) => MuttonPage(selecteditem: '',),),);
-  //   }
-  // }
-
 
   @override
   void initState() {
@@ -235,16 +220,6 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
- final List<Product> products = [
-                  Product(name:"Prawns", baseprice: 400.0, image:"assets/prawns.png"),
-                  Product(name:"Fish", baseprice: 200.0, image: "assets/fish.png"),
-                  Product(name:"Chicken_Flesh", baseprice: 300.0, image:"assets/chicken_flesh.png"),
-                  Product(name:"Chicken_Without_Skin", baseprice: 250.0, image:"assets/chicken_withoutSkin.png"),
-                  Product(name:"Chicken", baseprice: 300.0, image:"assets/chicken_2.png"),
-                  Product(name:"Mutton", baseprice: 800.0, image:"assets/fresh_raw_mutton_leg.png"),
-                  Product(name:"Shrimp", baseprice: 350.0, image:"assets/Shrimp.png"),
-  ];
-
   List<dynamic> companies = [];
 
   Future<void> fetchCompanies() async {
@@ -270,10 +245,12 @@ class _HomePageState extends State<HomePage> {
 
     // try 
     // {
-      final response = await http.post(
-        Uri.parse("http://192.168.86.9/FreshFareFlutter/lib/freshfare_database/get_products.php"),
-        body: {'company_id': companyId},
-      );
+      // final response = await http.post(
+      //   Uri.parse("http://192.168.86.9/FreshFareFlutter/lib/freshfare_database/get_products.php"),
+      //   body: {'company_id': companyId},
+      // );
+
+
 
     //   if (response.statusCode == 200) 
     //   {
@@ -288,132 +265,147 @@ class _HomePageState extends State<HomePage> {
     // }
   // void showProductDialog(BuildContext context)
   // {
-   
-  showDialog
-  (
-    context: context,
-    builder: (BuildContext context) 
-    {
-      return StatefulBuilder
-      (
-        builder: (context, setDialogState) 
-        {
-          return AlertDialog
-          (
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),),
-            title: Text(companyName,style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-            content: Container
+    final company = companies.firstWhere(
+      (c) => c['company_id'].toString() == companyId.toString(),
+      orElse: () => {},
+    );
+
+    
+    final sellingItems = (company['selling_items'] ?? '')
+        .toString()
+        .split(',')
+        .map((e) => e.trim())
+        .where((e) => e.isNotEmpty)
+        .toList();
+        
+    showDialog
+    (
+      context: context,
+      builder: (BuildContext context) 
+      {
+        final Set<String> addedItems = {};
+        return StatefulBuilder
+        (
+          builder: (context, setDialogState) 
+          {
+            return AlertDialog
             (
-              width: double.maxFinite,
-              height: 400,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children:
-                [
-                  Text("Note: You can Change / Modify the Quantity in Cart / View Cart Page",style: TextStyle(fontSize: 10, color: Colors.black54)),
-                  SizedBox(height: 16),
-                  Expanded
-                  (
-                    child: SingleChildScrollView
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),),
+              title: Text(companyName,style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+              content: SizedBox
+              (
+                width: double.maxFinite,
+                height: 400,
+                child:Column
+                (
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: 
+                  [
+                    Text("Note: You can Change / Modify the Quantity in Cart / View Cart Page",style: TextStyle(fontSize: 14, color: Colors.black54)), 
+                    Expanded
                     (
-                      child: Wrap
+                      child: sellingItems.isEmpty ? const Center(child: Text("No products available"))
+                      : ListView.builder
                       (
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: products.map<Widget>((product) 
+                        itemCount: sellingItems.length,
+                        itemBuilder: (context, index) 
                         {
-                          return productCard
+                          final product = sellingItems[index];
+                          final isAddedToCart = addedItems.contains(product);
+                          return Card
                           (
-                            context,
-                            product,
-                            companyName: companyName,
-                            companyId: companyId,
+                            shape: RoundedRectangleBorder
+                            (
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            elevation: 2,                            
+                            child : Column
+                            (           
+                              children: 
+                              [
+                                ClipRRect
+                                (
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Icon(Icons.fastfood, color: Colors.green),
+                                  // child: Image.asset("assets/prawns.png",height: 150,width: double.infinity,fit: BoxFit.cover,),
+                                ),
+                                SizedBox(height: 8),
+                                Text(product,style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                SizedBox(height: 4),
+                                Text("₹ / KG",style: TextStyle(color: Colors.black54)),
+                                SizedBox(height: 8),
+                                ElevatedButton.icon
+                                (
+                                  style: ElevatedButton.styleFrom
+                                  (
+                                    backgroundColor:Colors.green,
+                                    shape: RoundedRectangleBorder
+                                    (
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  onPressed: ()  
+                                  {
+                                    if (isAddedToCart) 
+                                    {
+                                      Navigator.push(context,MaterialPageRoute(builder: (context) => const CartPage()),);
+                                    } 
+                                    else 
+                                    {
+                                      final cartProvider =Provider.of<CartProvider>(context, listen: false);
+
+                                      final productItem = Product
+                                      (
+                                        name: product,
+                                        baseprice: 0.0,
+                                        image: "assets/logo.png",
+                                      );
+
+                                      cartProvider.addProduct(productItem);
+
+                                      Fluttertoast.showToast
+                                      (
+                                        msg: "$product added to cart",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        backgroundColor: Colors.green,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0,
+                                      );
+
+                                      setDialogState(() 
+                                      {
+                                        addedItems.add(product);
+                                      });
+                                    }
+                                  },
+                                icon: Icon(isAddedToCart ? Icons.shopping_cart : Icons.add_shopping_cart, color: Colors.white),
+                                label: Text(isAddedToCart ? "View Cart" : "Add to Cart",style: TextStyle(color: Colors.white),),
+                                ),
+                                SizedBox(height: 8),
+                              ],
+                            ),
                           );
-                        }).toList(),
+                        },
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            actions: 
-            [
-              TextButton
-              (
-                onPressed: () => Navigator.pop(context),
-                child: Text("Close"),
-              ),
-            ],
-          );
-        },
-      );
-    },
-  );
+              actions: 
+              [
+                TextButton
+                (
+                  onPressed: () => Navigator.pop(context),
+                  child: Text("Close"),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
-
-//  Future<void> showProductDialog(String companyId, String companyName) async 
-//   {
-//     // List<dynamic> products = [];
-
-//     // try 
-//     // {
-//       final response = await http.post(
-//         Uri.parse("http://192.168.86.9/FreshFareFlutter/lib/freshfare_database/get_products.php"),
-//         body: {'company_id': companyId},
-//       );
-
-//     //   if (response.statusCode == 200) 
-//     //   {
-//     //     products = json.decode(response.body);
-//     //     print("Sending company_id: $companyId");
-//     //   }
-//     // } 
-//     // catch (e) 
-//     // {
-//     //   print("Error fetching products: $e");
-//     // }
-//   // void showProductDialog(BuildContext context)
-//   // {
-   
-//     showDialog
-//     (
-//       context: context,
-//       builder: (BuildContext context) 
-//       {
-//         return AlertDialog
-//         (
-//           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-//           title: Text("$companyName Products", style: const TextStyle(fontWeight: FontWeight.bold)),
-//           content: SizedBox
-//           (
-//             width: double.maxFinite,
-//             child: products.isEmpty ? const Text("No products available.") : ListView.builder
-//             (
-//               // shrinkWrap: true,
-//               // physics: NeverScrollableScrollPhysics(), 
-//               itemCount: products.length,
-//               itemBuilder: (context, index) 
-//               {
-//                 final product = products[index];
-//                 return Container(
-//                   child: productCard(context, product),
-//                 );
-//               },
-//             ),
-//           ),
-//           actions: 
-//           [
-//             TextButton
-//             (
-//               onPressed: () => Navigator.pop(context),
-//               child: Text("Close"),
-//             ),
-//           ],
-//         );
-//       },
-//     );
-//   }
-
 
   @override
   Widget build(BuildContext context) 
@@ -458,7 +450,7 @@ class _HomePageState extends State<HomePage> {
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Colors.white,
                   child: Text(userName.isNotEmpty ? userName[0] : '?',
-                  style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20,fontFamily: "Poppins"),),
+                  style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20,),),
                   ),
               ),
               ListTile
@@ -528,7 +520,7 @@ class _HomePageState extends State<HomePage> {
           (
             children: 
             [
-              Text("Please allow location access to check delivery availabity in your area.",style: TextStyle(fontSize: 14),),
+              Text("Please allow location access to check delivery availabity in your area.",style: TextStyle(fontSize: 15),),
               SizedBox(height: 10),             
               Align
               (
@@ -691,106 +683,10 @@ class _HomePageState extends State<HomePage> {
                       ),
                     );
                   },
-                ),
-
-              // ListView.builder
-              // (
-              //   shrinkWrap: true,
-              //   physics: NeverScrollableScrollPhysics(), 
-              //   itemCount: products.length,
-              //   itemBuilder: (context, index) 
-              //   {
-              //     final product = products[index];
-              //     return Container(
-              //       // color: Colors.white,
-              //       child: productCard(context, product),
-              //     );
-              //   },
-              // ),
+                ),         
             ],                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
           ),
         ),
-    );
-  }
-
-  Widget productCard(BuildContext context, Product product,
-    {required String companyName, required String companyId}) 
-  {
-    return StatefulBuilder
-    (
-      builder: (context, setDialogState) 
-      {
-        return Container
-        (
-          width: 300, // 👈 ensures consistent box width
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration
-          (
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2)],
-          ),
-          child: Column
-          (
-            children: 
-            [
-              ClipRRect
-              (
-                borderRadius: BorderRadius.circular(10),
-                child: Image.asset(product.image,height: 150,width: double.infinity,fit: BoxFit.cover,),
-              ),
-              SizedBox(height: 8),
-              Text(product.name,style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              SizedBox(height: 4),
-              Text("₹${product.price} / KG",style: TextStyle(color: Colors.black54)),
-              SizedBox(height: 8),
-              ElevatedButton.icon
-              (
-                style: ElevatedButton.styleFrom
-                (
-                  backgroundColor:Colors.green,
-                  shape: RoundedRectangleBorder
-                  (
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                onPressed: () 
-                {
-                  final cart = Provider.of<CartProvider>(context, listen: false);
-                  final isAdded = cart.isInCart(product);
-
-                  if(isAdded)
-                  {             
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),)); 
-                  }
-                  else
-                  {
-                    product.companyId = companyId;
-                    product.companyName = companyName;
-
-                    Provider.of<CartProvider>(context,listen:false).addProduct(product);
-                    setState((){
-                      product.isAdded = true;
-                    });
-                  }
-                  Fluttertoast.showToast
-                  (
-                    msg: "${product.name} Added to cart, from ${product.companyName}",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                    backgroundColor: Colors.green,
-                    textColor: Colors.white,
-                    fontSize: 16.0,
-                  );           
-                },
-                icon:Icon(context.watch<CartProvider>().isInCart(product) ?  Icons.shopping_cart : Icons.add_shopping_cart,color: Colors.white),
-                label: Text(context.watch<CartProvider>().isInCart(product) ? "View Cart" : "Add to Cart",style: TextStyle(color: Colors.white)),
-              ),
-              SizedBox(height: 8),
-            ],
-          ),
-        );
-      },
     );
   }
 }

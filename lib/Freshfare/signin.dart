@@ -207,8 +207,6 @@ class _SignPageState extends State<SignPage>
                             ),
                         alignLabelWithHint: false,
                         filled: true,
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(0)))
                         ),                               
                         validator : (value)
                         {
@@ -246,9 +244,7 @@ class _SignPageState extends State<SignPage>
                               },
                             ),
                         alignLabelWithHint: false,
-                        filled: true,
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(0)))
+                        filled: true,                     
                         ),
                         validator : (value)
                         {

@@ -349,7 +349,7 @@ class _CartPageState extends State<CartPage>
                           Padding
                           (
                             padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                            child: Text("${item.companyName ?? 'FreshChicken'}",style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold,),
+                            child: Text("${item.companyName ?? 'Unknown'}",style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold,),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
