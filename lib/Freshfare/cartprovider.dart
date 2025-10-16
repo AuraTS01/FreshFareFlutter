@@ -7,6 +7,8 @@ class CartProvider extends ChangeNotifier{
   List<Product> get items => cart.items;
   double get totalPrice => cart.totalPrice;
 
+  int get itemCount => items.fold(0, (sum, item) => sum + item.quantity);
+
   void addProduct(Product product){
     var index = items.indexWhere((item) => item.name == product.name);
     if(index != -1){

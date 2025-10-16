@@ -235,104 +235,70 @@ class _CheckoutPageState extends State<CheckoutPage>
       (
         title:Row
         (
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: 
-            [
-              Image.asset('assets/logo.png',
-              height:45),
-              SizedBox(width: 8),
-              RichText(text: TextSpan
-              (
-                children: 
-                [
-                  TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
-                  TextSpan(text: 'resh',style:TextStyle(color:Colors.black,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
-                  TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
-                  TextSpan(text: 'are',style: TextStyle(color:Colors.black,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
-                ],
-              ),
-              ),
-            ],
-          ),
-      ),
-      drawer:Drawer
-      ( 
-        child: ListView
-        (                
-          padding: EdgeInsets.zero,
+          crossAxisAlignment: CrossAxisAlignment.center,           
           children: 
           [
-            UserAccountsDrawerHeader
-              (
-                decoration: BoxDecoration(color: Colors.green),
-                accountName: Text(userName.isNotEmpty ? "Hello $userName" : "Hello Guest"),
-                accountEmail: Text(userEmail),
-                currentAccountPicture: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: Text(userName.isNotEmpty ? userName[0] : '?',
-                  style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20,fontFamily: "Poppins"),),
-                  ),
-              ),
-            ListTile
+            Image.asset('assets/logo.png',height:45),
+            SizedBox(width: 8),
+            RichText(text: TextSpan
             (
-              leading: Icon(Icons.home_outlined),
-              title: const Text('Home'),
-              onTap: () {          
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));               
-              },
+              children: 
+              [
+                TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                TextSpan(text: 'resh',style:TextStyle(color:Colors.black,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                TextSpan(text: 'are',style: TextStyle(color:Colors.black,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+              ],
             ),
-            ListTile
-            (
-              leading: const Icon(Icons.shopping_cart),
-              title: const Text('My Cart'),
-              onTap: () {   
-                Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),));                    
-              },
             ),
-            ListTile
-            (
-              leading: const Icon(Icons.auto_stories_outlined),
-              title: const Text('Order History'),
-              onTap: () {   
-                Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryPage(),));                    
-              },
-            ),
-            ListTile
-            (
-                  leading: Icon(Icons.notifications_outlined),
-                  title: Text('Notifications'),
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationPage(),));
-                  },
-            ),
-            if (userEmail.isEmpty) 
-              ...[
-                ListTile
-                (
-                  leading: Icon(Icons.login_outlined),
-                  title: Text('Login'),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    ).then((_) => _loadUserData()); 
-                  },
-                ),
-              ]
-              else 
-              ...[
-                ListTile
-                (
-                  leading: const Icon(Icons.logout),
-                  title: const Text('Logout'),
-                  onTap: () async {
-                    _showLogoutDialog(context);
-                  },
-                ),
-              ]
           ],
         ),
-      ),  
+        actions: 
+        [
+          Consumer<CartProvider>
+          (
+            builder: (context, cart, child) 
+            {
+              return InkWell
+              (
+                onTap: () 
+                {
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => const CartPage()),);
+                },
+                child: Stack
+                (
+                  alignment: Alignment.center,
+                  children: 
+                  [
+                    Padding
+                    (
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(Icons.shopping_bag, size: 30),
+                    ),
+                    if (cart.items.isNotEmpty) 
+                      Positioned
+                      (
+                        right: 4,
+                        top: 4,
+                        child: Container
+                        (
+                          padding: EdgeInsets.all(4),
+                          decoration: BoxDecoration
+                          (
+                            color: Colors.green,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text('${cart.items.length}',style: TextStyle(color: Colors.white,fontSize: 12,fontWeight: FontWeight.bold,)),
+                        ),
+                      ),
+                  ],
+                ),
+              );  
+            },
+          ),
+          SizedBox(width: 10),  
+        ],
+      ),
       body : ListView
       (  
         children: 

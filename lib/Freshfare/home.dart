@@ -35,56 +35,32 @@ class _HomePageState extends State<HomePage>
   String ? selecteditem;
   final items =['Chicken','Mutton','Fish','Prawns','Mutton - Boti','Mutton - Liver','Beef','Beef - Liver','Beef - Boti','Quail','Duck'];
 
+  int _selectedIndex = 0;
+
+  late final List<Widget> _pages;
+
+
   @override
   void initState() {
     super.initState();
     _loadUserData();
     fetchCompanies();
+    _pages = [
+    HomeContent(
+      companies: companies,
+      items: items,
+      selectedItem: selecteditem,
+      showLocationDialog: _showLocationDialog,
+      showProductDialog: showProductDialog,
+      butcherShopKey: butcherShopKey,
+    ),
+    const HistoryPage(),
+    NotificationPage(),
+    ProfilePage(),
+    
+  ];
   }
 
- 
-  void _showLogoutDialog(BuildContext context)
-  {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Logout"),
-          content: const Text("Are you sure you want to logout?"),
-          actions: [
-            TextButton
-            (
-              onPressed: () async 
-              {
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.clear();    
-                setState(() {
-                  userName = '';
-                  userEmail = '';
-                });
-                Navigator.of(context).pop();
-                Fluttertoast.showToast(
-                msg: "Logout Successfully",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                backgroundColor: Colors.green,
-                textColor: Colors.white,
-                fontSize: 16.0,
-                );    
-              },
-               child: const Text("Yes"),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); 
-              },
-              child: const Text("No"),
-            ),            
-          ],
-        );
-      },
-    );
-  }
   Future<void> checkPincode() async 
   {
     String pincode = pincodecontroller.text.trim();
@@ -222,7 +198,8 @@ class _HomePageState extends State<HomePage>
 
   List<dynamic> companies = [];
 
-  Future<void> fetchCompanies() async {
+  Future<void> fetchCompanies() async 
+  {
     try {
       final response = await http.get(
         Uri.parse("http://192.168.86.9/FreshFareFlutter/lib/freshfare_database/get_companies.php"),
@@ -406,43 +383,130 @@ class _HomePageState extends State<HomePage>
       },
     );
   }
+  void _showLogoutDialog(BuildContext context)
+  {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Logout"),
+          content: const Text("Are you sure you want to logout?"),
+          actions: [
+            TextButton
+            (
+              onPressed: () async 
+              {
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.clear();    
+                setState(() {
+                  userName = '';
+                  userEmail = '';
+                });
+                Navigator.of(context).pop();
+                Fluttertoast.showToast(
+                msg: "Logout Successfully",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.CENTER,
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+                fontSize: 16.0,
+                );    
+              },
+               child: const Text("Yes"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); 
+              },
+              child: const Text("No"),
+            ),            
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) 
   {
     return  Scaffold
     (
-       appBar: AppBar
-       (
-          title:Row
-          (
-            crossAxisAlignment: CrossAxisAlignment.center,           
-            children: 
-            [
-              Image.asset('assets/logo.png',height:45),
-              SizedBox(width: 8),
-              RichText(text: TextSpan
-              (
-                children: 
-                [
-                  TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
-                  TextSpan(text: 'resh',style:TextStyle(color:Colors.black,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
-                  TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
-                  TextSpan(text: 'are',style: TextStyle(color:Colors.black,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
-                ],
-              ),
-              ),
-            ],
-          ),
+      appBar: AppBar
+      (
+        title:Row
+        (
+          crossAxisAlignment: CrossAxisAlignment.center,           
+          children: 
+          [
+            Image.asset('assets/logo.png',height:45),
+            SizedBox(width: 8),
+            RichText(text: TextSpan
+            (
+              children: 
+              [
+                TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                TextSpan(text: 'resh',style:TextStyle(color:Colors.black,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                TextSpan(text: 'are',style: TextStyle(color:Colors.black,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+              ],
+            ),
+            ),
+          ],
         ),
-       drawer:Drawer
-       ( 
-          child: ListView
-          (                
-            padding: EdgeInsets.zero,
-            children: 
-            [ 
-               UserAccountsDrawerHeader
+        actions: 
+        [
+          Consumer<CartProvider>
+          (
+            builder: (context, cart, child) 
+            {
+              return InkWell
+              (
+                onTap: () 
+                {
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => const CartPage()),);
+                },
+                child: Stack
+                (
+                  alignment: Alignment.center,
+                  children: 
+                  [
+                    Padding
+                    (
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(Icons.shopping_bag, size: 30),
+                    ),
+                    if (cart.items.isNotEmpty) 
+                      Positioned
+                      (
+                        right: 4,
+                        top: 4,
+                        child: Container
+                        (
+                          padding: EdgeInsets.all(4),
+                          decoration: BoxDecoration
+                          (
+                            color: Colors.green,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text('${cart.items.length}',style: TextStyle(color: Colors.white,fontSize: 12,fontWeight: FontWeight.bold,)),
+                        ),
+                      ),
+                  ],
+                ),
+              );  
+            },
+          ),
+          SizedBox(width: 10),  
+        ],
+      ),
+      drawer:Drawer
+      ( 
+        child: ListView
+        (                
+          padding: EdgeInsets.zero,
+          children: 
+          [
+            UserAccountsDrawerHeader
               (
                 decoration: BoxDecoration(color: Colors.green),
                 accountName: Text(userName.isNotEmpty ? "Hello $userName" : "Hello Guest"),
@@ -450,42 +514,42 @@ class _HomePageState extends State<HomePage>
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Colors.white,
                   child: Text(userName.isNotEmpty ? userName[0] : '?',
-                  style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20,),),
+                  style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20,fontFamily: "Poppins"),),
                   ),
               ),
-              ListTile
-              (      
-                leading: const Icon(Icons.person),              
-                title: const Text('My profile'),
-                onTap: () {          
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage(),));               
-                },
-              ),
-              ListTile
-              (
-                leading: const Icon(Icons.shopping_cart),
-                title: const Text('My Cart'),
-                onTap: () {   
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),));                    
-                },
-              ),
-              ListTile
-              (
-                leading: const Icon(Icons.auto_stories_outlined),
-                title: const Text('Order History'),
-                onTap: () {   
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryPage(),));                    
-                },
-              ),
-              ListTile
-              (
+            ListTile
+            (
+              leading: Icon(Icons.home_outlined),
+              title: const Text('Home'),
+              onTap: () {          
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));               
+              },
+            ),
+            ListTile
+            (
+              leading: const Icon(Icons.shopping_cart),
+              title: const Text('My Cart'),
+              onTap: () {   
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),));                    
+              },
+            ),
+            ListTile
+            (
+              leading: const Icon(Icons.auto_stories_outlined),
+              title: const Text('Order History'),
+              onTap: () {   
+                Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryPage(),));                    
+              },
+            ),
+            ListTile
+            (
                   leading: Icon(Icons.notifications_outlined),
                   title: Text('Notifications'),
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationPage(),));  
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationPage(),));
                   },
-              ),
-              if (userEmail.isEmpty) 
+            ),
+            if (userEmail.isEmpty) 
               ...[
                 ListTile
                 (
@@ -510,183 +574,241 @@ class _HomePageState extends State<HomePage>
                   },
                 ),
               ]
+          ],
+        ),
+      ),  
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar
+      (
+        currentIndex: _selectedIndex,
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
+        onTap: (index) 
+        {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        items: const 
+        [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            label: 'Orders',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.notifications),
+            label: 'Notifications',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class HomeContent extends StatelessWidget 
+{
+  final List<dynamic> companies;
+  final List<String> items;
+  final String? selectedItem;
+  final Function(BuildContext) showLocationDialog;
+  final Function(String, String) showProductDialog;
+  final GlobalKey butcherShopKey;
+
+  const HomeContent({
+    super.key,
+    required this.companies,
+    required this.items,
+    required this.selectedItem,
+    required this.showLocationDialog,
+    required this.showProductDialog,
+    required this.butcherShopKey,
+  });
+
+  @override
+  Widget build(BuildContext context) 
+  {
+    return  Padding
+    (
+      padding: EdgeInsets.all(16.0),
+      child: ListView
+      (
+        children: 
+        [
+          Text("Please allow location access to check delivery availabity in your area.",style: TextStyle(fontSize: 15),),
+          SizedBox(height: 10),             
+          Align
+          (
+            alignment: Alignment.center,              
+            child:ElevatedButton
+              (
+                style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          shape: RoundedRectangleBorder
+                          (
+                            borderRadius: BorderRadius.circular(7.0),
+                          ),
+                          ),
+                onPressed:  () async{   
+                  showLocationDialog(context);                 
+                    },                    
+                child:Text("Change Location", style: TextStyle(color: Colors.white,fontWeight:FontWeight.bold))
+              ),
+          ),
+          SizedBox(height: 40),
+          Container
+          (
+            padding: EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration
+            (
+              color: Colors.green,
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: DropdownButtonHideUnderline
+            (
+              child: DropdownButton
+              (
+                value: selectedItem,
+                hint: Text("All Items",style: TextStyle(color: Colors.white,fontWeight:FontWeight.bold),),
+                items: items.map((String value)
+                {
+                  return DropdownMenuItem<String>
+                  (
+                    value: value,
+                    child:Text(value,style: TextStyle(fontSize: 16,fontWeight:FontWeight.w500)),
+                  );
+                }).toList(),
+                onChanged:(value)
+                {
+                  if(value == "Choose Your Butcher Shops")
+                  {
+                    // setState(() {
+                    // selecteditem = value ;
+                    // });                        
+                    // navigate(value);                        
+                      Scrollable.ensureVisible(
+                        butcherShopKey.currentContext!,
+                        duration: const Duration(milliseconds: 500),
+                      );
+                  }    
+                },
+              ),
+            ),
+          ),
+          SizedBox(height: 20),
+          Row
+          (
+            children:
+            [
+              Icon(Icons.phone,color: Colors.green),
+              SizedBox(width: 10),
+              Column
+              (
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: 
+                [
+                  Text('+91 8754364997',style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('support 24/7 '),
+                ],
+              )
             ],
           ),
-        ),
-        body: Padding
-        (
-          padding: EdgeInsets.all(16.0),
-          child: ListView
+          SizedBox(height: 30),
+          Column
           (
             children: 
             [
-              Text("Please allow location access to check delivery availabity in your area.",style: TextStyle(fontSize: 15),),
-              SizedBox(height: 10),             
-              Align
-              (
-                alignment: Alignment.center,              
-                child:ElevatedButton
-                  (
-                    style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
-                              shape: RoundedRectangleBorder
-                              (
-                                borderRadius: BorderRadius.circular(7.0),
-                              ),
-                              ),
-                    onPressed:  () async{   
-                      _showLocationDialog(context);                  
-                        },                    
-                    child:Text("Change Location", style: TextStyle(color: Colors.white,fontWeight:FontWeight.bold))
-                  ),
-              ),
-              SizedBox(height: 40),
+              Text("Choose Your Butcher Shops",style: TextStyle(
+              color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold, ),),
+              SizedBox(height: 5),
               Container
               (
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration
-                (
-                  color: Colors.green,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: DropdownButtonHideUnderline
-                (
-                  child: DropdownButton
-                  (
-                    value:selecteditem,
-                    hint: Text("All Items",style: TextStyle(color: Colors.white,fontWeight:FontWeight.bold),),
-                    items: items.map((String value)
-                    {
-                      return DropdownMenuItem<String>
-                      (
-                        value: value,
-                        child:Text(value,style: TextStyle(fontSize: 16,fontWeight:FontWeight.w500)),
-                      );
-                    }).toList(),
-                    onChanged:(value)
-                    {
-                      if(value == "Choose Your Butcher Shops")
-                      {
-                        // setState(() {
-                        // selecteditem = value ;
-                        // });                        
-                        // navigate(value);                        
-                          Scrollable.ensureVisible(
-                            butcherShopKey.currentContext!,
-                            duration: const Duration(milliseconds: 500),
-                          );
-                      }    
-                    },
-                  ),
-                ),
+                width: 95,
+                height: 4,
+                color: Colors.green,
               ),
-              SizedBox(height: 20),
-              Row
-              (
-                children:
-                [
-                  Icon(Icons.phone,color: Colors.green),
-                  SizedBox(width: 10),
-                  Column
-                  (
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: 
-                    [
-                      Text('+91 8754364997',style: TextStyle(fontWeight: FontWeight.bold)),
-                      Text('support 24/7 '),
-                    ],
-                  )
-                ],
-              ),
-              SizedBox(height: 30),
-              Column
-              (
-                children: 
-                [
-                  Text("Choose Your Butcher Shops",style: TextStyle(
-                  color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold, ),),
-                  SizedBox(height: 5),
-                  Container
-                  (
-                    width: 95,
-                    height: 4,
-                    color: Colors.green,
-                  ),
-                ],
-              ),
-              SizedBox(height: 30),
-              companies.isEmpty
-              ? const Center(child: CircularProgressIndicator())
-              : ListView.builder
+            ],
+          ),
+          SizedBox(height: 30),
+          companies.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : ListView.builder
+            (
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: companies.length,
+              itemBuilder: (context, index) {
+                final company = companies[index];
+                return Card
                 (
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: companies.length,
-                  itemBuilder: (context, index) {
-                    final company = companies[index];
-                    return Card
+                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  elevation: 3,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  child: Padding
+                  (
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column
                     (
-                      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                      elevation: 3,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      child: Padding
-                      (
-                        padding: const EdgeInsets.all(12.0),
-                        child: Column
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: 
+                      [
+                        Row
                         (
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: 
-                          [
-                            Row
+                          [                             
+                            Image.asset('assets/logo.png',height:45),
+                            SizedBox(width: 12),
+                            Expanded
                             (
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: 
-                              [                             
-                                Image.asset('assets/logo.png',height:45),
-                                SizedBox(width: 12),
-                                Expanded
-                                (
-                                  child: Column
-                                  (
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children:
-                                    [
-                                      Text(company['company_name'],style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold,),),
-                                      SizedBox(height: 4),
-                                      Text(company['email'],style: const TextStyle(color: Colors.black54),),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 12),
-                            Align
-                            (
-                              alignment: Alignment.center,
-                              child: ElevatedButton
+                              child: Column
                               (
-                                style: ElevatedButton.styleFrom
-                                (
-                                  backgroundColor: Colors.blue,
-                                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),),
-                                ),
-                                onPressed: () 
-                                {
-                                  showProductDialog(company['company_id'],company['company_name'],);
-                                },
-                                child : Text("View Products",style: TextStyle(color: Colors.white,fontWeight:FontWeight.bold),),
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children:
+                                [
+                                  Text(company['company_name'],style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold,),),
+                                  SizedBox(height: 4),
+                                  Text(company['email'],style: const TextStyle(color: Colors.black54),),
+                                ],
                               ),
                             ),
                           ],
                         ),
-                      ),
-                    );
-                  },
-                ),         
-            ],                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-          ),
-        ),
+                        SizedBox(height: 12),
+                        Align
+                        (
+                          alignment: Alignment.center,
+                          child: ElevatedButton
+                          (
+                            style: ElevatedButton.styleFrom
+                            (
+                              backgroundColor: Colors.blue,
+                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),),
+                            ),
+                            onPressed: () 
+                            {
+                              showProductDialog(company['company_id'],company['company_name'],);
+                            },
+                            child : Text("View Products",style: TextStyle(color: Colors.white,fontWeight:FontWeight.bold),),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),         
+        ],                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+      ),
     );
   }
 }
