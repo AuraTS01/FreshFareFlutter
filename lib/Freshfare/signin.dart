@@ -4,10 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/login.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:freshfare/freshfare/orderhistory.dart';
-import 'package:freshfare/freshfare/home.dart';
-import 'package:freshfare/freshfare/notification.dart';
-import 'package:freshfare/freshfare/cart.dart';
+
 
 
 class SignPage extends StatefulWidget 
@@ -106,14 +103,6 @@ class _SignPageState extends State<SignPage>
    String userName = '';
   String userEmail = '';
 
-  Future<void> _loadUserData() async {
-    await Future.delayed(const Duration(milliseconds: 100));
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      userName = prefs.getString('userName') ?? '';
-      userEmail = prefs.getString('userEmail') ?? '';
-    });
-  }
 
 
   @override
@@ -121,13 +110,14 @@ class _SignPageState extends State<SignPage>
   {
     return Scaffold
     (
+      backgroundColor: Colors.white,
       appBar:AppBar
       (
-        // automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
         title:Row
          (
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: 
             [
               Image.asset('assets/logo.png',
@@ -146,59 +136,6 @@ class _SignPageState extends State<SignPage>
               ),
             ],
           ),
-      ),
-     drawer:Drawer
-      ( 
-        child: ListView
-        (                
-          padding: EdgeInsets.zero,
-          children: 
-          [ 
-              UserAccountsDrawerHeader
-            (
-              decoration: BoxDecoration(color: Colors.green),
-              accountName: Text(userName.isNotEmpty ? "Hello $userName" : "Hello Guest"),
-              accountEmail: Text(userEmail),
-              currentAccountPicture: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Text(userName.isNotEmpty ? userName[0] : '?',
-                style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20,),),
-                ),
-            ),
-            ListTile
-            (
-              leading: Icon(Icons.home_outlined),
-              title: const Text('Home'),
-              onTap: () {          
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));               
-              },
-            ),
-          ListTile
-            (
-              leading: const Icon(Icons.shopping_cart),
-              title: const Text('My Cart'),
-              onTap: () {   
-                Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),));                    
-              },
-            ),
-            ListTile
-            (
-              leading: const Icon(Icons.auto_stories_outlined),
-              title: const Text('Order History'),
-              onTap: () {   
-                Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryPage(),));                    
-              },
-            ),
-            ListTile
-            (
-                leading: Icon(Icons.notifications_outlined),
-                title: Text('Notifications'),
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationPage(),));  
-                },
-            ),           
-          ],
-        ),
       ),
       body:SingleChildScrollView
       (
@@ -264,6 +201,7 @@ class _SignPageState extends State<SignPage>
                         controller: passwordcontroller,
                         decoration: _inputDecoration().copyWith(
                         labelText: 'password',
+                        fillColor: Colors.white,
                         prefixIcon: Icon(Icons.password),
                         suffixIcon: IconButton(
                               icon: Icon(passwordVisible? Icons.visibility: Icons.visibility_off),
@@ -301,6 +239,7 @@ class _SignPageState extends State<SignPage>
                         controller: confirmcontroller,
                         decoration: _inputDecoration().copyWith(
                         labelText: 'confirm password',
+                        fillColor: Colors.white,
                         prefixIcon: Icon(Icons.password),
                         suffixIcon: IconButton(
                               icon: Icon(passwordVis ? Icons.visibility : Icons.visibility_off),
