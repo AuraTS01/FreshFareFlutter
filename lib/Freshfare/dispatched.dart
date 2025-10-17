@@ -75,6 +75,8 @@ class _DispatchedPageState extends State<DispatchedPage>
       },
     );
   }
+
+  int _selectedIndex = 2;
  
   @override
   Widget build(BuildContext context) {
@@ -103,84 +105,6 @@ class _DispatchedPageState extends State<DispatchedPage>
               ),
             ],
           ),
-      ),
-      drawer:Drawer
-      ( 
-        child: ListView
-        (                
-          padding: EdgeInsets.zero,
-          children: 
-          [
-           UserAccountsDrawerHeader
-              (
-                decoration: BoxDecoration(color: Colors.green),
-                 accountName: Text(userName.isNotEmpty ? "Hello $userName" : "Hello Guest"),
-                accountEmail: Text(userEmail),
-                currentAccountPicture: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: Text(userName.isNotEmpty ? userName[0] : '?',
-                  style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20,fontFamily: "Poppins"),),
-                  ),
-              ),
-             ListTile
-              (
-                leading: Icon(Icons.home_outlined),
-                title: const Text('Dashboard'),
-                onTap: () {          
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => CompanyPage(),));               
-                },
-              ),
-              ListTile
-              (
-                leading: Icon(Icons.auto_stories_outlined),
-                title: Text('View Orders List'),
-                onTap: (){
-                     Navigator.push(context, MaterialPageRoute(builder: (context) => OrderlistPage(),));
-                },
-             ),
-             ListTile
-              (
-                leading: Icon(Icons.auto_stories_outlined),
-                title: Text('View Dispatched Order List'),
-                onTap: (){
-                     Navigator.push(context, MaterialPageRoute(builder: (context) => DispatchedPage(),));
-                },
-             ),
-             ListTile
-              (
-                leading: Icon(Icons.price_change_outlined),
-                title: Text(' Fix Price for Products'),
-                onTap: (){
-                     Navigator.push(context, MaterialPageRoute(builder: (context) => PricePage(),));
-                },
-             ),
-             if (userEmail.isEmpty) 
-              ...[
-                ListTile
-                (
-                  leading: Icon(Icons.login_outlined),
-                  title: Text('Login'),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    ).then((_) => _loadUserData()); 
-                  },
-                ),
-              ]
-              else 
-              ...[
-                ListTile
-                (
-                  leading: const Icon(Icons.logout),
-                  title: const Text('Logout'),
-                  onTap: () async {
-                    _showLogoutDialog(context);
-                  },
-                ),
-              ]
-          ],
-        ),
       ),
       body: SingleChildScrollView
       (
@@ -230,79 +154,49 @@ class _DispatchedPageState extends State<DispatchedPage>
                       Padding(padding: EdgeInsets.all(8), child: Text("Status", style: TextStyle(fontWeight: FontWeight.bold))),
                     ],
                   ),
-                  // TableRow
-                  // (
-                  //   decoration: BoxDecoration(color: Colors.white),
-                  //   children: 
-                  //   [
-                  //     Padding(padding: EdgeInsets.all(10), child: Text("#ORD967329")),
-                  //     Padding(padding: EdgeInsets.all(10),child: Text("John Frank\n8967452310\nCOD")),
-                  //     Padding
-                  //     (
-                  //       padding: EdgeInsets.all(10),
-                  //       child: Column
-                  //       (
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         children: const [
-                  //           Text("Chicken With Skin (1 Kg) – ₹170.00"),
-                  //           Text("Chicken Without Skin (1 Kg) – ₹180.00"),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //     Padding(padding: EdgeInsets.all(10), child: Text("₹350")),
-                  //     Padding(padding: EdgeInsets.all(10), child: Text("2025-09-15 11:44:59")),
-                  //     Padding(
-                  //       padding: EdgeInsets.all(10),
-                  //       child: ElevatedButton(
-                  //         onPressed: () {},
-                  //         style: ElevatedButton.styleFrom(
-                  //           backgroundColor: Colors.blue,
-                  //           foregroundColor: Colors.white,
-                  //         ),
-                  //         child: Text("Acknowledge"),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  // TableRow
-                  // (
-                  //   decoration: BoxDecoration(color: Colors.white),
-                  //   children: 
-                  //   [
-                  //     Padding(padding: EdgeInsets.all(10), child: Text("#ORD967329")),
-                  //     Padding(padding: EdgeInsets.all(10),child: Text("John Frank\n8967452310\nCOD")),
-                  //     Padding
-                  //     (
-                  //       padding: EdgeInsets.all(10),
-                  //       child: Column
-                  //       (
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         children: const [
-                  //           Text("Chicken With Skin (1 Kg) – ₹170.00"),
-                  //           Text("Chicken Without Skin (1 Kg) – ₹180.00"),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //     Padding(padding: EdgeInsets.all(10), child: Text("₹350")),
-                  //     Padding(padding: EdgeInsets.all(10), child: Text("2025-09-15 11:44:59")),
-                  //     Padding(
-                  //       padding: EdgeInsets.all(10),
-                  //       child: ElevatedButton(
-                  //         onPressed: () {},
-                  //         style: ElevatedButton.styleFrom(
-                  //           backgroundColor: Colors.blue,
-                  //           foregroundColor: Colors.white,
-                  //         ),
-                  //         child: Text("Acknowledge"),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
                 ],
               ),
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar
+      (
+        currentIndex: _selectedIndex  < 0 ? 0 : _selectedIndex,
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
+        onTap: (index) 
+        {
+          setState(() {
+            _selectedIndex = index;
+          });
+          switch (index) 
+          {
+            case 0:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const CompanyPage()));
+              break;
+            case 1:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const OrderlistPage()));
+              break; 
+            case 2:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const DispatchedPage()));
+              break;
+            case 3:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const PricePage()));
+              break;
+            case 4:
+               Navigator.pop(context); 
+               break;
+          }
+        },
+        items: const 
+        [
+          BottomNavigationBarItem(icon: Icon(Icons.home),label: 'Home',),
+          BottomNavigationBarItem(icon: Icon(Icons.book_rounded),label: 'View Orders',),
+          BottomNavigationBarItem(icon: Icon(Icons.view_agenda),label: 'Dispatched',),
+          BottomNavigationBarItem(icon: Icon(Icons.price_change),label: 'Fix Price',),
+        ],
       ),
     ); 
   }

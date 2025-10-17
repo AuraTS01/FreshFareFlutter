@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:freshfare/Freshfare/cartprovider.dart';
+import 'package:freshfare/Freshfare/home.dart';
+import 'package:freshfare/Freshfare/notification.dart';
+import 'package:freshfare/Freshfare/orderhistory.dart';
+import 'package:freshfare/Freshfare/profile.dart';
 import 'package:freshfare/freshfare/cart.dart';
 import 'package:freshfare/freshfare/summary.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:freshfare/freshfare/cartprovider.dart';
 
 
 
@@ -37,6 +41,8 @@ class _PaymentPageState extends State<PaymentPage>
     super.initState();
     _loadUserData();
   }
+
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) 
@@ -85,7 +91,7 @@ class _PaymentPageState extends State<PaymentPage>
                     Padding
                     (
                       padding: const EdgeInsets.all(8.0),
-                      child: Icon(Icons.shopping_bag, size: 30),
+                      child: Icon(Icons.shopping_cart_outlined, size: 30),
                     ),
                     if (cart.items.isNotEmpty) 
                       Positioned
@@ -110,95 +116,143 @@ class _PaymentPageState extends State<PaymentPage>
           ),
           SizedBox(width: 10),  
         ],
-      ),
-      
-        body: SingleChildScrollView
+      ),     
+      body: SingleChildScrollView
+      (
+        padding: EdgeInsets.all(50.0),
+        child:Container
         (
-          padding: EdgeInsets.all(50.0),
+          width: double.infinity,
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration
+          (
+            color: Colors.grey[100],
+            border: Border.all(color: Colors.grey.shade300),
+            borderRadius: BorderRadius.circular(8),
+          ),
           child: Column
           (  
             children: 
             [
-                      Text("Payment Options",style: TextStyle(color: Colors.black,fontSize: 30),),
-                      Divider(height: 30,thickness: 1,),
-                      Column
-                      (
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: 
-                        [ 
-                          RadioListTile
-                          (
-                            title: Text('Pay Online (UPI / Card / Netbanking / Wallet)'),
-                            value: 'Card', 
-                            groupValue: selectedPayment, 
-                            onChanged: (value)
-                            {
-                              setState(() {
-                                selectedPayment =  value.toString();
-                              });
-                            },
-                          ),
-                          SizedBox(height: 20),
-                          RadioListTile
-                          (
-                            title: Text('Pay on Delivery'),
-                            value: 'Pay on Delivery', 
-                            groupValue: selectedPayment, 
-                            onChanged: (value)
-                            {
-                              setState(() {
-                                selectedPayment =  value.toString();
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      if(selectedPayment == 'Pay on Delivery')
-                        Container
-                        (
-                          padding: EdgeInsets.all(10),
-                          color: Colors.green.shade50,
-                          child: Text('You’ve selected Pay on Delivery. Please keep the amount ready when your order arrives.',
-                          style: TextStyle(color:Colors.green.shade900),),
-                        ),
-                      if(selectedPayment == 'Card')
-                        Container
-                        (
-                          padding: EdgeInsets.all(10),
-                          color: Colors.green.shade50,
-                          child: Text('You’ve selected Online Payment. Complete the payment securely with Razorpay.',
-                          style: TextStyle(color:Colors.green.shade900),),
-                        ),  
-                      SizedBox(height: 30),
-                      ElevatedButton
-                      (
-                        onPressed:(){
-                                Navigator.push( context,MaterialPageRoute(builder: (context) => const SummaryPage()));
-                                Fluttertoast.showToast(
-                                      msg: "Order is Placed",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.CENTER,
-                                      timeInSecForIosWeb: 3,
-                                      backgroundColor: Colors.green,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0,
-                                    );
-                        },
-                        style: ElevatedButton.styleFrom
-                        (
-                          backgroundColor: Colors.green,
-                          padding: EdgeInsets.symmetric(horizontal: 50,vertical: 15),
-                          shape: RoundedRectangleBorder
-                          (
-                            borderRadius: BorderRadius.circular(0),
-                          ),
-                        ),
-                        child: Text('Place Order',style: TextStyle(color: Colors.white,fontSize: 16),)
-                      ),  
-                    ],
+              Text("Payment Options",style: TextStyle(color: Colors.black,fontSize: 30),),
+              Divider(height: 30,thickness: 1,),
+              Column
+              (
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: 
+                [ 
+                  RadioListTile
+                  (
+                    title: Text('Pay Online (UPI / Card / Netbanking / Wallet)'),
+                    value: 'Card', 
+                    groupValue: selectedPayment, 
+                    onChanged: (value)
+                    {
+                      setState(() {
+                        selectedPayment =  value.toString();
+                      });
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  RadioListTile
+                  (
+                    title: Text('Pay on Delivery'),
+                    value: 'Pay on Delivery', 
+                    groupValue: selectedPayment, 
+                    onChanged: (value)
+                    {
+                      setState(() {
+                        selectedPayment =  value.toString();
+                      });
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              if(selectedPayment == 'Pay on Delivery')
+                Container
+                (
+                  padding: EdgeInsets.all(10),
+                  color: Colors.green.shade50,
+                  child: Text('You’ve selected Pay on Delivery. Please keep the amount ready when your order arrives.',
+                  style: TextStyle(color:Colors.green.shade900),),
                 ),
-        ),   
+              if(selectedPayment == 'Card')
+                Container
+                (
+                  padding: EdgeInsets.all(10),
+                  color: Colors.green.shade50,
+                  child: Text('You’ve selected Online Payment. Complete the payment securely with Razorpay.',
+                  style: TextStyle(color:Colors.green.shade900),),
+                ),  
+              SizedBox(height: 30),
+              ElevatedButton
+              (
+                onPressed:(){
+                        Navigator.push( context,MaterialPageRoute(builder: (context) => const SummaryPage()));
+                        Fluttertoast.showToast(
+                              msg: "Order is Placed",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 3,
+                              backgroundColor: Colors.green,
+                              textColor: Colors.white,
+                              fontSize: 16.0,
+                            );
+                },
+                style: ElevatedButton.styleFrom
+                (
+                  backgroundColor: Colors.green,
+                  padding: EdgeInsets.symmetric(horizontal: 50,vertical: 15),
+                  shape: RoundedRectangleBorder
+                  (
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+                child: Text('Place Order',style: TextStyle(color: Colors.white,fontSize: 16),)
+              ),  
+            ],
+          ),
+        ),  
+      ),
+      bottomNavigationBar: BottomNavigationBar
+      (
+        currentIndex: _selectedIndex  < 0 ? 0 : _selectedIndex,
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
+        onTap: (index) 
+        {
+          setState(() {
+            _selectedIndex = index;
+          });
+          switch (index) 
+          {
+            case 0:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const HomePage()));
+              break;
+            case 1:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const HistoryPage()));
+              break; 
+            case 2:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const NotificationPage()));
+              break;
+            case 3:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const ProfilePage()));
+              break;
+            case 4:
+               Navigator.pop(context); 
+               break;
+          }
+        },
+        items: const 
+        [
+          BottomNavigationBarItem(icon: Icon(Icons.home),label: 'Home',),
+          BottomNavigationBarItem(icon: Icon(Icons.history),label: 'Orders',),
+          BottomNavigationBarItem(icon: Icon(Icons.notifications),label: 'Notifications',),
+          BottomNavigationBarItem(icon: Icon(Icons.person),label: 'Profile',),
+        ],
+      ),
     ); 
   }
 }

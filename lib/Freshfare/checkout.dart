@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:freshfare/Freshfare/profile.dart';
 import 'package:freshfare/freshfare/cart.dart';
 import 'package:freshfare/freshfare/cartprovider.dart';
 import 'package:freshfare/freshfare/chicken.dart';
@@ -182,48 +183,7 @@ class _CheckoutPageState extends State<CheckoutPage>
     });
   }
 
- void _showLogoutDialog(BuildContext context)
-  {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Logout"),
-          content: const Text("Are you sure you want to logout?"),
-          actions: [
-            TextButton
-            (
-              onPressed: () async 
-              {
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.clear();    
-                setState(() {
-                  userName = '';
-                  userEmail = '';
-                });
-                Navigator.of(context).pop();
-                Fluttertoast.showToast(
-                msg: "Logout Successfully",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                backgroundColor: Colors.green,
-                textColor: Colors.white,
-                fontSize: 16.0,
-                );    
-              },
-               child: const Text("Yes"),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); 
-              },
-              child: const Text("No"),
-            ),            
-          ],
-        );
-      },
-    );
-  }
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) 
@@ -273,7 +233,7 @@ class _CheckoutPageState extends State<CheckoutPage>
                     Padding
                     (
                       padding: const EdgeInsets.all(8.0),
-                      child: Icon(Icons.shopping_bag, size: 30),
+                      child: Icon(Icons.shopping_cart_outlined, size: 30),
                     ),
                     if (cart.items.isNotEmpty) 
                       Positioned
@@ -355,7 +315,7 @@ class _CheckoutPageState extends State<CheckoutPage>
                 children: 
                 [
                   Text('+91 8754364997',style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text('support 24/7 '),
+                  Text('support 24/7 time'),
                 ],
               )
             ],
@@ -539,7 +499,7 @@ class _CheckoutPageState extends State<CheckoutPage>
                                 padding: EdgeInsets.symmetric(horizontal: 50,vertical: 15),
                                 shape: RoundedRectangleBorder
                                 (
-                                  borderRadius: BorderRadius.circular(0),
+                                  borderRadius: BorderRadius.circular(4),
                                 ),
                               ),
                           child: Text("SAVE BILLING DETAILS",style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)
@@ -648,6 +608,44 @@ class _CheckoutPageState extends State<CheckoutPage>
               ),
             ),
           ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar
+      (
+        currentIndex: _selectedIndex  < 0 ? 0 : _selectedIndex,
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
+        onTap: (index) 
+        {
+          setState(() {
+            _selectedIndex = index;
+          });
+          switch (index) 
+          {
+            case 0:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const HomePage()));
+              break;
+            case 1:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const HistoryPage()));
+              break; 
+            case 2:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const NotificationPage()));
+              break;
+            case 3:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const ProfilePage()));
+              break;
+            case 4:
+               Navigator.pop(context); 
+               break;
+          }
+        },
+        items: const 
+        [
+          BottomNavigationBarItem(icon: Icon(Icons.home),label: 'Home',),
+          BottomNavigationBarItem(icon: Icon(Icons.history),label: 'Orders',),
+          BottomNavigationBarItem(icon: Icon(Icons.notifications),label: 'Notifications',),
+          BottomNavigationBarItem(icon: Icon(Icons.person),label: 'Profile',),
         ],
       ),
     ); 

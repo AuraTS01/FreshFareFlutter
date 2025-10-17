@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:freshfare/freshfare/cartprovider.dart';
+import 'package:freshfare/Freshfare/orderhistory.dart';
 import 'package:freshfare/freshfare/cart.dart';
 import 'package:freshfare/freshfare/home.dart';
 import 'package:freshfare/freshfare/login.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freshfare/freshfare/notification.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -24,15 +27,6 @@ class _ProfilePageState extends State<ProfilePage>
   String billingTown = '';
   String billingState = '';
 
-  //  Future<void> _loadUserData() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     userName = prefs.getString('userName') ?? '';
-  //     userEmail = prefs.getString('userEmail') ?? '';
-  //   });
-  // }
-
-
   Future<void> loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -51,148 +45,81 @@ class _ProfilePageState extends State<ProfilePage>
     super.initState();
     loadUserData();
   }
-
-  void _showLogoutDialog(BuildContext context)
-  {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Logout"),
-          content: const Text("Are you sure you want to logout?"),
-          actions: [
-            TextButton
-            (
-              onPressed: () async 
-              {
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.clear();    
-                setState(() {
-                  userName = '';
-                  userEmail = '';
-                });
-                Navigator.of(context).pop();
-                Fluttertoast.showToast(
-                msg: "Logout Successfully",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                backgroundColor: Colors.green,
-                textColor: Colors.white,
-                fontSize: 16.0,
-                );    
-              },
-               child: const Text("Yes"),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); 
-              },
-              child: const Text("No"),
-            ),            
-          ],
-        );
-      },
-    );
-  }
+  
+  int _selectedIndex = 3;
 
   @override
   Widget build(BuildContext context) {
     return  Scaffold
     (
-      // appBar: AppBar
-      // (
-      //   title:Row
-      //   (
-      //       crossAxisAlignment: CrossAxisAlignment.center,      
-      //       children: 
-      //       [
-      //         Image.asset('assets/logo.png',
-      //         height:45),
-      //         SizedBox(width: 8),
-      //         RichText(text: TextSpan
-      //         (
-      //           children: 
-      //           [
-      //             TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
-      //             TextSpan(text: 'resh',style:TextStyle(color:Colors.black,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
-      //             TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
-      //             TextSpan(text: 'are',style: TextStyle(color:Colors.black,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
-      //           ],
-      //         ),
-      //         ),
-      //       ],
-      //     ),
-      // ),
-      // drawer:Drawer
-      // ( 
-      //   child: ListView
-      //   (                
-      //     padding: EdgeInsets.zero,
-      //     children: 
-      //     [
-      //       UserAccountsDrawerHeader
-      //         (
-      //           decoration: BoxDecoration(color: Colors.green),
-      //           accountName: Text(userName.isNotEmpty ? "Hello $userName" : "Hello Guest"),
-      //           accountEmail: Text(userEmail),
-      //           currentAccountPicture: CircleAvatar(
-      //             backgroundColor: Colors.white,
-      //             child: Text(userName.isNotEmpty ? userName[0] : '?',
-      //             style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20,fontFamily: "Poppins"),),
-      //             ),
-      //         ),
-      //       ListTile
-      //       (
-      //         leading: Icon(Icons.home_outlined),
-      //         title: const Text('Home'),
-      //         onTap: () {          
-      //             Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));               
-      //         },
-      //       ),
-      //       ListTile
-      //         (
-      //           leading: const Icon(Icons.shopping_cart),
-      //           title: const Text('My Cart'),
-      //           onTap: () {   
-      //             Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),));                    
-      //           },
-      //         ),
-      //       ListTile
-      //       (
-      //             leading: Icon(Icons.notifications_outlined),
-      //             title: Text('Notifications'),
-      //             onTap: (){
-      //               Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationPage(),));
-      //             },
-      //       ),
-      //      if (userEmail.isEmpty) 
-      //         ...[
-      //           ListTile
-      //           (
-      //             leading: Icon(Icons.login_outlined),
-      //             title: Text('Login'),
-      //             onTap: () {
-      //               Navigator.push(
-      //                 context,
-      //                 MaterialPageRoute(builder: (context) => LoginPage()),
-      //               ).then((_) => _loadUserData()); 
-      //             },
-      //           ),
-      //         ]
-      //         else 
-      //         ...[
-      //           ListTile
-      //           (
-      //             leading: const Icon(Icons.logout),
-      //             title: const Text('Logout'),
-      //             onTap: () async {
-      //               _showLogoutDialog(context);
-      //             },
-      //           ),
-      //         ]
-      //     ],
-      //   ),
-      // ),
+      appBar: AppBar
+      (
+        title:Row
+        (
+          crossAxisAlignment: CrossAxisAlignment.center,           
+          children: 
+          [
+            Image.asset('assets/logo.png',height:45),
+            SizedBox(width: 8),
+            RichText(text: TextSpan
+            (
+              children: 
+              [
+                TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                TextSpan(text: 'resh',style:TextStyle(color:Colors.black,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                TextSpan(text: 'F',style:TextStyle(color:Colors.green,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                TextSpan(text: 'are',style: TextStyle(color:Colors.black,fontSize: 30,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+              ],
+            ),
+            ),
+          ],
+        ),
+        actions: 
+        [
+          Consumer<CartProvider>
+          (
+            builder: (context, cart, child) 
+            {
+              return InkWell
+              (
+                onTap: () 
+                {
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => const CartPage()),);
+                },
+                child: Stack
+                (
+                  alignment: Alignment.center,
+                  children: 
+                  [
+                    Padding
+                    (
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(Icons.shopping_cart_outlined, size: 30),
+                    ),
+                    if (cart.items.isNotEmpty) 
+                      Positioned
+                      (
+                        right: 4,
+                        top: 4,
+                        child: Container
+                        (
+                          padding: EdgeInsets.all(4),
+                          decoration: BoxDecoration
+                          (
+                            color: Colors.green,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text('${cart.items.length}',style: TextStyle(color: Colors.white,fontSize: 12,fontWeight: FontWeight.bold,)),
+                        ),
+                      ),
+                  ],
+                ),
+              );  
+            },
+          ),
+          SizedBox(width: 10),  
+        ],
+      ),
       body: Column(
         children: [
           Stack(
@@ -247,6 +174,53 @@ class _ProfilePageState extends State<ProfilePage>
                 ],
               ),
             ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar
+      (
+        currentIndex: _selectedIndex,
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
+        onTap: (index) 
+        {
+          setState(() {
+            _selectedIndex = index;
+          });
+          switch (index) 
+          {
+            case 0:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const HomePage()));
+              break;
+            case 1:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const HistoryPage()));
+              break; 
+            case 2:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const NotificationPage()));
+              break;
+            case 3:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const ProfilePage()));
+              break;
+          }
+        },
+        items: const 
+        [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            label: 'Orders',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.notifications),
+            label: 'Notifications',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
           ),
         ],
       ),

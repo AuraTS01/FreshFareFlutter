@@ -36,7 +36,7 @@ class _CompanyPageState extends State<CompanyPage>
     _loadUserData();
   }
 
-    void _showLogoutDialog(BuildContext context)
+  void _showLogoutDialog(BuildContext context)
   {
     showDialog(
       context: context,
@@ -49,21 +49,7 @@ class _CompanyPageState extends State<CompanyPage>
             (
               onPressed: () async 
               {
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.clear();    
-                setState(() {
-                  userName = '';
-                  userEmail = '';
-                });
-                Navigator.of(context).pop();
-                Fluttertoast.showToast(
-                msg: "Logout Successfully",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                backgroundColor: Colors.green,
-                textColor: Colors.white,
-                fontSize: 16.0,
-                );    
+                Navigator.push(context,MaterialPageRoute(builder: (context) => const LoginPage()),);
               },
                child: const Text("Yes"),
             ),
@@ -78,7 +64,9 @@ class _CompanyPageState extends State<CompanyPage>
       },
     );
   }
- 
+
+  int _selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return  Scaffold
@@ -114,49 +102,31 @@ class _CompanyPageState extends State<CompanyPage>
           padding: EdgeInsets.zero,
           children: 
           [
-           UserAccountsDrawerHeader
-              (
-                decoration: BoxDecoration(color: Colors.green),
-                accountName: Text(userName.isNotEmpty ? "Hello $userName" : "Hello Guest"),
-                accountEmail: Text(userEmail),
-                currentAccountPicture: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: Text(userName.isNotEmpty ? userName[0] : '?',
-                  style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20,fontFamily: "Poppins"),),
-                  ),
-              ),
-              ListTile
-              (
-                leading: Icon(Icons.home_outlined),
-                title: const Text('Dashboard'),
-                onTap: () {          
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => CompanyPage(),));               
-                },
-              ),
-              ListTile
-              (
-                leading: Icon(Icons.auto_stories_outlined),
-                title: Text('View Orders List'),
-                onTap: (){
-                     Navigator.push(context, MaterialPageRoute(builder: (context) => OrderlistPage(),));
-                },
-             ),
-             ListTile
-              (
-                leading: Icon(Icons.auto_stories_outlined),
-                title: Text('View Dispatched Order List'),
-                onTap: (){
-                     Navigator.push(context, MaterialPageRoute(builder: (context) => DispatchedPage(),));
-                },
-             ),
-             ListTile
-              (
-                leading: Icon(Icons.price_change_outlined),
-                title: Text(' Fix Price for Products'),
-                onTap: (){
-                     Navigator.push(context, MaterialPageRoute(builder: (context) => PricePage(),));
-                },
-             ),
+            UserAccountsDrawerHeader
+            (
+              decoration: BoxDecoration(color: Colors.green),
+              accountName: Text(userName.isNotEmpty ? "Hello $userName" : "Hello Guest"),
+              accountEmail: Text(userEmail),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Text(userName.isNotEmpty ? userName[0] : '?',
+                style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20,),),
+                ),
+            ),
+            ListTile
+            (
+              leading: Icon(Icons.home_outlined),
+              title: const Text('Home'),
+              onTap: () {          
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => CompanyPage(),));               
+              },
+            ),
+            ListTile
+            (
+              leading: Icon(Icons.settings),
+              title: const Text('Settings'),
+              onTap: () {},
+            ),
             if (userEmail.isEmpty) 
               ...[
                 ListTile
@@ -208,7 +178,7 @@ class _CompanyPageState extends State<CompanyPage>
                     (
                       children: 
                       [
-                        TextSpan(text:"Dharsan Company Orders Dashboard",style: TextStyle(color: Colors.black,fontSize: 15,fontWeight: FontWeight.bold,fontFamily: "Poppins",),),
+                        TextSpan(text:"Company Orders Dashboard",style: TextStyle(color: Colors.black,fontSize: 15,fontWeight: FontWeight.bold,fontFamily: "Poppins",),),
                       ],
                     ),
                   ),
@@ -253,6 +223,44 @@ class _CompanyPageState extends State<CompanyPage>
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar
+      (
+        currentIndex: _selectedIndex  < 0 ? 0 : _selectedIndex,
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
+        onTap: (index) 
+        {
+          setState(() {
+            _selectedIndex = index;
+          });
+          switch (index) 
+          {
+            case 0:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const CompanyPage()));
+              break;
+            case 1:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const OrderlistPage()));
+              break; 
+            case 2:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const DispatchedPage()));
+              break;
+            case 3:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const PricePage()));
+              break;
+            case 4:
+               Navigator.pop(context); 
+               break;
+          }
+        },
+        items: const 
+        [
+          BottomNavigationBarItem(icon: Icon(Icons.home),label: 'Home',),
+          BottomNavigationBarItem(icon: Icon(Icons.book_rounded),label: 'View Orders',),
+          BottomNavigationBarItem(icon: Icon(Icons.view_agenda),label: 'Dispatched',),
+          BottomNavigationBarItem(icon: Icon(Icons.price_change),label: 'Fix Price',),
+        ],
       ),
     );
   }

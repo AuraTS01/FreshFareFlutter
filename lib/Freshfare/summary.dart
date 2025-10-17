@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:freshfare/Freshfare/profile.dart';
 import 'package:freshfare/freshfare/cart.dart';
 import 'package:freshfare/freshfare/home.dart';
 import 'package:freshfare/freshfare/login.dart';
@@ -48,48 +49,7 @@ class _SummaryPageState extends State<SummaryPage>
     _loadUserData();
   }
 
-  void _showLogoutDialog(BuildContext context)
-  {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Logout"),
-          content: const Text("Are you sure you want to logout?"),
-          actions: [
-            TextButton
-            (
-              onPressed: () async 
-              {
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.clear();    
-                setState(() {
-                  userName = '';
-                  userEmail = '';
-                });
-                Navigator.of(context).pop();
-                Fluttertoast.showToast(
-                msg: "Logout Successfully",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                backgroundColor: Colors.green,
-                textColor: Colors.white,
-                fontSize: 16.0,
-                );    
-              },
-               child: const Text("Yes"),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); 
-              },
-              child: const Text("No"),
-            ),            
-          ],
-        );
-      },
-    );
-  }
+  int _selectedIndex = 0;
   
   @override
   Widget build(BuildContext context) 
@@ -146,7 +106,7 @@ class _SummaryPageState extends State<SummaryPage>
                     Padding
                     (
                       padding: const EdgeInsets.all(8.0),
-                      child: Icon(Icons.shopping_bag, size: 30),
+                      child: Icon(Icons.shopping_cart_outlined, size: 30),
                     ),
                     if (cart.items.isNotEmpty) 
                       Positioned
@@ -280,7 +240,45 @@ class _SummaryPageState extends State<SummaryPage>
               ),
             ],
           )
-        ),   
+        ), 
+        bottomNavigationBar: BottomNavigationBar
+      (
+        currentIndex: _selectedIndex  < 0 ? 0 : _selectedIndex,
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
+        onTap: (index) 
+        {
+          setState(() {
+            _selectedIndex = index;
+          });
+          switch (index) 
+          {
+            case 0:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const HomePage()));
+              break;
+            case 1:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const HistoryPage()));
+              break; 
+            case 2:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const NotificationPage()));
+              break;
+            case 3:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const ProfilePage()));
+              break;
+            case 4:
+               Navigator.pop(context); 
+               break;
+          }
+        },
+        items: const 
+        [
+          BottomNavigationBarItem(icon: Icon(Icons.home),label: 'Home',),
+          BottomNavigationBarItem(icon: Icon(Icons.history),label: 'Orders',),
+          BottomNavigationBarItem(icon: Icon(Icons.notifications),label: 'Notifications',),
+          BottomNavigationBarItem(icon: Icon(Icons.person),label: 'Profile',),
+        ],
+      ),  
     ); 
   }
 }

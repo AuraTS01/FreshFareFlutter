@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:freshfare/Freshfare/profile.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -55,6 +56,8 @@ class _CartPageState extends State<CartPage>
                       );
     }
   }
+   String ? selecteditem;
+  final items =['Chicken','Mutton','Fish','Prawns','Mutton - Boti','Mutton - Liver','Beef','Beef - Liver','Beef - Boti','Quail','Duck'];
 
   String userName = '';
   String userEmail = '';
@@ -78,50 +81,6 @@ class _CartPageState extends State<CartPage>
     super.initState();
     _loadUserData();
   }
- void _showLogoutDialog(BuildContext context)
-  {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Logout"),
-          content: const Text("Are you sure you want to logout?"),
-          actions: [
-            TextButton
-            (
-              onPressed: () async 
-              {
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.clear();    
-                setState(() {
-                  userName = '';
-                  userEmail = '';
-                });
-                Navigator.of(context).pop();
-                Fluttertoast.showToast(
-                msg: "Logout Successfully",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                backgroundColor: Colors.green,
-                textColor: Colors.white,
-                fontSize: 16.0,
-                );    
-              },
-              child: const Text("Yes"),
-            ),
-            TextButton
-            (
-              onPressed: () 
-              {
-                Navigator.of(context).pop(); 
-              },
-              child: const Text("No"),
-            ),        
-          ],
-        );
-      },
-    );
-  }
 
   List<dynamic> companies = [];
 
@@ -141,6 +100,7 @@ class _CartPageState extends State<CartPage>
     }
   }
 
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) 
@@ -190,7 +150,7 @@ class _CartPageState extends State<CartPage>
                     Padding
                     (
                       padding: const EdgeInsets.all(8.0),
-                      child: Icon(Icons.shopping_bag, size: 30),
+                      child: Icon(Icons.shopping_cart_outlined, size: 30),
                     ),
                     if (cart.items.isNotEmpty) 
                       Positioned
@@ -223,43 +183,83 @@ class _CartPageState extends State<CartPage>
         (  
           children: 
           [
-            Row
-            (
-              children: 
-              [
-                Expanded
-                (
-                  child: TextField
-                  (
-                    controller:searchcontroller,
-                    decoration: InputDecoration
-                    (
-                      hintText: 'what do you need?',
-                      border: OutlineInputBorder(),
+            // Row
+            // (
+            //   children: 
+            //   [
+            //     Expanded
+            //     (
+            //       child: TextField
+            //       (
+            //         controller:searchcontroller,
+            //         decoration: InputDecoration
+            //         (
+            //           hintText: 'what do you need?',
+            //           border: OutlineInputBorder(),
                       
-                    ),
-                  ),
-                ),
-                SizedBox(width: 10),
-                SizedBox(
-                  width: 120.0,
-                  height: 45.0,
-                child:ElevatedButton
-                (
+            //         ),
+            //       ),
+            //     ),
+            //     SizedBox(width: 10),
+            //     SizedBox(
+            //       width: 120.0,
+            //       height: 45.0,
+            //     child:ElevatedButton
+            //     (
                   
-                  style: ElevatedButton.styleFrom
-                  (
-                    backgroundColor: Colors.green,
-                    shape: RoundedRectangleBorder
+            //       style: ElevatedButton.styleFrom
+            //       (
+            //         backgroundColor: Colors.green,
+            //         shape: RoundedRectangleBorder
+            //         (
+            //           borderRadius: BorderRadius.circular(0),
+            //         ),
+            //       ),
+            //       onPressed:search,
+            //       child: Text('search',style: TextStyle(color: Colors.white),),
+            //     ),
+            //     ),
+            //   ],
+            // ),
+            SizedBox(height: 20),
+            Container
+            (
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              decoration: BoxDecoration
+              (
+                color: Colors.green,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: DropdownButtonHideUnderline
+              (
+                child: DropdownButton
+                (
+                  value: selecteditem,
+                  hint: Text("All Items",style: TextStyle(color: Colors.white,fontWeight:FontWeight.bold),),
+                  items: items.map((String value)
+                  {
+                    return DropdownMenuItem<String>
                     (
-                      borderRadius: BorderRadius.circular(0),
-                    ),
-                  ),
-                  onPressed:search,
-                  child: Text('search',style: TextStyle(color: Colors.white),),
+                      value: value,
+                      child:Text(value,style: TextStyle(fontSize: 16,fontWeight:FontWeight.w500)),
+                    );
+                  }).toList(),
+                  onChanged:(value)
+                  {
+                    if(value == "Choose Your Butcher Shops")
+                    {
+                      // setState(() {
+                      // selecteditem = value ;
+                      // });                        
+                      // navigate(value);                        
+                        // Scrollable.ensureVisible(
+                        //   butcherShopKey.currentContext!,
+                        //   duration: const Duration(milliseconds: 500),
+                        // );
+                    }    
+                  },
                 ),
-                ),
-              ],
+              ),
             ),
             SizedBox(height: 20),
             Row
@@ -274,7 +274,7 @@ class _CartPageState extends State<CartPage>
                   children: 
                   [
                     Text('+91 8754364997',style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text('support 24/7 '),
+                    Text('support 24/7 time'),
                   ],
                 )
               ],
@@ -530,6 +530,44 @@ class _CartPageState extends State<CartPage>
           ],           
         ),
       ),  
+      bottomNavigationBar: BottomNavigationBar
+      (
+        currentIndex: _selectedIndex  < 0 ? 0 : _selectedIndex,
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
+        onTap: (index) 
+        {
+          setState(() {
+            _selectedIndex = index;
+          });
+          switch (index) 
+          {
+            case 0:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const HomePage()));
+              break;
+            case 1:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const HistoryPage()));
+              break; 
+            case 2:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const NotificationPage()));
+              break;
+            case 3:
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const ProfilePage()));
+              break;
+            case 4:
+               Navigator.pop(context); 
+               break;
+          }
+        },
+        items: const 
+        [
+          BottomNavigationBarItem(icon: Icon(Icons.home),label: 'Home',),
+          BottomNavigationBarItem(icon: Icon(Icons.history),label: 'Orders',),
+          BottomNavigationBarItem(icon: Icon(Icons.notifications),label: 'Notifications',),
+          BottomNavigationBarItem(icon: Icon(Icons.person),label: 'Profile',),
+        ],
+      ),
     ); 
   }
 }
