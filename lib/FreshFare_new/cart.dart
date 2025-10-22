@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:freshfare/FreshFare_New/cartprovider.dart';
 import 'package:freshfare/FreshFare_New/header.dart';
 import 'package:freshfare/FreshFare_New/navigation.dart';
+import 'package:freshfare/FreshFare_New/index.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -28,9 +29,12 @@ class _CartPageState extends State<CartPage> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
-        child: Header(isCartPage: true),
+        child: Header(
+          isCartPage: true,
+          onCartTap: () {},
+        ),
       ),
-      bottomNavigationBar: const Navigation(currentIndex: 4),
+      bottomNavigationBar: const Navigation(currentIndex: 2), // Cart index
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -52,14 +56,13 @@ class _CartPageState extends State<CartPage> {
                       fontSize: 26,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      shadows: [Shadow(blurRadius: 3, color: Colors.black45, offset: Offset(1, 1))],
+                      shadows: [
+                        Shadow(blurRadius: 3, color: Colors.black45, offset: Offset(1, 1))
+                      ],
                     ),
                   ),
                   SizedBox(height: 8),
-                  Text(
-                    'Home — Shopping Cart',
-                    style: TextStyle(color: Colors.white70),
-                  ),
+                  Text('Home — Shopping Cart', style: TextStyle(color: Colors.white70)),
                 ],
               ),
             ),
@@ -69,18 +72,13 @@ class _CartPageState extends State<CartPage> {
             if (cart.items.isEmpty)
               const Padding(
                 padding: EdgeInsets.all(30),
-                child: Text(
-                  'Your cart is empty.',
-                  style: TextStyle(color: Colors.grey),
-                ),
+                child: Text('Your cart is empty.', style: TextStyle(color: Colors.grey)),
               )
             else
               Column(
                 children: itemsByCompany.entries.map((entry) {
                   final companyName = entry.key;
                   final items = entry.value;
-
-                  // Calculate subtotal for this company
                   double companySubtotal = cart.companyTotal(companyName);
 
                   return Padding(
@@ -88,26 +86,18 @@ class _CartPageState extends State<CartPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Company header with subtotal
+                        // Company header
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                companyName,
-                                style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.green),
-                              ),
-                              Text(
-                                'Subtotal: ₹${companySubtotal.toStringAsFixed(2)}',
-                                style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.red),
-                              ),
+                              Text(companyName,
+                                  style: const TextStyle(
+                                      fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green)),
+                              Text('Subtotal: ₹${companySubtotal.toStringAsFixed(2)}',
+                                  style: const TextStyle(
+                                      fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red)),
                             ],
                           ),
                         ),
@@ -127,25 +117,18 @@ class _CartPageState extends State<CartPage> {
                             ],
                           ),
                         ),
-
                         const Divider(),
 
-                        // Items for this company
+                        // Items
                         ...items.map((item) {
                           incrementValues.putIfAbsent(item.id, () => 1.0);
                           return Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                             child: Row(
                               children: [
-                                // Product image
                                 Expanded(
                                   flex: 2,
-                                  child: Image.asset(
-                                    item.imagePath, // Product image
-                                    width: 50,
-                                    height: 50,
-                                    fit: BoxFit.cover,
-                                  ),
+                                  child: Image.asset(item.imagePath, width: 50, height: 50, fit: BoxFit.cover),
                                 ),
                                 Expanded(flex: 3, child: Text(item.name)),
                                 Expanded(child: Text('₹${item.price.toStringAsFixed(2)}')),
@@ -166,9 +149,7 @@ class _CartPageState extends State<CartPage> {
                                         value: incrementValues[item.id],
                                         onChanged: (val) {
                                           if (val != null) {
-                                            setState(() {
-                                              incrementValues[item.id] = val;
-                                            });
+                                            setState(() { incrementValues[item.id] = val; });
                                           }
                                         },
                                         items: const [
@@ -192,15 +173,12 @@ class _CartPageState extends State<CartPage> {
                                 Expanded(child: Text('₹${(item.price * item.quantity).toStringAsFixed(2)}')),
                                 IconButton(
                                   icon: const Icon(Icons.delete, color: Colors.red),
-                                  onPressed: () {
-                                    cart.removeItem(item.id);
-                                  },
+                                  onPressed: () { cart.removeItem(item.id); },
                                 ),
                               ],
                             ),
                           );
-                        }).toList(),
-
+                        }),
                         const Divider(),
                       ],
                     ),
@@ -220,7 +198,7 @@ class _CartPageState extends State<CartPage> {
                     textStyle: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const IndexPage()));
                   },
                   child: const Text('CONTINUE SHOPPING', style: TextStyle(color: Colors.white)),
                 ),
@@ -245,10 +223,8 @@ class _CartPageState extends State<CartPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text('Total (Incl GST)', style: TextStyle(fontWeight: FontWeight.bold)),
-                        Text(
-                          '₹${cart.totalAmount.toStringAsFixed(2)}',
-                          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
-                        ),
+                        Text('₹${cart.totalAmount.toStringAsFixed(2)}',
+                            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
                       ],
                     ),
                     const SizedBox(height: 10),

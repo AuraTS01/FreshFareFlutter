@@ -11,7 +11,7 @@ import 'package:freshfare/FreshFare_New/header.dart';
 import 'package:freshfare/FreshFare_New/navigation.dart';
 
 class IndexPage extends StatefulWidget {
-  const IndexPage({Key? key}) : super(key: key);
+  const IndexPage({super.key});
 
   @override
   State<IndexPage> createState() => _IndexPageState();
@@ -20,30 +20,18 @@ class IndexPage extends StatefulWidget {
 class _IndexPageState extends State<IndexPage> with TickerProviderStateMixin {
   bool showItems = false;
   String selectedPincode = '';
-  int _currentIndex = 0;
+  final int _currentIndex = 0;
   String pincodeError = '';
 
   final List<String> items = [
-    'Chicken',
-    'Fish',
-    'Prawns',
-    'Mutton',
-    'Mutton - Boti',
-    'Mutton - Liver',
-    'Beef',
-    'Beef - Liver',
-    'Beef - Boti',
-    'Quail',
-    'Duck',
+    'Chicken','Fish','Prawns','Mutton','Mutton - Boti','Mutton - Liver',
+    'Beef','Beef - Liver','Beef - Boti','Quail','Duck',
   ];
 
-  final List<String> validPincodes = ['641104', '641301', '641302'];
+  final List<String> validPincodes = ['641104', '641301', '641305'];
   final TextEditingController _pincodeController = TextEditingController();
 
-  final List<String> offerImages = [
-    'assets/offer1.png',
-    'assets/offer2.png',
-  ];
+  final List<String> offerImages = ['assets/offer1.png','assets/offer2.png'];
 
   List<Map<String, dynamic>> butcherShops = [];
   bool isLoadingShops = false;
@@ -56,41 +44,27 @@ class _IndexPageState extends State<IndexPage> with TickerProviderStateMixin {
   }
 
   Future<void> fetchButcherShops() async {
-    setState(() {
-      isLoadingShops = true;
-      shopFetchError = '';
-    });
-
+    setState(() { isLoadingShops = true; shopFetchError = ''; });
     try {
       final response = await http.get(Uri.parse(
           'http://192.168.1.4/FreshFareFlutter/lib/FreshFare_New/database/get_companies.php'));
-
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data['success'] == true) {
           final List<dynamic> companies = data['companies'];
           setState(() {
-            butcherShops =
-                companies.map((c) => Map<String, dynamic>.from(c)).toList();
+            butcherShops = companies.map((c) => Map<String, dynamic>.from(c)).toList();
           });
         } else {
           shopFetchError = 'Failed: ${data['message'] ?? 'Unknown error'}';
         }
-      } else {
-        shopFetchError = 'Server error: ${response.statusCode}';
-      }
-    } catch (e) {
-      shopFetchError = 'Error fetching shops: $e';
-    } finally {
-      setState(() => isLoadingShops = false);
-    }
+      } else { shopFetchError = 'Server error: ${response.statusCode}'; }
+    } catch (e) { shopFetchError = 'Error fetching shops: $e'; }
+    finally { setState(() => isLoadingShops = false); }
   }
 
   void _showLocationDialog() {
-    setState(() {
-      pincodeError = '';
-    });
-
+    setState(() { pincodeError = ''; });
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
@@ -103,19 +77,25 @@ class _IndexPageState extends State<IndexPage> with TickerProviderStateMixin {
           child: Opacity(
             opacity: a1.value,
             child: AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              title: const Text(
+                "Enter Pincode to verify the delivery",
+                style: TextStyle(color: Colors.green),
               ),
-              title: const Text("Change Pincode",
-                  style: TextStyle(color: Colors.green)),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  const Text(
+                    "Location access was denied. Please enter your area pincode to check delivery availability.",
+                  ),
+                  const SizedBox(height: 12),
                   TextField(
                     controller: _pincodeController,
                     keyboardType: TextInputType.number,
+                    maxLength: 6,
                     decoration: InputDecoration(
-                      hintText: "Enter your pincode",
+                      hintText: "Enter 6-digit pincode",
+                      counterText: "",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -124,25 +104,33 @@ class _IndexPageState extends State<IndexPage> with TickerProviderStateMixin {
                   if (pincodeError.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(top: 8),
-                      child: Text(pincodeError,
-                          style: const TextStyle(color: Colors.red)),
+                      child: Text(pincodeError, style: const TextStyle(color: Colors.red)),
                     ),
                 ],
               ),
               actions: [
+                TextButton(
+                  onPressed: () { Navigator.pop(context); },
+                  child: const Text("Cancel", style: TextStyle(color: Colors.grey)),
+                ),
                 TextButton(
                   onPressed: () {
                     final input = _pincodeController.text.trim();
                     if (validPincodes.contains(input)) {
                       setState(() => selectedPincode = input);
                       Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Delivery Available in your location"),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
                     } else {
                       setState(() => pincodeError =
-                          "Delivery only in Mettupalayam and Karamadai.");
+                          "Invalid Pincode. Delivery is Available only for Karamadai and Mettupalayam");
                     }
                   },
-                  child: const Text("Confirm",
-                      style: TextStyle(color: Colors.green)),
+                  child: const Text("Confirm", style: TextStyle(color: Colors.green)),
                 ),
               ],
             ),
@@ -180,10 +168,7 @@ class _IndexPageState extends State<IndexPage> with TickerProviderStateMixin {
                 ),
                 const SizedBox(height: 12),
                 Text(shop['company_name'] ?? '',
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.green)),
+                    style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Colors.green)),
                 const SizedBox(height: 6),
                 Text(
                     "📧 ${shop['email'] ?? 'N/A'} | 📞 ${shop['contact_number'] ?? 'N/A'}",
@@ -202,33 +187,43 @@ class _IndexPageState extends State<IndexPage> with TickerProviderStateMixin {
                       final item = products[i];
                       final itemName = item['name'];
                       final price = double.tryParse(item['price'].toString()) ?? 100.0;
+                      final alreadyInCart = Provider.of<CartProvider>(context)
+                          .items
+                          .any((c) => c.id == "${shop['company_name']}_$itemName");
 
                       return ListTile(
                         title: Text(itemName),
                         subtitle: Text("₹${price.toStringAsFixed(2)}"),
-                        trailing: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
-                            foregroundColor: Colors.white,
-                          ),
-                          onPressed: () {
-                            final newItem = CartItem(
-                              id: "${shop['company_name']}_${itemName}",
-                              name: itemName,
-                              price: price,
-                              quantity: 1,
-                              companyName: shop['company_name'] ?? 'Unknown Shop',
-                            );
-                            cart.addItem(newItem);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('$itemName added to cart'),
-                                duration: const Duration(seconds: 1),
+                        trailing: alreadyInCart
+                            ? ElevatedButton(
+                                style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
+                                onPressed: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (_) => const CartPage()));
+                                },
+                                child: const Text("View Cart"),
+                              )
+                            : ElevatedButton(
+                                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                                onPressed: () {
+                                  final newItem = CartItem(
+                                    id: "${shop['company_name']}_$itemName",
+                                    name: itemName,
+                                    price: price,
+                                    quantity: 1,
+                                    companyName: shop['company_name'] ?? 'Unknown Shop',
+                                  );
+                                  cart.addItem(newItem);
+                                  setState(() {});
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('$itemName added to cart'),
+                                      duration: const Duration(seconds: 1),
+                                    ),
+                                  );
+                                },
+                                child: const Text("Add to Cart"),
                               ),
-                            );
-                          },
-                          child: const Text("Add"),
-                        ),
                       );
                     },
                   ),
@@ -245,10 +240,7 @@ class _IndexPageState extends State<IndexPage> with TickerProviderStateMixin {
     return Scaffold(
       appBar: Header(
         onCartTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const CartPage()),
-          );
+          Navigator.push(context, MaterialPageRoute(builder: (_) => const CartPage()));
         },
         isCartPage: false,
       ),
@@ -266,8 +258,7 @@ class _IndexPageState extends State<IndexPage> with TickerProviderStateMixin {
           Center(
             child: ElevatedButton(
               onPressed: _showLocationDialog,
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green, foregroundColor: Colors.white),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.green, foregroundColor: Colors.white),
               child: const Text("Change Location"),
             ),
           ),
@@ -284,22 +275,18 @@ class _IndexPageState extends State<IndexPage> with TickerProviderStateMixin {
               children: [
                 ListTile(
                   tileColor: Colors.green,
-                  title: const Text("All Items",
-                      style: TextStyle(color: Colors.white)),
-                  trailing: Icon(
-                    showItems
-                        ? Icons.keyboard_arrow_up
-                        : Icons.keyboard_arrow_down,
-                    color: Colors.white,
-                  ),
+                  title: const Text("All Items", style: TextStyle(color: Colors.white)),
+                  trailing: Icon(showItems ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.white),
                   onTap: () => setState(() => showItems = !showItems),
                 ),
-                if (showItems)
-                  ...items
-                      .map((e) => ListTile(
-                            title: Text(e),
-                          ))
-                      .toList(),
+                AnimatedCrossFade(
+                  duration: const Duration(milliseconds: 300),
+                  firstChild: const SizedBox.shrink(),
+                  secondChild: Column(
+                    children: items.map((e) => ListTile(title: Text(e))).toList(),
+                  ),
+                  crossFadeState: showItems ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                ),
               ],
             ),
           ),
@@ -308,11 +295,7 @@ class _IndexPageState extends State<IndexPage> with TickerProviderStateMixin {
 
           // Carousel
           CarouselSlider(
-            options: CarouselOptions(
-              height: 180,
-              autoPlay: true,
-              enlargeCenterPage: true,
-            ),
+            options: CarouselOptions(height: 180, autoPlay: true, enlargeCenterPage: true),
             items: offerImages.map((path) {
               return ClipRRect(
                 borderRadius: BorderRadius.circular(12),
@@ -322,16 +305,11 @@ class _IndexPageState extends State<IndexPage> with TickerProviderStateMixin {
           ),
 
           const SizedBox(height: 24),
-          const Text("Choose Your Butcher Shops",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Colors.green)),
-
+          const Text("Choose Your Butcher Shops", textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.green)),
           const SizedBox(height: 8),
-          if (isLoadingShops)
-            const Center(child: CircularProgressIndicator())
+
+          if (isLoadingShops) const Center(child: CircularProgressIndicator())
           else if (shopFetchError.isNotEmpty)
             Center(child: Text(shopFetchError, style: const TextStyle(color: Colors.red)))
           else
@@ -345,9 +323,12 @@ class _IndexPageState extends State<IndexPage> with TickerProviderStateMixin {
                   margin: const EdgeInsets.symmetric(vertical: 6),
                   child: ListTile(
                     title: Text(shop['company_name'] ?? 'Unknown Shop'),
-                    subtitle: Text(
-                        "📧 ${shop['email'] ?? 'N/A'} | 📞 ${shop['contact_number'] ?? 'N/A'}"),
-                    onTap: () => _showShopProducts(context, shop),
+                    subtitle: Text("📧 ${shop['email'] ?? 'N/A'} | 📞 ${shop['contact_number'] ?? 'N/A'}"),
+                    trailing: ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                      onPressed: () => _showShopProducts(context, shop),
+                      child: const Text("View Products"),
+                    ),
                   ),
                 );
               },
